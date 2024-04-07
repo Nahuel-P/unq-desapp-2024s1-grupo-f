@@ -22,10 +22,7 @@ class UserServiceImpl : IUserService {
         initialWallet: String
     ): UserExchange {
         val user = UserExchange(firstName, lastName, email, address, password, initialCvu, initialWallet)
-        return userRepository.save(user)
+        return userRepository.registerUser(user)
     }
 
-    fun getUser(userId: Long): UserExchange {
-        return userRepository.findById(userId).orElseThrow { NoSuchElementException("User not found with id: $userId") }
-    }
 }
