@@ -20,10 +20,10 @@ class CryptoExchangeTest {
 
     @Test
     fun testCryptocurrencyModel(){
-        Assertions.assertEquals("BTCUSDT",coin.code())
-        Assertions.assertEquals(68064.7,coin.price())
-        Assertions.assertEquals(creationTime, coin.dateTime())
-        Assertions.assertTrue(coin.priceHistory().isEmpty())
+        Assertions.assertEquals("BTCUSDT",coin.code)
+        Assertions.assertEquals(68064.7,coin.price)
+        Assertions.assertEquals(creationTime, coin.dateTime)
+        Assertions.assertTrue(coin.priceHistory.isEmpty())
     }
 
     @Test
@@ -31,13 +31,13 @@ class CryptoExchangeTest {
         var updateTime = LocalDateTime.now()
         coin.updatePrice(68064.5,updateTime)
 
-        Assertions.assertEquals(68064.5,coin.price())
-        Assertions.assertEquals(updateTime, coin.dateTime())
-        Assertions.assertEquals(coin.priceHistory().size,1)
+        Assertions.assertEquals(68064.5,coin.price)
+        Assertions.assertEquals(updateTime, coin.dateTime)
+        Assertions.assertEquals(coin.priceHistory.size,1)
 
-        var priceHistory = coin.priceHistory()
-        Assertions.assertEquals(68064.7, priceHistory.first().price())
-        Assertions.assertEquals(creationTime, priceHistory.first().dateTime())
+        var priceHistory = coin.priceHistory
+        Assertions.assertEquals(68064.7, priceHistory.first().price)
+        Assertions.assertEquals(creationTime, priceHistory.first().dateTime)
 
     }
 }
