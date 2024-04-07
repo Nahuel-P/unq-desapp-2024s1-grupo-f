@@ -1,7 +1,12 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.model
 
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
 import java.util.regex.Pattern
 
+@Entity
 class UserExchange(
     firstName: String,
     lastName: String,
@@ -10,7 +15,11 @@ class UserExchange(
     password: String,
     initialCvu: String,
     initialWallet: String
-) {
+)  {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Long? = null
+
     val firstName: String = validateLength(firstName, 3, 30, "First name")
     val lastName: String = validateLength(lastName, 3, 30, "Last name")
     val email: String = validateEmail(email)
@@ -19,9 +28,6 @@ class UserExchange(
 
     private var cvu: String = validateLength(initialCvu, 22, 22, "CVU")
     private var wallet: String = validateLength(initialWallet, 8, 8, "Wallet")
-
-    private var amountOfTransactions: Int = 0
-    private var successfulTransactions: Int = 0
 
     private fun validateLength(value: String, min: Int, max: Int, fieldName: String): String {
         require(value.length in min..max) { "$fieldName must be between $min and $max characters" }
