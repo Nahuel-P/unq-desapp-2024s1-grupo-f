@@ -1,5 +1,7 @@
+package ar.edu.unq.desapp.grupoF.backenddesappapi.persistence
+
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.UserExchange
-import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.UserRepository
+import ar.edu.unq.desapp.grupoF.backenddesappapi.persitence.UserRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 

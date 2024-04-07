@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoF.backenddesappapi.repositories
+package ar.edu.unq.desapp.grupoF.backenddesappapi.persitence
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.UserExchange
 import org.springframework.stereotype.Repository

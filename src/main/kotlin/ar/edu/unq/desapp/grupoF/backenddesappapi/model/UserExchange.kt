@@ -26,8 +26,8 @@ class UserExchange(
     val address: String = validateLength(address, 10, 30, "Address")
     val password: String = validatePassword(password)
 
-    private var cvu: String = validateLength(initialCvu, 22, 22, "CVU")
-    private var wallet: String = validateLength(initialWallet, 8, 8, "Wallet")
+    val cvu: String = validateLength(initialCvu, 22, 22, "CVU")
+    val wallet: String = validateLength(initialWallet, 8, 8, "Wallet")
 
     private fun validateLength(value: String, min: Int, max: Int, fieldName: String): String {
         require(value.length in min..max) { "$fieldName must be between $min and $max characters" }
