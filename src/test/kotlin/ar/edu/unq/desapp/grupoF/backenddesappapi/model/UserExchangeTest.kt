@@ -146,7 +146,6 @@ class UserExchangeTest {
             "12345678"
         )
         val cryptocurrencyMock = mock(Cryptocurrency::class.java)
-
         val order = user.publishOrder(IntentionType.BUY, cryptocurrencyMock, 0.1, 68064.7)
 
         Assertions.assertEquals(user, order.ownerUser)

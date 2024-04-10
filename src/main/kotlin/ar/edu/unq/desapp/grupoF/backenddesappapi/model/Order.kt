@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.model
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.StateOrder
 import java.time.LocalDateTime
 
 class Order(
@@ -14,6 +15,7 @@ class Order(
     var id: Int? = null
     var entryTime: LocalDateTime = LocalDateTime.now()
     var endTime: LocalDateTime? = null
-    var isActive: Boolean = true
+    var isActive: Boolean = false
+    var state: StateOrder = StateOrder.OPEN
 
 }
