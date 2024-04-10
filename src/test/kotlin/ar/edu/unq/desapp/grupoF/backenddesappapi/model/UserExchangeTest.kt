@@ -1,11 +1,11 @@
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Cryptocurrency
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Order
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.UserExchange
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.verify
+import org.mockito.Mockito.*
 
 class UserExchangeTest {
 
@@ -135,10 +135,25 @@ class UserExchangeTest {
 
     @Test
     fun `a user places a new purchase order`() {
-        val userMock = mock(UserExchange::class.java)
+
+        val user = UserExchange(
+            "Carlos",
+            "Gonzalez",
+            "carlos.gonzalez@ejemplo.com.ar",
+            "Avenida Siempre Viva 742",
+            "Contraseña1!",
+            "1234567890123456789012",
+            "12345678"
+        )
         val cryptocurrencyMock = mock(Cryptocurrency::class.java)
 
-        userMock.publishOrder(IntentionType.BUY, cryptocurrencyMock, 0.1, 68064.7)
-        verify(userMock).publishOrder(IntentionType.BUY, cryptocurrencyMock, 0.1, 68064.7)
+        val order = user.publishOrder(IntentionType.BUY, cryptocurrencyMock, 0.1, 68064.7)
+
+        Assertions.assertEquals(user, order.ownerUser)
+        Assertions.assertEquals(cryptocurrencyMock, order.cryptocurrency)
+        Assertions.assertEquals(0.1, order.amount)
+        Assertions.assertEquals(68064.7, order.price)
+        Assertions.assertEquals(IntentionType.BUY, order.type)
+
     }
 }
