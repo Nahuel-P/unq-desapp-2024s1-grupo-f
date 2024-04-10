@@ -1,7 +1,11 @@
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Cryptocurrency
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.UserExchange
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.verify
 
 class UserExchangeTest {
 
@@ -127,5 +131,14 @@ class UserExchangeTest {
                 "1234567"
             )
         }
+    }
+
+    @Test
+    fun `a user places a new purchase order`() {
+        val userMock = mock(UserExchange::class.java)
+        val cryptocurrencyMock = mock(Cryptocurrency::class.java)
+
+        userMock.publishOrder(IntentionType.BUY, cryptocurrencyMock, 0.1, 68064.7)
+        verify(userMock).publishOrder(IntentionType.BUY, cryptocurrencyMock, 0.1, 68064.7)
     }
 }
