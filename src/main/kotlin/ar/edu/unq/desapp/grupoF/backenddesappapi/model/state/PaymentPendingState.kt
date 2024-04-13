@@ -1,7 +1,7 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.model.state
 
-class PendingState : TransactionState {
+class PaymentPendingState : TransactionState {
     override fun getState(): String {
-        return "PENDING"
+        return "PAYMENT_PENDING"
     }
 }
