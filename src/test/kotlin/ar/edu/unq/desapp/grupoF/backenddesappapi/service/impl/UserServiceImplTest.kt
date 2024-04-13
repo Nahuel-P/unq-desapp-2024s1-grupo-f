@@ -1,6 +1,6 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl
 
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.UserExchange
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoF.backenddesappapi.persitence.IUserRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.fail
@@ -23,7 +23,7 @@ class UserServiceImplTest {
     @Test
     fun `registerUser throws IllegalArgumentException when provided invalid email`() {
         try {
-            val user = UserExchange(
+            val user = User(
                 "Juan",
                 "Lopez",
                 "invalid email",
@@ -52,7 +52,7 @@ class UserServiceImplTest {
 
     @Test
     fun `registerUser throws IllegalArgumentException when provided invalid password`() {
-        val user = UserExchange(
+        val user = User(
             "Juan",
             "Lopez",
             "juan.lopez@example.com",

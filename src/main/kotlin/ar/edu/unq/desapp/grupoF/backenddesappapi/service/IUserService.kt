@@ -1,6 +1,6 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.service
 
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.UserExchange
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 
 interface IUserService {
     fun registerUser(
@@ -11,5 +11,5 @@ interface IUserService {
         password: String,
         initialCvu: String,
         initialWallet: String // TODO: Impl DTO instead of passing values as parameters
-    ): UserExchange
+    ): User
 }

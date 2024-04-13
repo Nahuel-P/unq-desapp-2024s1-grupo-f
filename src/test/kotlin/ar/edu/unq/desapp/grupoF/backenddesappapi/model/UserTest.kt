@@ -1,17 +1,17 @@
+
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Cryptocurrency
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Order
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.UserExchange
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.mockito.Mockito.*
+import org.mockito.Mockito.mock
 
-class UserExchangeTest {
+class UserTest {
 
     @Test
     fun `valid user exchange creation`() {
-        val user = UserExchange(
+        val user = User(
             "Carlos",
             "Gonzalez",
             "carlos.gonzalez@ejemplo.com.ar",
@@ -31,7 +31,7 @@ class UserExchangeTest {
     @Test
     fun `invalid first name length throws exception`() {
         assertThrows<IllegalArgumentException> {
-            UserExchange(
+            User(
                 "Ca",
                 "Gonzalez",
                 "carlos.gonzalez@ejemplo.com.ar",
@@ -46,7 +46,7 @@ class UserExchangeTest {
     @Test
     fun `invalid last name length throws exception`() {
         assertThrows<IllegalArgumentException> {
-            UserExchange(
+            User(
                 "Carlos",
                 "Go",
                 "carlos.gonzalez@ejemplo.com.ar",
@@ -61,7 +61,7 @@ class UserExchangeTest {
     @Test
     fun `invalid email format throws exception`() {
         assertThrows<IllegalArgumentException> {
-            UserExchange(
+            User(
                 "Carlos",
                 "Gonzalez",
                 "carlos.gonzalez",
@@ -76,7 +76,7 @@ class UserExchangeTest {
     @Test
     fun `invalid address length throws exception`() {
         assertThrows<IllegalArgumentException> {
-            UserExchange(
+            User(
                 "Carlos",
                 "Gonzalez",
                 "carlos.gonzalez@ejemplo.com.ar",
@@ -91,7 +91,7 @@ class UserExchangeTest {
     @Test
     fun `invalid password format throws exception`() {
         assertThrows<IllegalArgumentException> {
-            UserExchange(
+            User(
                 "Carlos",
                 "Gonzalez",
                 "carlos.gonzalez@ejemplo.com.ar",
@@ -106,7 +106,7 @@ class UserExchangeTest {
     @Test
     fun `invalid cvu length throws exception`() {
         assertThrows<IllegalArgumentException> {
-            UserExchange(
+            User(
                 "Carlos",
                 "Gonzalez",
                 "carlos.gonzalez@ejemplo.com.ar",
@@ -121,7 +121,7 @@ class UserExchangeTest {
     @Test
     fun `invalid wallet length throws exception`() {
         assertThrows<IllegalArgumentException> {
-            UserExchange(
+            User(
                 "Carlos",
                 "Gonzalez",
                 "carlos.gonzalez@ejemplo.com.ar",
@@ -136,7 +136,7 @@ class UserExchangeTest {
     @Test
     fun `a user places a new purchase order`() {
 
-        val user = UserExchange(
+        val user = User(
             "Carlos",
             "Gonzalez",
             "carlos.gonzalez@ejemplo.com.ar",

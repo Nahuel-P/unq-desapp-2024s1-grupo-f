@@ -1,8 +1,8 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.persitence
 
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.UserExchange
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 
 interface IUserRepository {
-    fun registerUser(user: UserExchange) : UserExchange
-    fun getUsers(): Map<Long, UserExchange>
+    fun registerUser(user: User) : User
+    fun getUsers(): Map<Long, User>
 }

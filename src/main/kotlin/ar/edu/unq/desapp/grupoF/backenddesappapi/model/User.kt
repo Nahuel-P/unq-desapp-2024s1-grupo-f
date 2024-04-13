@@ -8,7 +8,7 @@ import jakarta.persistence.Id
 import java.util.regex.Pattern
 
 @Entity
-class UserExchange(
+class User(
     firstName: String,
     lastName: String,
     email: String,

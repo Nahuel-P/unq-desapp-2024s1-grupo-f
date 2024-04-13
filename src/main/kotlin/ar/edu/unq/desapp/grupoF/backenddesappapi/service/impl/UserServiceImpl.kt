@@ -1,6 +1,6 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl
 
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.UserExchange
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoF.backenddesappapi.persitence.IUserRepository
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IUserService
 import org.springframework.beans.factory.annotation.Autowired
@@ -20,8 +20,8 @@ class UserServiceImpl : IUserService {
         password: String,
         initialCvu: String,
         initialWallet: String
-    ): UserExchange {
-        val user = UserExchange(firstName, lastName, email, address, password, initialCvu, initialWallet)
+    ): User {
+        val user = User(firstName, lastName, email, address, password, initialCvu, initialWallet)
         return userRepository.registerUser(user)
     }
 
