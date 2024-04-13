@@ -19,6 +19,26 @@ class OrderBuilder {
     private var state: StateOrder? = null
 
     fun build(): Order {
+        if (this.ownerUser == null) {
+            throw IllegalArgumentException("Owner user must not be null")
+        }
+
+        if (this.cryptocurrency == null) {
+            throw IllegalArgumentException("Cryptocurrency must not be null")
+        }
+
+        if (this.amount == null) {
+            throw IllegalArgumentException("Amount must not be null")
+        }
+
+        if (this.price == null) {
+            throw IllegalArgumentException("Price must not be null")
+        }
+
+        if (this.type == null) {
+            throw IllegalArgumentException("Type must not be null")
+        }
+
         val order = Order()
         order.ownerUser = this.ownerUser
         order.cryptocurrency = this.cryptocurrency
