@@ -7,27 +7,16 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import java.util.regex.Pattern
 
-class User(
-    firstName: String,
-    lastName: String,
-    email: String,
-    address: String,
-    password: String,
-    initialCvu: String,
-    initialWallet: String
-)  {
+class User{
+
     var id: Long? = null
-
-    val firstName: String = validateLength(firstName, 3, 30, "First name")
-    val lastName: String = validateLength(lastName, 3, 30, "Last name")
-    val email: String = validateEmail(email)
-    val address: String = validateLength(address, 10, 30, "Address")
-    val password: String = validatePassword(password)
-
-    val cvu: String = validateLength(initialCvu, 22, 22, "CVU")
-    val wallet: String = validateLength(initialWallet, 8, 8, "Wallet")
-
-    
+    var firstName: String? = null
+    var lastName: String? = null
+    var email: String? = null
+    var address: String? = null
+    var password: String? = null
+    var cvu: String? = null
+    var walletAddress: String? = null
 
     private fun validateLength(value: String, min: Int, max: Int, fieldName: String): String {
         require(value.length in min..max) { "$fieldName must be between $min and $max characters" }
