@@ -10,19 +10,26 @@ import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.mock
 
 class UserTest {
-
-
     fun aUser(): UserBuilder {
         return UserBuilder()
             .withFirstName("Miguel Angel")
             .withFirstName("Borja")
+            .withEmail("el.colibri09@gmail.com")
+            .withAddress("Av. Siempre Viva 742")
+            .withPassword("Contraseña1!")
+            .withCvu("1234567890123456789012")
+            .withWalletAddress("12345678")
     }
 
+    @Test
+    fun `should create a user when it has valid data`() {
+        assertDoesNotThrow { aUser().build() }
+    }
     @Test
     fun `throw exception for invalid minimum first name length`() {
         assertThrows<IllegalArgumentException> {
             aUser()
-                .withFirstName("as").build()
+                .withFirstName("Mi").build()
         }
     }
 
@@ -30,7 +37,7 @@ class UserTest {
     fun `throw exception  for exceeding maximum first name length`() {
         assertThrows<IllegalArgumentException> {
             aUser()
-                .withFirstName("gIHqnJsKpFOkwDfUMoBrTLCNcWvXbteG").build()
+                .withFirstName("el nombre que quiero cargar es mas largo de lo que se permite").build()
         }
     }
 
@@ -38,7 +45,7 @@ class UserTest {
     fun `throw exception for invalid minimum last name length`() {
         assertThrows<IllegalArgumentException> {
             aUser()
-                .withLastName("sa").build()
+                .withLastName("Bo").build()
         }
     }
 
@@ -46,7 +53,7 @@ class UserTest {
     fun `throw exception  for exceeding maximum last name length`() {
         assertThrows<IllegalArgumentException> {
             aUser()
-                .withLastName("gIHqnJsKpFOkwDfUMoBrTLCNcWvXbteG").build()
+                .withLastName("el apellido que quiero cargar es mas largo de lo que se permite").build()
         }
     }
 
@@ -54,7 +61,7 @@ class UserTest {
     fun `invalid email format throws exception`() {
         assertThrows<IllegalArgumentException> {
             aUser()
-                .withEmail("carlos.gonzalez").build()
+                .withEmail("el.colibri").build()
         }
     }
 
@@ -67,72 +74,53 @@ class UserTest {
     }
 
     @Test
-    fun `throw exception  for exceeding maximum adress length`() {
+    fun `throw exception for exceeding maximum adress length`() {
         assertThrows<IllegalArgumentException> {
             aUser()
                 .withAddress("Av. la calle que estoy intentando ingresar es mas larga de lo permitido").build()
         }
     }
-//    @Test
-//    fun `invalid address length throws exception`() {
-//        assertThrows<IllegalArgumentException> {
-//            User(
-//                "Carlos",
-//                "Gonzalez",
-//                "carlos.gonzalez@ejemplo.com.ar",
-//                "Avenida 7",
-//                "Contraseña1!",
-//                "1234567890123456789012",
-//                "12345678"
-//            )
-//        }
-//    }
-//
-//    @Test
-//    fun `invalid password format throws exception`() {
-//        assertThrows<IllegalArgumentException> {
-//            User(
-//                "Carlos",
-//                "Gonzalez",
-//                "carlos.gonzalez@ejemplo.com.ar",
-//                "Avenida Siempre Viva 742",
-//                "contraseña",
-//                "1234567890123456789012",
-//                "12345678"
-//            )
-//        }
-//    }
-//
-//    @Test
-//    fun `invalid cvu length throws exception`() {
-//        assertThrows<IllegalArgumentException> {
-//            User(
-//                "Carlos",
-//                "Gonzalez",
-//                "carlos.gonzalez@ejemplo.com.ar",
-//                "Avenida Siempre Viva 742",
-//                "Contraseña1!",
-//                "123456789012345678901",
-//                "12345678"
-//            )
-//        }
-//    }
-//
-//    @Test
-//    fun `invalid wallet length throws exception`() {
-//        assertThrows<IllegalArgumentException> {
-//            User(
-//                "Carlos",
-//                "Gonzalez",
-//                "carlos.gonzalez@ejemplo.com.ar",
-//                "Avenida Siempre Viva 742",
-//                "Contraseña1!",
-//                "1234567890123456789012",
-//                "1234567"
-//            )
-//        }
-//    }
-//
+
+    @Test
+    fun `invalid password format throws exception`() {
+        assertThrows<IllegalArgumentException> {
+            aUser()
+                .withPassword("1234").build()
+        }
+    }
+
+    @Test
+    fun `throw exception for invalid minimum cvu length`() {
+        assertThrows<IllegalArgumentException> {
+            aUser()
+                .withCvu("752").build()
+        }
+    }
+
+    @Test
+    fun `throw exception for exceeding maximum cvu length`() {
+        assertThrows<IllegalArgumentException> {
+            aUser()
+                .withCvu("7529888111100012745826123").build()
+        }
+    }
+
+    @Test
+    fun `throw exception for invalid minimum wallet length`() {
+        assertThrows<IllegalArgumentException> {
+            aUser()
+                .withCvu("12").build()
+        }
+    }
+
+    @Test
+    fun `throw exception for exceeding maximum wallet length`() {
+        assertThrows<IllegalArgumentException> {
+            aUser()
+                .withCvu("12345678912121212").build()
+        }
+    }
+
 //    @Test
 //    fun `a user places a new purchase order`() {
 //
