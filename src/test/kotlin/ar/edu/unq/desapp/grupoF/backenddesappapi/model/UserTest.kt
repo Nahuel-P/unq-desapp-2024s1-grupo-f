@@ -123,24 +123,8 @@ class UserTest {
 
 //    @Test
 //    fun `a user places a new purchase order`() {
-//
-//        val user = User(
-//            "Carlos",
-//            "Gonzalez",
-//            "carlos.gonzalez@ejemplo.com.ar",
-//            "Avenida Siempre Viva 742",
-//            "Contraseña1!",
-//            "1234567890123456789012",
-//            "12345678"
-//        )
-//        val cryptocurrencyMock = mock(Cryptocurrency::class.java)
-//        val order = user.publishOrder(IntentionType.BUY, cryptocurrencyMock, 0.1, 68064.7)
-//
-//        Assertions.assertEquals(user, order.ownerUser)
-//        Assertions.assertEquals(cryptocurrencyMock, order.cryptocurrency)
-//        Assertions.assertEquals(0.1, order.amount)
-//        Assertions.assertEquals(68064.7, order.price)
-//        Assertions.assertEquals(IntentionType.BUY, order.type)
+//        var aUser = aUser().build()
+//        aUser.publishOrder(IntentionType.BUY, Cryptocurrency("BTCUSDT", 68064.7), 0.1, 68064.7)
 //
 //    }
 }

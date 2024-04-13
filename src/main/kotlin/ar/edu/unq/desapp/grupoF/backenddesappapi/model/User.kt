@@ -8,6 +8,7 @@ import jakarta.persistence.Id
 import java.util.regex.Pattern
 
 class User{
+
     var id: Long? = null
     var firstName: String? = null
     var lastName: String? = null
@@ -16,4 +17,6 @@ class User{
     var password: String? = null
     var cvu: String? = null
     var walletAddress: String? = null
+
+//s
 }
