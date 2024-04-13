@@ -27,7 +27,7 @@ class TransactionTest {
     fun `transaction should be pending after creation`() {
         val transaction = Transaction()
         val state = transaction.state
-        assertEquals("PENDING", state.getState())
+        assertEquals("PAYMENT_PENDING", state.getState())
     }
 
     @Test
