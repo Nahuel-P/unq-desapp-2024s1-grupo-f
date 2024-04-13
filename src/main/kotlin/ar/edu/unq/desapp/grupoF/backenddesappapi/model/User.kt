@@ -7,7 +7,6 @@ import jakarta.persistence.GenerationType
 import jakarta.persistence.Id
 import java.util.regex.Pattern
 
-@Entity
 class User(
     firstName: String,
     lastName: String,
@@ -17,8 +16,6 @@ class User(
     initialCvu: String,
     initialWallet: String
 )  {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
     val firstName: String = validateLength(firstName, 3, 30, "First name")

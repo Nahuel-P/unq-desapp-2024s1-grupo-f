@@ -12,7 +12,7 @@ class Order(
     var type: IntentionType
     ) {
 
-    var id: Int? = null
+    var id: Long? = null
     var entryTime: LocalDateTime = LocalDateTime.now()
     var endTime: LocalDateTime? = null
     var isActive: Boolean = false
