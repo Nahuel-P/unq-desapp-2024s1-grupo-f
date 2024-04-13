@@ -13,7 +13,7 @@ class UserTest {
     fun aUser(): UserBuilder {
         return UserBuilder()
             .withFirstName("Miguel Angel")
-            .withFirstName("Borja")
+            .withLastName("Borja")
             .withEmail("el.colibri09@gmail.com")
             .withAddress("Av. Siempre Viva 742")
             .withPassword("Contraseña1!")

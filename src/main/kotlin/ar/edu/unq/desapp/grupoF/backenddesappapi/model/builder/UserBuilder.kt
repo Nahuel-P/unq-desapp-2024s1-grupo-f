@@ -14,13 +14,13 @@ class UserBuilder {
 
     fun build(): User {
         val user = User()
-        user.firstName = firstName
-        user.lastName = lastName
-        user.email = email
-        user.address = address
-        user.password = password
-        user.cvu = cvu
-        user.walletAddress = walletAddress
+        user.firstName = this.firstName
+        user.lastName = this.lastName
+        user.email = this.email
+        user.address = this.address
+        user.password = this.password
+        user.cvu = this.cvu
+        user.walletAddress = this.walletAddress
         return user
     }
 
