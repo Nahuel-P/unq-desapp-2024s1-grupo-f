@@ -1,32 +1,49 @@
-package ar.edu.unq.desapp.grupoF.backenddesappapi.persistence
-
+import ar.edu.unq.desapp.grupoF.backenddesappapi.BackendDesappApiApplication
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.persitence.UserRepository
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import org.mockito.Mockito
+import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.boot.test.mock.mockito.MockBean
+import java.util.*
 
+@SpringBootTest(classes = [BackendDesappApiApplication::class])
 class UserRepositoryTest {
 
-//    private val userRepository = UserRepository()
-//
-//    @Test
-//    fun `registerUser stores user in users HashMap with correct ID`() {
-//        val user = User("Juan", "Lopez", "juan.lopez@example.com", "Calle Falsa 123", "Password1!", "1234567890123456789012", "12345678")
-//
-//        userRepository.registerUser(user)
-//
-//        val users = userRepository.getUsers()
-//        val storedUser = users[user.id]
-//
-//        assertEquals(user, storedUser)
-//    }
-//
-//    @Test
-//    fun `registerUser returns UserExchange object with correct ID`() {
-//        val user = User("Juan", "Lopez", "juan.lopez@example.com", "Calle Falsa 123", "Password1!", "1234567890123456789012", "12345678")
-//
-//        val returnedUser = userRepository.registerUser(user)
-//
-//        assertEquals(user.id, returnedUser.id)
-//    }
+    @MockBean
+    private lateinit var userRepository: UserRepository
+
+    private fun aUser(): User {
+        return UserBuilder()
+            .withFirstName("Juan")
+            .withLastName("Lopez")
+            .withEmail("juan.lopez@example.com")
+            .withAddress("Calle Falsa 123")
+            .withPassword("Password1!")
+            .withCvu("1234567890123456789012")
+            .withWalletAddress("12345678")
+            .build()
+    }
+
+    @Test
+    fun `findById returns correct user when user exists`() {
+        val user = aUser()
+        Mockito.`when`(userRepository.findById(1L)).thenReturn(Optional.of(user))
+
+        val optionalUser = userRepository.findById(1L)
+
+        assertTrue(optionalUser.isPresent)
+        assertEquals(user, optionalUser.get())
+    }
+
+    @Test
+    fun `findById returns empty when user does not exist`() {
+        Mockito.`when`(userRepository.findById(1L)).thenReturn(Optional.empty())
+
+        val optionalUser = userRepository.findById(1L)
+
+        assertFalse(optionalUser.isPresent)
+    }
 }
