@@ -25,9 +25,7 @@ class CryptocurrencyBuilder {
         }
 
         private fun validateName(name: String?): String {
-            if (name == null) {
-                throw IllegalArgumentException("Name cannot be null")
-            }
+            requireNotNull(name) { "Name cannot be null" }
             return name
         }
 
