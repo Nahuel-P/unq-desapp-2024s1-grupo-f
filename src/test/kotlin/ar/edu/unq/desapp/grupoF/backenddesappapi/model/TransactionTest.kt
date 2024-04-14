@@ -6,9 +6,9 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.TransactionBuilde
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.StateOrder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.TransactionStatus
-import org.junit.jupiter.api.Assertions.assertDoesNotThrow
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import java.time.LocalDateTime
@@ -53,6 +53,7 @@ class TransactionTest {
             .withEntryTime(LocalDateTime.now())
             .withEndTime(LocalDateTime.now())
             .withIsActive(true)
+            .withId(1L)
     }
 
     private fun aCryptoCurrency(): CryptocurrencyBuilder {
@@ -68,6 +69,7 @@ class TransactionTest {
             .withAmount(10.0)
             .withPrice(50000.0)
             .withType(IntentionType.BUY)
+            .withState(StateOrder.OPEN)
     }
 
 
@@ -172,4 +174,37 @@ class TransactionTest {
         assertEquals("The buyer is not the owner of the order", exception.message)
     }
 
+    @Test
+    fun `should set status to PAID when paid is called`() {
+        val transaction = aTransaction().build()
+        transaction.paid()
+        val status = transaction.status
+        assertEquals(TransactionStatus.PAID, status)
+    }
+
+    @Test
+    fun `should set status to CANCELLED_BY_USER and isActive to false when cancelByUser is called`() {
+        val transaction = aTransaction().build()
+        transaction.cancelByUser()
+        assertEquals(TransactionStatus.CANCELLED_BY_USER, transaction.status)
+        assertFalse(transaction.isActive)
+    }
+
+    @Test
+    fun `should set status to CANCELLED_BY_SYSTEM and isActive to false when cancelBySystem is called`() {
+        val transaction = aTransaction().build()
+        transaction.cancelBySystem()
+        assertEquals(TransactionStatus.CANCELLED_BY_SYSTEM, transaction.status)
+        assertFalse(transaction.isActive)
+    }
+
+    @Test
+    fun `should set status to CONFIRMED, isActive to false and close the order when confirmed is called`() {
+        val order = anOrder().withIsActive(true).build()
+        val transaction = aTransaction().withOrder(order).build()
+        transaction.confirmed()
+        assertEquals(TransactionStatus.CONFIRMED, transaction.status)
+        assertFalse(transaction.isActive)
+        assertEquals(StateOrder.CLOSED, transaction.order!!.state)
+    }
 }
