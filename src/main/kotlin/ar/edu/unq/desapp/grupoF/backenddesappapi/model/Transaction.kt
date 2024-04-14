@@ -1,8 +1,6 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.model
 
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.state.PaymentPendingState
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.state.TransactionState
-import jakarta.persistence.*
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.TransactionStatus
 import java.time.LocalDateTime
 
 class Transaction {
@@ -14,7 +12,7 @@ class Transaction {
 
     var order: Order? = null
 
-    var state: TransactionState = PaymentPendingState()
+    var state: TransactionStatus? = TransactionStatus.PENDING
 
     var entryTime: LocalDateTime = LocalDateTime.now()
     var endTime: LocalDateTime? = null

@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.model
 
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.TransactionStatus
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito.mock
@@ -27,7 +28,7 @@ class TransactionTest {
     fun `transaction should be pending after creation`() {
         val transaction = Transaction()
         val state = transaction.state
-        assertEquals("PAYMENT_PENDING", state.getState())
+        assertEquals(TransactionStatus.PENDING, state)
     }
 
     @Test
