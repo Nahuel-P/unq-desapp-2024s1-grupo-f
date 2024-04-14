@@ -4,6 +4,7 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.OrderBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.StateOrder
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
@@ -98,5 +99,30 @@ class OrderTest {
     fun `throws exception when building order without type`() {
         val orderBuilder = OrderBuilder().withOwnerUser(aUser().build()).withCryptocurrency(aCryptocurrency().build()).withAmount(10.0).withPrice(50000.0)
         assertThrows(IllegalArgumentException::class.java) { orderBuilder.build() }
+    }
+    @Test
+    fun `withEntryTime sets the entryTime`() {
+        val time = LocalDateTime.now()
+        val order = aOrder().withEntryTime(time).build()
+        assertEquals(time, order.entryTime)
+    }
+
+    @Test
+    fun `withEndTime sets the endTime`() {
+        val time = LocalDateTime.now()
+        val order = aOrder().withEndTime(time).build()
+        assertEquals(time, order.endTime)
+    }
+
+    @Test
+    fun `withIsActive sets the isActive`() {
+        val order = aOrder().withIsActive(true).build()
+        assertEquals(true, order.isActive)
+    }
+
+    @Test
+    fun `withState sets the state`() {
+        val order = aOrder().withState(StateOrder.CLOSED).build()
+        assertEquals(StateOrder.CLOSED, order.state)
     }
 }
