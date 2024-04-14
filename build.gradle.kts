@@ -9,12 +9,13 @@ plugins {
 	kotlin("plugin.spring") version "1.9.22"
 	kotlin("plugin.jpa") version "1.9.22"
 	id("jacoco")
-	id("org.sonarqube") version "3.3"
+	id("org.sonarqube") version "4.4.1.3373"
 }
 
 // Jacoco configuration
 jacoco {
 	toolVersion = "0.8.11"
+
 }
 
 tasks.jacocoTestReport {
@@ -29,7 +30,6 @@ sonarqube {
 		property("sonar.coverage.jacoco.xmlReportPaths", "${buildDir}/tmp/kotlin-classes/debug")
 	}
 }
-
 group = "ar.edu.unq.desapp.grupoF"
 version = "0.0.1-SNAPSHOT"
 
