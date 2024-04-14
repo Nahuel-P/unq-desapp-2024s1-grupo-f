@@ -31,7 +31,7 @@ sonar {
 		property("sonar.host.url", "https://sonarcloud.io")
 		property("sonar.organization", "nahuel-p")
 		property("sonar.projectKey", "Nahuel-P_unq-desapp-2024s1-grupo-f")
-		property("sonar.login", System.getenv("SONAR_TOKEN"))
+		property("sonar.token", System.getenv("SONAR_TOKEN"))
 	}
 }
 group = "ar.edu.unq.desapp.grupoF"
