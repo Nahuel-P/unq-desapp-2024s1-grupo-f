@@ -2,6 +2,7 @@
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.CryptocurrencyBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.OrderBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertThrows
@@ -23,7 +24,7 @@ class OrderTest {
 
     fun aCryptocurrency(): CryptocurrencyBuilder {
         return CryptocurrencyBuilder()
-            .withName("BTCUSDT")
+            .withName(CryptoSymbol.BTCUSDT)
             .withCreated(LocalDateTime.now())
     }
 

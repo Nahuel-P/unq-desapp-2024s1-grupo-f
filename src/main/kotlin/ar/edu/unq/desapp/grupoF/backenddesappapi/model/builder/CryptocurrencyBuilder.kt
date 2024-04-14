@@ -1,10 +1,11 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Cryptocurrency
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import java.time.LocalDateTime
 
 class CryptocurrencyBuilder {
-        private var name: String? = null
+        private var name: CryptoSymbol? = null
         private var createdAt: LocalDateTime? = null
 
         fun build(): Cryptocurrency {
@@ -14,7 +15,7 @@ class CryptocurrencyBuilder {
             return cryptocurrency
         }
 
-        fun withName(name: String?): CryptocurrencyBuilder {
+        fun withName(name: CryptoSymbol?): CryptocurrencyBuilder {
             this.name = validateName(name)
             return this
         }
@@ -24,7 +25,7 @@ class CryptocurrencyBuilder {
             return this
         }
 
-        private fun validateName(name: String?): String {
+        private fun validateName(name: CryptoSymbol?): CryptoSymbol {
             requireNotNull(name) { "Name cannot be null" }
             return name
         }
