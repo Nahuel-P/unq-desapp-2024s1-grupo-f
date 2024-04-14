@@ -27,11 +27,9 @@ tasks.jacocoTestReport {
 
 sonar {
 	properties {
-		property("sonar.coverage.jacoco.xmlReportPaths", "${project.buildDir}/reports/jacoco/test/jacocoTestReport.xml")
 		property("sonar.host.url", "https://sonarcloud.io")
 		property("sonar.organization", "nahuel-p")
 		property("sonar.projectKey", "Nahuel-P_unq-desapp-2024s1-grupo-f")
-		property("sonar.token", System.getenv("SONAR_TOKEN"))
 	}
 }
 group = "ar.edu.unq.desapp.grupoF"
