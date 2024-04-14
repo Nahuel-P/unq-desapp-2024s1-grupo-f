@@ -5,5 +5,5 @@ enum class TransactionStatus {
     PAID,
     CANCELLED_BY_USER,
     CANCELLED_BY_SYSTEM,
-    COMPLETED
+    CONFIRMED
 }

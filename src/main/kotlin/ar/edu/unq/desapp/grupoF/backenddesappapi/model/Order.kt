@@ -17,4 +17,11 @@ class Order {
     var isActive: Boolean? = null
     var state: StateOrder? = null
 
+
+
+    fun close(){
+        this.isActive = false
+        this.endTime = LocalDateTime.now()
+        this.state = StateOrder.CLOSED
+    }
 }
