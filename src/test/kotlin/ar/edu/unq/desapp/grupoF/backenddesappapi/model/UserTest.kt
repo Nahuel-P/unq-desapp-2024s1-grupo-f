@@ -122,11 +122,4 @@ class UserTest {
                 .withCvu("12345678912121212").build()
         }
     }
-
-//    @Test
-//    fun `a user places a new purchase order`() {
-//        var aUser = aUser().build()
-//        aUser.publishOrder(IntentionType.BUY, aCrypto().build(), 0.1, 68064.7)
-//
-//    }
 }
