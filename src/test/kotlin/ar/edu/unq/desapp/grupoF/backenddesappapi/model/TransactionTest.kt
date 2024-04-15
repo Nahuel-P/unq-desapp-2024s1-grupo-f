@@ -4,7 +4,6 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.CryptocurrencyBui
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.OrderBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.TransactionBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.StateOrder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.TransactionStatus
@@ -27,12 +26,7 @@ class TransactionTest {
 
     private fun aTransaction(): TransactionBuilder {
         return TransactionBuilder()
-            .withCryptocurrency(aCryptoCurrency().build())
-            .withQuantity(10.0)
-            .withPrice(1000.0)
-            .withTotalAmount(10000.0)
-            .withBuyer(buyer)
-            .withSeller(seller)
+            .withCounterParty(seller)
             .withOrder(anOrder().build())
             .withStatus(TransactionStatus.PENDING)
             .withEntryTime(LocalDateTime.now())
@@ -67,8 +61,7 @@ class TransactionTest {
         val order = anOrder().withType(IntentionType.SELL).withOwnerUser(seller).build()
         assertDoesNotThrow { aTransaction()
                             .withOrder(order)
-                            .withSeller(seller)
-                            .withBuyer(buyer)
+                            .withCounterParty(buyer)
                             .build() }
     }
 
@@ -77,8 +70,7 @@ class TransactionTest {
         val order = anOrder().withType(IntentionType.SELL).withOwnerUser(seller).build()
         assertDoesNotThrow { aTransaction()
                             .withOrder(order)
-                            .withSeller(seller)
-                            .withBuyer(buyer)
+                            .withCounterParty(buyer)
                             .build() }
     }
 
@@ -89,8 +81,7 @@ class TransactionTest {
         val exception = assertThrows<Exception> {
             aTransaction()
                 .withOrder(order)
-                .withSeller(buyer)
-                .withBuyer(buyer)
+                .withCounterParty(seller)
                 .build()
         }
         assertEquals("The buyer and the seller are the same person", exception.message)
@@ -102,64 +93,27 @@ class TransactionTest {
         assertThrows<java.lang.Exception>() {
             aTransaction()
                 .withOrder(order)
-                .withSeller(seller)
-                .withBuyer(null)
+                .withCounterParty(null)
                 .build()
         }
     }
 
-    @Test
-    fun `should throw an error when the user or seller is null`(){
-        val order = anOrder().withType(IntentionType.SELL).withOwnerUser(seller).build()
-        assertThrows<java.lang.Exception>() {
-            aTransaction()
-                .withOrder(order)
-                .withSeller(null)
-                .withBuyer(buyer)
-                .build()
-        }
-    }
 
     @Test
     fun `should throw an error when the order is null`(){
         assertThrows<java.lang.Exception>() {
             aTransaction()
                 .withOrder(null)
-                .withSeller(seller)
-                .withBuyer(buyer)
+                .withCounterParty(buyer)
                 .build()
         }
     }
 
-    @Test
-    fun `should throw an error when the seller is not the owner of the order`(){
-        val order = anOrder().withType(IntentionType.SELL).withOwnerUser(buyer).build()
-        val exception = assertThrows<Exception> {
-            aTransaction()
-                .withOrder(order)
-                .withSeller(seller)
-                .withBuyer(buyer)
-                .build()
-        }
-        assertEquals("The seller is not the owner of the order", exception.message)
-    }
-
-    @Test
-    fun `should throw an error when the buyer is not the owner of the order`(){
-        val order = anOrder().withType(IntentionType.BUY).withOwnerUser(seller).build()
-        val exception = assertThrows<Exception> {
-            aTransaction()
-                .withOrder(order)
-                .withSeller(seller)
-                .withBuyer(buyer)
-                .build()
-        }
-        assertEquals("The buyer is not the owner of the order", exception.message)
-    }
 
     @Test
     fun `should set status to PAID when paid is called`() {
-        val transaction = aTransaction().build()
+        val order = anOrder().withType(IntentionType.BUY).withOwnerUser(buyer).build()
+        val transaction = aTransaction().withOrder(order).withCounterParty(seller).build()
         transaction.paid()
         val status = transaction.status
         assertEquals(TransactionStatus.PAID, status)

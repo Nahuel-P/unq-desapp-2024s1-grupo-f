@@ -9,7 +9,6 @@ class Transaction {
     var cryptocurrency: Cryptocurrency? = null
     var quantity: Double = 0.0
     var price: Double = 0.0
-    var totalAmount: Double = 0.0
     var buyer : User? = null
     var seller : User? = null
     var order: Order? = null
@@ -17,28 +16,16 @@ class Transaction {
     var entryTime: LocalDateTime = LocalDateTime.now()
     var endTime: LocalDateTime? = null
     var isActive: Boolean = false
-    fun startTransaction(cryptocurrency: Cryptocurrency,
-                        quantity: Double,
-                        price: Double,
-                        totalAmount: Double,
-                        buyer: User,
-                        seller: User,
-                        order: Order): Transaction{
-        if(seller==buyer){
+    fun startTransaction(order: Order, counterParty: User): Transaction{
+        if(counterParty==order.ownerUser){
             throw Exception("The buyer and the seller are the same person")
         }
-        if(order.type== IntentionType.SELL && order.ownerUser != seller){
-            throw Exception("The seller is not the owner of the order")
-        }
-        if(order.type== IntentionType.BUY && order.ownerUser != buyer){
-            throw Exception("The buyer is not the owner of the order")
-        }
+
 
         val transaction = Transaction()
-        transaction.cryptocurrency = cryptocurrency
-        transaction.price = price
-        transaction.quantity = quantity
-        transaction.totalAmount = totalAmount
+        transaction.cryptocurrency = order.cryptocurrency
+        transaction.price = order.price!!
+        transaction.quantity = order.amount!!
         transaction.buyer = buyer
         transaction.seller = seller
         transaction.order = order
@@ -47,7 +34,23 @@ class Transaction {
         transaction.isActive = true
         transaction.order!!.close()
 
-        // validation of buyer/seller for cvu or wallet
+
+
+        if(order.type== IntentionType.BUY) {
+            transaction.buyer = order.ownerUser
+            transaction.seller = counterParty
+        }
+        if(order.type== IntentionType.SELL) {
+            transaction.seller = order.ownerUser
+            transaction.buyer = counterParty
+        }
+
+        if(order.type == IntentionType.SELL && order.ownerUser != transaction.seller){
+            throw Exception("The seller is not the owner of the order")
+        }
+        if(order.type == IntentionType.BUY && order.ownerUser != transaction.buyer){
+            throw Exception("The buyer is not the owner of the order")
+        }
         return transaction
     }
 
