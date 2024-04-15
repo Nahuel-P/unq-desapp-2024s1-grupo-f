@@ -12,7 +12,6 @@ class OrderBuilder {
     private var cryptocurrency: Cryptocurrency? = null
     private var amount: Double? = null
     private var price: Double? = null
-    private var totalAmount : Double? = null
     private var type: IntentionType? = null
     private var entryTime: LocalDateTime = LocalDateTime.now()
     private var isActive: Boolean? = null
@@ -61,10 +60,6 @@ class OrderBuilder {
         return this
     }
 
-    fun withTotalAmount(amount: Double?): OrderBuilder {
-        this.totalAmount = amount
-        return this
-    }
 
     fun withType(type: IntentionType): OrderBuilder {
         this.type = type

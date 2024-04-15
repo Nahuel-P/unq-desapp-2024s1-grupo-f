@@ -9,7 +9,6 @@ class Order {
     var cryptocurrency: Cryptocurrency? = null
     var amount: Double? = null
     var price: Double? = null
-    var totalAmount : Double? = null
     var type: IntentionType? = null
     var entryTime: LocalDateTime = LocalDateTime.now()
     var isActive: Boolean? = null
