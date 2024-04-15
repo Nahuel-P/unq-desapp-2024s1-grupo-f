@@ -1,6 +1,7 @@
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Cryptocurrency
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.CryptocurrencyBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import org.junit.jupiter.api.Assertions
@@ -25,6 +26,7 @@ class UserTest {
     fun `should create a user when it has valid data`() {
         assertDoesNotThrow { aUser().build() }
     }
+
     @Test
     fun `throw exception for invalid minimum first name length`() {
         assertThrows<IllegalArgumentException> {
@@ -124,7 +126,7 @@ class UserTest {
 //    @Test
 //    fun `a user places a new purchase order`() {
 //        var aUser = aUser().build()
-//        aUser.publishOrder(IntentionType.BUY, Cryptocurrency("BTCUSDT", 68064.7), 0.1, 68064.7)
+//        aUser.publishOrder(IntentionType.BUY, aCrypto().build(), 0.1, 68064.7)
 //
 //    }
 }

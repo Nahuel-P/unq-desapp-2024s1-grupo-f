@@ -19,25 +19,10 @@ class TransactionTest {
     private var seller = aSeller().build()
     private fun aBuyer(): UserBuilder {
         return UserBuilder()
-            .withFirstName("Miguel Angel")
-            .withLastName("Borja")
-            .withEmail("el.colibri09@gmail.com")
-            .withAddress("Av. Siempre Viva 742")
-            .withPassword("Contraseña1!")
-            .withCvu("1234567890123456789012")
-            .withWalletAddress("12345678")
     }
-
 
     private fun aSeller(): UserBuilder {
         return UserBuilder()
-            .withFirstName("Joseph")
-            .withLastName("Perez")
-            .withEmail("josephperez@gmail.com")
-            .withAddress("Av. Siempre Viva 740")
-            .withPassword("Contraseña2!")
-            .withCvu("1234567890123456789013")
-            .withWalletAddress("12345679")
     }
 
     private fun aTransaction(): TransactionBuilder {
@@ -57,10 +42,8 @@ class TransactionTest {
     }
 
     private fun aCryptoCurrency(): CryptocurrencyBuilder {
-        val now = LocalDateTime.now()
-        return CryptocurrencyBuilder().withName(CryptoSymbol.BTCUSDT).withCreated(now)
+        return CryptocurrencyBuilder()
     }
-
 
     private fun anOrder(): OrderBuilder {
         return OrderBuilder()
