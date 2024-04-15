@@ -1,6 +1,8 @@
 
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.PriceHistory
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.CryptocurrencyBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
@@ -26,4 +28,56 @@ class CryptocurrencyTest {
         }
     }
 
+    @Test
+    fun `lastPrice returns the most recent price history`() {
+        val oldPrice = PriceHistory().apply {
+            this.price = 100.0
+            this.priceTime = LocalDateTime.now().minusDays(1)
+        }
+        val recentPrice = PriceHistory().apply {
+            this.price = 200.0
+            this.priceTime = LocalDateTime.now()
+        }
+
+        val cryptocurrency = aCryptocurrency()
+            .withPriceHistory(mutableListOf(oldPrice, recentPrice))
+            .build()
+        assertFalse(cryptocurrency.priceHistory.isEmpty())
+        assertEquals(recentPrice, cryptocurrency.lastPrice())
+    }
+
+    @Test
+    fun `pricesOver24hs returns only the prices from the last 24 hours`() {
+        val oldPrice = PriceHistory().apply {
+            this.price = 100.0
+            this.priceTime = LocalDateTime.now().minusDays(2)
+        }
+        val recentPrice = PriceHistory().apply {
+            this.price = 200.0
+            this.priceTime = LocalDateTime.now()
+        }
+        val cryptocurrency = aCryptocurrency()
+            .withPriceHistory(mutableListOf(oldPrice, recentPrice))
+            .build()
+
+        val pricesOver24hs = cryptocurrency.pricesOver24hs()
+
+        assertTrue(pricesOver24hs.contains(recentPrice))
+        assertFalse(pricesOver24hs.contains(oldPrice))
+    }
+
+    @Test
+    fun `pricesOver24hs returns an empty list when there are no prices from the last 24 hours`() {
+        val oldPrice = PriceHistory().apply {
+            this.price = 100.0
+            this.priceTime = LocalDateTime.now().minusDays(2)
+        }
+        val cryptocurrency = aCryptocurrency()
+            .withPriceHistory(mutableListOf(oldPrice))
+            .build()
+
+        val pricesOver24hs = cryptocurrency.pricesOver24hs()
+
+        assertTrue(pricesOver24hs.isEmpty())
+    }
 }

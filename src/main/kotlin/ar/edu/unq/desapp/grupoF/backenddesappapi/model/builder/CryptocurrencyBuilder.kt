@@ -1,17 +1,20 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Cryptocurrency
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.PriceHistory
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import java.time.LocalDateTime
 
 class CryptocurrencyBuilder {
         private var name: CryptoSymbol? = null
         private var createdAt: LocalDateTime? = null
+        private var priceHistory: MutableList<PriceHistory> = mutableListOf()
 
         fun build(): Cryptocurrency {
             val cryptocurrency = Cryptocurrency()
             cryptocurrency.name = this.name
             cryptocurrency.createdAt = this.createdAt
+            cryptocurrency.priceHistory = this.priceHistory
             return cryptocurrency
         }
 
@@ -30,5 +33,8 @@ class CryptocurrencyBuilder {
             return name
         }
 
-
+        fun withPriceHistory(priceHistory: MutableList<PriceHistory>): CryptocurrencyBuilder {
+            this.priceHistory = priceHistory
+            return this
+        }
 }
