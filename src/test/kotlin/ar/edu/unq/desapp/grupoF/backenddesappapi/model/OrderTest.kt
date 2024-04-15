@@ -108,13 +108,6 @@ class OrderTest {
     }
 
     @Test
-    fun `withEndTime sets the endTime`() {
-        val time = LocalDateTime.now()
-        val order = aOrder().withEndTime(time).build()
-        assertEquals(time, order.endTime)
-    }
-
-    @Test
     fun `withIsActive sets the isActive`() {
         val order = aOrder().withIsActive(true).build()
         assertEquals(true, order.isActive)

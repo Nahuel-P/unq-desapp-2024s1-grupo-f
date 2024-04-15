@@ -10,9 +10,9 @@ import java.time.LocalDateTime
 class TransactionBuilder {
     private var id: Long? = null
     private var cryptocurrency: Cryptocurrency? = null
-    private var quantity: Double = 0.0
-    private var price: Double = 0.0
-    private var totalAmount: Double = 0.0
+    private var quantity: Double? = 0.0
+    private var price: Double? = 0.0
+    private var totalAmount: Double? = 0.0
     private var buyer : User? = null
     private var seller : User? = null
     private var order: Order? = null

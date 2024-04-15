@@ -12,9 +12,9 @@ class OrderBuilder {
     private var cryptocurrency: Cryptocurrency? = null
     private var amount: Double? = null
     private var price: Double? = null
+    private var totalAmount : Double? = null
     private var type: IntentionType? = null
     private var entryTime: LocalDateTime = LocalDateTime.now()
-    private var endTime: LocalDateTime? = null
     private var isActive: Boolean? = null
     private var state: StateOrder? = null
 
@@ -36,7 +36,6 @@ class OrderBuilder {
         order.price = this.price
         order.type = this.type
         order.entryTime = this.entryTime
-        order.endTime = this.endTime
         order.isActive = this.isActive
         order.state = this.state
         return order
@@ -62,6 +61,11 @@ class OrderBuilder {
         return this
     }
 
+    fun withTotalAmount(amount: Double?): OrderBuilder {
+        this.totalAmount = amount
+        return this
+    }
+
     fun withType(type: IntentionType): OrderBuilder {
         this.type = type
         return this
@@ -69,11 +73,6 @@ class OrderBuilder {
 
     fun withEntryTime(entryTime: LocalDateTime): OrderBuilder {
         this.entryTime = entryTime
-        return this
-    }
-
-    fun withEndTime(endTime: LocalDateTime): OrderBuilder {
-        this.endTime = endTime
         return this
     }
 
