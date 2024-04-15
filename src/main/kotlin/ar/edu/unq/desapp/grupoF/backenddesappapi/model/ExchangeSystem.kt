@@ -1,5 +1,7 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.model
 
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.StateOrder
+
 class ExchangeSystem {
 
     var users: MutableSet<User> = mutableSetOf()
@@ -29,18 +31,18 @@ class ExchangeSystem {
         orders.add(order)
     }
 
-        fun ordersByUser(user: User): List<Order> {
-            isUserRegistered(user)
-            return orders.filter { it.ownerUser == user }
-        }
+    fun active0rdersByUser(user: User): List<Order> {
+        isUserRegistered(user)
+        return orders.filter { it.ownerUser == user && it.state == StateOrder.OPEN }
+    }
 
-        fun startTransaction(order: Order, counterParty: User): Transaction {
-            isUserRegistered(counterParty)
-            isRegisteredOrder(order)
-            val transaction = Transaction().startTransaction(order, counterParty)
-            transactions.add(transaction)
-            return transaction
-        }
+    fun startTransaction(order: Order, counterParty: User): Transaction {
+        isUserRegistered(counterParty)
+        isRegisteredOrder(order)
+        val transaction = Transaction().startTransaction(order, counterParty)
+        transactions.add(transaction)
+        return transaction
+    }
 
     private fun validateUser(user: User) {
         if (users.any { it.email == user.email }) {

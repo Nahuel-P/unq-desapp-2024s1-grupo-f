@@ -11,4 +11,7 @@ class User{
     var cvu: String? = null
     var walletAddress: String? = null
 
+    var successfulTransaction: Int = 0
+    var score: Int = 0
+
 }

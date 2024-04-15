@@ -6,6 +6,7 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.OrderBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.StateOrder
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -143,28 +144,30 @@ class ExchangeSystemTest {
     }
 
     @Test
-    fun `ordersByUser returns orders owned by the user`() {
+    fun `ordersByUser returns active orders owned by the user`() {
         val exchangeSystem = aExchangeSystem().build()
         val user = aUser()
         exchangeSystem.registerUser(user)
-        val order1 = aOrder().withOwnerUser(user).build()
-        val order2 = aOrder().withOwnerUser(user).build()
+        val order1 = aOrder().withOwnerUser(user).withState(StateOrder.OPEN).build()
+        val order2 = aOrder().withOwnerUser(user).withState(StateOrder.CLOSED).build()
+        val order3 = aOrder().withOwnerUser(user).withState(StateOrder.OPEN).build()
         exchangeSystem.publishOrder(order1)
         exchangeSystem.publishOrder(order2)
+        exchangeSystem.publishOrder(order3)
 
-        val userOrders = exchangeSystem.ordersByUser(user)
+        val userOrders = exchangeSystem.active0rdersByUser(user)
 
         assertEquals(2, userOrders.size)
-        assertTrue(userOrders.containsAll(listOf(order1, order2)))
+        assertTrue(userOrders.containsAll(listOf(order1, order3)))
     }
 
     @Test
-    fun `ordersByUser returns empty list when user has no orders`() {
+    fun `ordersByUser returns empty list when user has no actives orders`() {
         val exchangeSystem = aExchangeSystem().build()
         val user = aUser()
         exchangeSystem.registerUser(user)
 
-        val userOrders = exchangeSystem.ordersByUser(user)
+        val userOrders = exchangeSystem.active0rdersByUser(user)
 
         assertTrue(userOrders.isEmpty())
     }
