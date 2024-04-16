@@ -6,6 +6,7 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.OrderBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.TransactionStatus
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -15,8 +16,12 @@ import java.time.LocalDateTime
 
 class ExchangeSystemTest {
 
+    fun cryptoHistory(): MutableList<PriceHistory> {
+        val priceHistory = PriceHistory(CryptoSymbol.BTCUSDT, 50000.0)
+        return mutableListOf(priceHistory)
+    }
     fun aCrypto(): Cryptocurrency {
-        return CryptocurrencyBuilder().withName(CryptoSymbol.BTCUSDT).build()
+        return CryptocurrencyBuilder().withName(CryptoSymbol.BTCUSDT).withPriceHistory(cryptoHistory()).build()
     }
 
     fun aUser(): User {
@@ -40,7 +45,7 @@ class ExchangeSystemTest {
             .withType(IntentionType.BUY)
     }
 
-    fun aExchangeSystem(): ExchangeSystemBuilder {
+    private fun aExchangeSystem(): ExchangeSystemBuilder {
         return ExchangeSystemBuilder().
                 withCryptocurrencies(aCryptocurrencySet())
 
@@ -114,7 +119,7 @@ class ExchangeSystemTest {
     @Test
     fun `getPrices returns empty list when there are no cryptocurrencies`() {
         val crypto1 = CryptocurrencyBuilder().withName(CryptoSymbol.BTCUSDT).build()
-        val exchangeSystem = aExchangeSystem().build()
+        val exchangeSystem = aExchangeSystem().withCryptocurrencies(mutableSetOf(crypto1)).build()
 
         val prices = exchangeSystem.getPrices()
 
@@ -141,24 +146,6 @@ class ExchangeSystemTest {
         assertTrue(prices.isEmpty())
     }
 
-//    @Test
-//    fun `ordersByUser returns active orders owned by the user`() {
-//        val exchangeSystem = aExchangeSystem().build()
-//        val user = aUser()
-//        exchangeSystem.registerUser(user)
-//        val order1 = aOrder().withOwnerUser(user).withState(StateOrder.OPEN).build()
-//        val order2 = aOrder().withOwnerUser(user).withState(StateOrder.CLOSED).build()
-//        val order3 = aOrder().withOwnerUser(user).withState(StateOrder.OPEN).build()
-//        exchangeSystem.publishOrder(order1)
-//        exchangeSystem.publishOrder(order2)
-//        exchangeSystem.publishOrder(order3)
-//
-//        val userOrders = exchangeSystem.active0rdersByUser(user)
-//
-//        assertEquals(2, userOrders.size)
-//        assertTrue(userOrders.containsAll(listOf(order1, order3)))
-//    }
-
     @Test
     fun `ordersByUser returns empty list when user has no actives orders`() {
         val exchangeSystem = aExchangeSystem().build()
@@ -169,23 +156,6 @@ class ExchangeSystemTest {
 
         assertTrue(userOrders.isEmpty())
     }
-
-//    @Test
-//    fun `startTransaction creates a transaction for a registered user and order`() {
-//        val exchangeSystem = aExchangeSystem().build()
-//        val user = aUser()
-//        exchangeSystem.registerUser(user)
-//        val user2 = aUser2()
-//        exchangeSystem.registerUser(user2)
-//        val order = aOrder().withType(IntentionType.BUY).withOwnerUser(user).build()
-//        exchangeSystem.publishOrder(order)
-//
-//        val transaction = exchangeSystem.startTransaction(order, user2)
-//
-//        assertEquals(user, transaction.buyer)
-//        assertEquals(order, transaction.order)
-//        assertTrue(exchangeSystem.transactions.contains(transaction))
-//    }
 
     @Test
     fun `startTransaction throws IllegalArgumentException when user is not registered`() {
@@ -209,4 +179,99 @@ class ExchangeSystemTest {
             exchangeSystem.startTransaction(order, user)
         }
     }
+
+
+    @Test
+    fun `should throw exception when user is not registered`() {
+        val exchangeSystem = aExchangeSystem().build()
+        val user = aUser()
+        val cryptocurrency = aCrypto()
+        val amount = 10.0
+        val price = 50000.0
+        val type = IntentionType.BUY
+
+        assertThrows<IllegalArgumentException> {
+            exchangeSystem.publishOrder(user, cryptocurrency, amount, price, type)
+        }
+    }
+
+    @Test
+    fun `should throw exception when the buyer is the same as the seller`() {
+        val exchangeSystem = aExchangeSystem().build()
+        val user = aUser()
+        exchangeSystem.registerUser(user)
+        val cryptocurrency = aCrypto()
+        val amount = 10.0
+        val price = 50000.0
+        val order = exchangeSystem.publishOrder(user, cryptocurrency, amount, price, IntentionType.BUY)
+
+        assertThrows<java.lang.Exception> {
+            exchangeSystem.startTransaction(order, user)
+        }
+    }
+
+    @Test
+    fun `should cancel transaction when seller is the same as transaction seller`() {
+        val exchangeSystem = aExchangeSystem().build()
+        val seller = aUser()
+        val buyer = aUser2()
+        exchangeSystem.registerUser(seller)
+        exchangeSystem.registerUser(buyer)
+
+        val order = exchangeSystem.publishOrder(seller, aCrypto(), 10.0, 50000.0, IntentionType.SELL)
+        val transaction = exchangeSystem.startTransaction(order, buyer)
+
+        exchangeSystem.sellerCancelsTransaction(transaction)
+
+        assertEquals(TransactionStatus.CANCELLED_BY_USER, transaction.status)
+        assertEquals(-20, seller.score)
+    }
+
+    @Test
+    fun `should mark transaction as paid when buyer pays`() {
+        val exchangeSystem = aExchangeSystem().build()
+        val buyer = aUser()
+        val seller = aUser2()
+        exchangeSystem.registerUser(buyer)
+        exchangeSystem.registerUser(seller)
+        val order = exchangeSystem.publishOrder(seller, aCrypto(), 10.0, 50000.0, IntentionType.SELL)
+        val transaction = exchangeSystem.startTransaction(order, buyer)
+
+        exchangeSystem.buyerPaidTransaction(transaction)
+
+        assertEquals(TransactionStatus.PAID, transaction.status)
+    }
+
+    @Test
+    fun `should decrease buyer score when buyer cancels transaction`() {
+        val exchangeSystem = aExchangeSystem().build()
+        val buyer = aUser()
+        val seller = aUser2()
+        exchangeSystem.registerUser(buyer)
+        exchangeSystem.registerUser(seller)
+        val order = exchangeSystem.publishOrder(seller, aCrypto(), 10.0, 50000.0, IntentionType.SELL)
+        val transaction = exchangeSystem.startTransaction(order, buyer)
+
+        exchangeSystem.buyerCancelTransaction(transaction)
+
+        assertEquals(TransactionStatus.CANCELLED_BY_USER, transaction.status)
+        assertEquals(-20, buyer.score)
+    }
+
+    @Test
+    fun `should mark transaction as confirmed when seller confirms`() {
+        val exchangeSystem = aExchangeSystem().build()
+        val buyer = aUser()
+        val seller = aUser2()
+        exchangeSystem.registerUser(buyer)
+        exchangeSystem.registerUser(seller)
+        val order = exchangeSystem.publishOrder(seller, aCrypto(), 10.0, 50000.0, IntentionType.SELL)
+        val transaction = exchangeSystem.startTransaction(order, buyer)
+        transaction.paid()
+
+        exchangeSystem.sellerConfirmTransaction(transaction)
+
+        assertEquals(TransactionStatus.CONFIRMED, transaction.status)
+    }
+
 }

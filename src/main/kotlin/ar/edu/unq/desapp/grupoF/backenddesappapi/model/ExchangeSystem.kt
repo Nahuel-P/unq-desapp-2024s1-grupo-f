@@ -49,10 +49,13 @@ class ExchangeSystem {
     }
 
     private fun validatePriceMargin(order: Order) {
-        var lastPrice = order.cryptocurrency!!.lastPrice()!!.price
-        var userPrice = order.price
-        var margin = lastPrice?.times(0.05)
-        if (userPrice!! > lastPrice!! + margin!! || userPrice < lastPrice - margin) {
+        val lastPrice = order.cryptocurrency?.lastPrice()?.price
+        val userPrice = order.price
+        val margin = lastPrice?.times(0.05)
+
+        if (lastPrice == null || userPrice == null || margin == null) {
+            throw Exception("Price or last price or margin is null")
+        } else if (userPrice > lastPrice + margin || userPrice < lastPrice - margin) {
             throw Exception("Price is out of margin range of 5% of the last price of the cryptocurrency")
         }
     }
@@ -71,7 +74,7 @@ class ExchangeSystem {
         isRegisteredOrder(order)
         areSameUsers(order.ownerUser!!, counterParty)
         order.isAvailable()
-        var transaction = TransactionBuilder()
+        val transaction = TransactionBuilder()
             .withOrder(order)
             .withCounterParty(counterParty)
             .build()
@@ -80,25 +83,26 @@ class ExchangeSystem {
         return transaction
     }
 
-    fun buyerPaidTransaction(transaction: Transaction, user: User): Transaction {
-        existTransaction(transaction)
-        areSameUsers(transaction.buyer()!!, user)
-        isAvaibleToPaid(transaction)
+    fun buyerPaidTransaction(transaction: Transaction): Transaction {
+        existsTransaction(transaction)
+//        areSameUsers(transaction.buyer()!!, user)
+        isAvailableToPaid(transaction)
         return transaction.paid()
     }
 
-    fun buyerCancelTransaction(transaction: Transaction, user: User): Transaction {
-        existTransaction(transaction)
-        areSameUsers(transaction.buyer()!!,user)
+    fun buyerCancelTransaction(transaction: Transaction): Transaction {
+        existsTransaction(transaction)
+//        areSameUsers(transaction.seller()!!,user)
         var updateTransaction = transaction.cancelByUser()
+        val user = transaction.buyer()!!
         user.decreaseScore()
         return updateTransaction
     }
 
-    fun sellerConfirmTransaction(transaction: Transaction, user: User): Transaction {
-        existTransaction(transaction)
-        areSameUsers(transaction.seller()!!,user)
-        isAvaibleToConfirmed(transaction)
+    fun sellerConfirmTransaction(transaction: Transaction): Transaction {
+        existsTransaction(transaction)
+//        areSameUsers(transaction.seller()!!,user)
+        isAvailableToConfirmed(transaction)
         var updateTransaction = transaction.confirmed()
         updateReputationBy(transaction.entryTime, transaction.endTime,transaction.buyer()!!, transaction.seller()!!)
         return updateTransaction
@@ -114,30 +118,29 @@ class ExchangeSystem {
         seller.increaseScore(increment).increaseTransactions()
     }
 
-    fun sellerCancelTransaction(transaction: Transaction, user: User) {
-        existTransaction(transaction)
-        areSameUsers(transaction.seller()!!,user)
-        isAvaibleToConfirmed(transaction)
+    fun sellerCancelsTransaction(transaction: Transaction) {
+        existsTransaction(transaction)
+//        areSameUsers(transaction.seller()!!,user) // it is not necessary to check if the buyer is the same as the user
+//        isAvailableToConfirmed(transaction)
+        val user = transaction.seller()!!
         transaction.cancelByUser()
         user.decreaseScore()
     }
 
-    private fun isAvaibleToConfirmed(transaction: Transaction) {
+    private fun isAvailableToConfirmed(transaction: Transaction) {
         if (transaction.status != TransactionStatus.PAID) {
             throw IllegalArgumentException("Transaction is not available to be paid for the buyer")
         }
     }
 
-    private fun isAvaibleToPaid(transaction: Transaction) {
+    private fun isAvailableToPaid(transaction: Transaction) {
         if (transaction.status != TransactionStatus.PENDING) {
             throw IllegalArgumentException("Transaction is not available to be paid for the buyer")
         }
     }
 
-    private fun existTransaction(transaction: Transaction) {
-        if (transactions.contains(transaction)) {
-            throw IllegalArgumentException("Transaction is not registered")
-        }
+    private fun existsTransaction(transaction: Transaction): Boolean {
+        return transactions.contains(transaction)
     }
 
     private fun areSameUsers(ownerUser: User, counterParty: User) {
