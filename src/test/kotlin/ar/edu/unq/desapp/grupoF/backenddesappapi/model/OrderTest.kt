@@ -5,7 +5,7 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.OrderBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 
@@ -71,23 +71,31 @@ class OrderTest {
         val order = aOrder().withType(IntentionType.BUY).build()
         assertEquals(IntentionType.BUY, order.type)
     }
-//    @Test
-//    fun `withEntryTime sets the entryTime`() {
-//        val time = LocalDateTime.now()
-//        val order = aOrder().build()
-//        assertEquals(time, order.entryTime)
-//    }
 
-//    @Test
-//    fun `withIsActive sets the isActive`() {
-//        val order = aOrder().build()
-//        assertEquals(true, order.isActive)
-//    }
-//
-//    @Test
-//    fun `withState sets the state`() {
-//        val order = aOrder().build()
-//        order.close()
-//        assertEquals(StateOrder.CLOSED, order.state)
-//    }
+
+    @Test
+    fun `should not throw exception when order is available`() {
+        val order = aOrder().build()
+
+        assertDoesNotThrow {
+            order.isAvailable()
+        }
+    }
+
+    @Test
+    fun `should disable order`() {
+        val order = aOrder().build()
+        order.disable()
+
+        assertFalse(order.isActive)
+    }
+
+    @Test
+    fun `should not throw exception when order is open and active`() {
+        val order = aOrder().build()
+
+        assertDoesNotThrow {
+            order.isAvailable()
+        }
+    }
 }
