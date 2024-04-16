@@ -27,7 +27,6 @@ class Order {
     }
 
     fun disable() {
-        this.state = StateOrder.CLOSED
         this.isActive = false
     }
 
