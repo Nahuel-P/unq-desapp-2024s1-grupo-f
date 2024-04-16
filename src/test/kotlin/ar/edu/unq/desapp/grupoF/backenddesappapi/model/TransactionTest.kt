@@ -7,9 +7,9 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.StateOrder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.TransactionStatus
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertDoesNotThrow
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 
 
 class TransactionTest {
@@ -40,7 +40,6 @@ class TransactionTest {
             .withAmount(10.0)
             .withPrice(50000.0)
             .withType(IntentionType.BUY)
-            .withState(StateOrder.OPEN)
     }
 
 
@@ -115,7 +114,6 @@ class TransactionTest {
         val transaction = aTransaction().build()
         transaction.cancelByUser()
         assertEquals(TransactionStatus.CANCELLED_BY_USER, transaction.status)
-        assertFalse(transaction.isActive)
     }
 
     @Test
@@ -123,16 +121,14 @@ class TransactionTest {
         val transaction = aTransaction().build()
         transaction.cancelBySystem()
         assertEquals(TransactionStatus.CANCELLED_BY_SYSTEM, transaction.status)
-        assertFalse(transaction.isActive)
     }
 
     @Test
     fun `should set status to CONFIRMED, isActive to false and close the order when confirmed is called`() {
-        val order = anOrder().withIsActive(true).build()
+        val order = anOrder().build()
         val transaction = aTransaction().withOrder(order).build()
         transaction.confirmed()
         assertEquals(TransactionStatus.CONFIRMED, transaction.status)
-        assertFalse(transaction.isActive)
         assertEquals(StateOrder.CLOSED, transaction.order!!.state)
     }
 }

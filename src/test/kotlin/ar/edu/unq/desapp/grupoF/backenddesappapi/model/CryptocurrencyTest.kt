@@ -30,11 +30,11 @@ class CryptocurrencyTest {
 
     @Test
     fun `lastPrice returns the most recent price history`() {
-        val oldPrice = PriceHistory().apply {
+        val oldPrice = PriceHistory(CryptoSymbol.BTCUSDT, 2.0).apply {
             this.price = 100.0
             this.priceTime = LocalDateTime.now().minusDays(1)
         }
-        val recentPrice = PriceHistory().apply {
+        val recentPrice = PriceHistory(CryptoSymbol.BTCUSDT, 2.0).apply {
             this.price = 200.0
             this.priceTime = LocalDateTime.now()
         }
@@ -48,11 +48,11 @@ class CryptocurrencyTest {
 
     @Test
     fun `pricesOver24hs returns only the prices from the last 24 hours`() {
-        val oldPrice = PriceHistory().apply {
+        val oldPrice = PriceHistory(CryptoSymbol.BTCUSDT, 2.0).apply {
             this.price = 100.0
             this.priceTime = LocalDateTime.now().minusDays(2)
         }
-        val recentPrice = PriceHistory().apply {
+        val recentPrice = PriceHistory(CryptoSymbol.BTCUSDT, 2.0).apply {
             this.price = 200.0
             this.priceTime = LocalDateTime.now()
         }
@@ -68,7 +68,7 @@ class CryptocurrencyTest {
 
     @Test
     fun `pricesOver24hs returns an empty list when there are no prices from the last 24 hours`() {
-        val oldPrice = PriceHistory().apply {
+        val oldPrice = PriceHistory(CryptoSymbol.BTCUSDT, 2.0).apply {
             this.price = 100.0
             this.priceTime = LocalDateTime.now().minusDays(2)
         }

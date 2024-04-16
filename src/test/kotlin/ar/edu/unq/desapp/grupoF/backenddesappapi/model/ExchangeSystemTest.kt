@@ -6,7 +6,6 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.OrderBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.StateOrder
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -94,13 +93,13 @@ class ExchangeSystemTest {
 
     @Test
     fun `getPrices returns list of last prices for each cryptocurrency`() {
-        val priceHistory1 = PriceHistory().apply {
+        val priceHistory1 = PriceHistory(CryptoSymbol.BTCUSDT, 2.0).apply {
             this.price = 100.0
             this.priceTime = LocalDateTime.now()
         }
         val crypto1 = CryptocurrencyBuilder().withName(CryptoSymbol.BTCUSDT).withPriceHistory(mutableListOf(priceHistory1)).build()
 
-        val priceHistory2 = PriceHistory().apply {
+        val priceHistory2 = PriceHistory(CryptoSymbol.BTCUSDT, 2.0).apply {
             this.price = 200.0
             this.priceTime = LocalDateTime.now()
         }

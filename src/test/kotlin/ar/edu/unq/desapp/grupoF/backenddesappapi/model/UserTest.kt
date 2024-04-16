@@ -1,14 +1,9 @@
 
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Cryptocurrency
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.CryptocurrencyBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
-import org.junit.jupiter.api.Assertions
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
-import org.mockito.Mockito.mock
 
 class UserTest {
     fun aUser(): UserBuilder {
@@ -121,5 +116,28 @@ class UserTest {
             aUser()
                 .withCvu("12345678912121212").build()
         }
+    }
+
+    @Test
+    fun `should decrease reputation by 20`() {
+        val user = aUser().build()
+        user.decreaseScore()
+        assertEquals(-20, user.score)
+    }
+
+    @Test
+    fun `should increase reputation by given increment`() {
+        val user = aUser().build()
+        user.increaseScore(10)
+        assertEquals(10, user.score)
+    }
+
+    @Test
+    fun `should increase reputation by given increment multiple times`() {
+        val user = aUser().build()
+        for (i in 1..10) {
+            user.increaseScore(10)
+        }
+        assertEquals(100, user.score)
     }
 }
