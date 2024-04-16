@@ -4,8 +4,6 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Cryptocurrency
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Order
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.StateOrder
-import java.time.LocalDateTime
 
 class OrderBuilder {
     private var ownerUser: User? = null
@@ -17,12 +15,12 @@ class OrderBuilder {
 
 
     fun build(): Order {
-        requireNotNull(this.ownerUser) { "Owner user must not be null" }
-        requireNotNull(this.cryptocurrency) { "Cryptocurrency must not be null" }
-        requireNotNull(this.amount) { "Amount must not be null" }
-        requireNotNull(this.price) { "Price must not be null" }
-        requireNotNull(this.type) { "Type must not be null" }
-        requireNotNull(this.priceARS) { "PriceARS must not be null" }
+//        requireNotNull(this.ownerUser) { "Owner user must not be null" }
+//        requireNotNull(this.cryptocurrency) { "Cryptocurrency must not be null" }
+//        requireNotNull(this.amount) { "Amount must not be null" }
+//        requireNotNull(this.price) { "Price must not be null" }
+//        requireNotNull(this.type) { "Type must not be null" }
+//        requireNotNull(this.priceARS) { "PriceARS must not be null" }
 
         val order = Order()
         order.ownerUser = this.ownerUser

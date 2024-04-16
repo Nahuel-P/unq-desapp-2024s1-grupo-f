@@ -14,7 +14,7 @@ class ExchangeSystem {
     var orders: MutableList<Order> = mutableListOf()
     var transactions: MutableList<Transaction> = mutableListOf()
     var cryptocurrencies: MutableSet<Cryptocurrency>? = null
-    var USTPrice: Double = 00.00
+    var USTPrice: Double = 1.00
 
     fun registerUser(user: User) {
         validateUser(user)
@@ -33,7 +33,7 @@ class ExchangeSystem {
         return cryptocurrency.pricesOver24hs()
     }
 
-    fun publishOrder(user: User, cryptocurrency: Cryptocurrency, amount: Double, price: Double, type: IntentionType): Order {
+    fun publishOrder(user: User, cryptocurrency: Cryptocurrency, amount: Double, price: Double, type: IntentionType, ): Order {
         isUserRegistered(user)
         val order = OrderBuilder()
             .withOwnerUser(user)

@@ -84,9 +84,8 @@ class ExchangeSystemTest {
     @Test
     fun `cannot place an order from an unregistered user`() {
         val exchangeSystem = aExchangeSystem().build()
-        val order = aOrder().build()
         val exception = assertThrows<IllegalArgumentException> {
-            exchangeSystem.publishOrder(order)
+            exchangeSystem.publishOrder(aUser(), aCrypto(), 1.0, 1.0, IntentionType.SELL)
         }
         assertEquals("User is not registered", exception.message)
     }

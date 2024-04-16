@@ -85,7 +85,7 @@ class Transaction {
         return when (order!!.type) {
             IntentionType.SELL -> order!!.ownerUser
             IntentionType.BUY -> counterParty
-            else -> throw Exception("The order type is not valid")
+            null -> throw Exception("The order type cannot be null")
         }
     }
 
@@ -93,7 +93,7 @@ class Transaction {
         return when (order!!.type) {
             IntentionType.BUY -> order!!.ownerUser
             IntentionType.SELL -> counterParty
-            else -> throw Exception("The order type is not valid")
+            null -> throw Exception("The order type cannot be null")
         }
     }
 }
