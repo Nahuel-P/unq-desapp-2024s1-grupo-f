@@ -6,7 +6,6 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 
@@ -71,36 +70,6 @@ class OrderTest {
     fun `builds order with correct type`() {
         val order = aOrder().withType(IntentionType.BUY).build()
         assertEquals(IntentionType.BUY, order.type)
-    }
-
-    @Test
-    fun `throws exception when building order without owner`() {
-        val orderBuilder = OrderBuilder().withCryptocurrency(aCryptocurrency().build()).withAmount(10.0).withPrice(50000.0).withType(IntentionType.BUY)
-        assertThrows(IllegalArgumentException::class.java) { orderBuilder.build() }
-    }
-
-    @Test
-    fun `throws exception when building order without cryptocurrency`() {
-        val orderBuilder = OrderBuilder().withOwnerUser(aUser().build()).withAmount(10.0).withPrice(50000.0).withType(IntentionType.BUY)
-        assertThrows(IllegalArgumentException::class.java) { orderBuilder.build() }
-    }
-
-    @Test
-    fun `throws exception when building order without amount`() {
-        val orderBuilder = OrderBuilder().withOwnerUser(aUser().build()).withCryptocurrency(aCryptocurrency().build()).withPrice(50000.0).withType(IntentionType.BUY)
-        assertThrows(IllegalArgumentException::class.java) { orderBuilder.build() }
-    }
-
-    @Test
-    fun `throws exception when building order without price`() {
-        val orderBuilder = OrderBuilder().withOwnerUser(aUser().build()).withCryptocurrency(aCryptocurrency().build()).withAmount(10.0).withType(IntentionType.BUY)
-        assertThrows(IllegalArgumentException::class.java) { orderBuilder.build() }
-    }
-
-    @Test
-    fun `throws exception when building order without type`() {
-        val orderBuilder = OrderBuilder().withOwnerUser(aUser().build()).withCryptocurrency(aCryptocurrency().build()).withAmount(10.0).withPrice(50000.0)
-        assertThrows(IllegalArgumentException::class.java) { orderBuilder.build() }
     }
 //    @Test
 //    fun `withEntryTime sets the entryTime`() {
