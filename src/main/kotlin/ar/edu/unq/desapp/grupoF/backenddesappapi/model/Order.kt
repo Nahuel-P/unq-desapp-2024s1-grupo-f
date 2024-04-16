@@ -20,7 +20,7 @@ class Order {
     }
 
     fun isTransactable(): Boolean {
-        return (state != StateOrder.OPEN && isActive)
+        return (state == StateOrder.OPEN && isActive)
     }
 
     fun disable() {

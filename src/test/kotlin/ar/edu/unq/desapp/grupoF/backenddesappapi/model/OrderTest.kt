@@ -5,6 +5,7 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.utils.aOrder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.utils.aUser
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import java.time.LocalDateTime
 
 class OrderTest {
 
@@ -42,9 +43,22 @@ class OrderTest {
     }
 
     @Test
+    fun `entryTime is set when order is created`() {
+        val order = aOrder().build()
+        assertNotNull(order.entryTime)
+        assertTrue(order.entryTime.isBefore(LocalDateTime.now().plusSeconds(1)))
+    }
+
+    @Test
     fun `builds buy order`() {
         val order = aOrder().withType(IntentionType.BUY).build()
         assertTrue(order.isBuyOrder())
+    }
+
+    @Test
+    fun `should return false when order is not sell order`() {
+        val order = aOrder().withType(IntentionType.BUY).build()
+        assertFalse(order.isSellOrder())
     }
 
     @Test
@@ -53,26 +67,56 @@ class OrderTest {
         assertTrue(order.isSellOrder())
     }
 
-//    @Test
-//    fun `order with valid data is available`() {
-//        val order = aOrder().build()
-//        order.disable()
-//        assertFalse(order.isActive)
-//    }
-
+    @Test
+    fun `should return false when order is not buy order`() {
+        val order = aOrder().withType(IntentionType.SELL).build()
+        assertFalse(order.isBuyOrder())
+    }
 
     @Test
-    fun `should disable order`() {
+    fun `order with valid data is active`() {
+        val order = aOrder().build()
+        assertTrue(order.isActive())
+    }
+
+    @Test
+    fun `order with valid data is transactable`() {
+        val order = aOrder().build()
+        assertTrue(order.isTransactable())
+    }
+
+    @Test
+    fun `should disable an order to make it inactive`() {
         val order = aOrder().build()
         order.disable()
         assertFalse(order.isActive())
     }
 
     @Test
+    fun `an inactive order is not transactable`() {
+        val order = aOrder().build()
+        order.disable()
+        assertFalse(order.isTransactable())
+    }
+
+    @Test
     fun `should return false when order is not finished`() {
         val order = aOrder().build()
-
         assertFalse(order.isFinished())
+    }
+
+    @Test
+    fun `when closing an order, its status becomes finished`() {
+        val order = aOrder().build()
+        order.close()
+        assertTrue(order.isFinished())
+    }
+
+    @Test
+    fun `a closed order is not transactable`() {
+        val order = aOrder().build()
+        order.close()
+        assertFalse(order.isTransactable())
     }
 
     @Test
@@ -80,36 +124,7 @@ class OrderTest {
         val order = aOrder().build()
         order.close()
         order.reset()
-
         assertFalse(order.isFinished())
-    }
-
-    @Test
-    fun `should return true when order is buy order`() {
-        val order = aOrder().withType(IntentionType.BUY).build()
-
-        assertTrue(order.isBuyOrder())
-    }
-
-    @Test
-    fun `should return false when order is not buy order`() {
-        val order = aOrder().withType(IntentionType.SELL).build()
-
-        assertFalse(order.isBuyOrder())
-    }
-
-    @Test
-    fun `should return true when order is sell order`() {
-        val order = aOrder().withType(IntentionType.SELL).build()
-
-        assertTrue(order.isSellOrder())
-    }
-
-    @Test
-    fun `should return false when order is not sell order`() {
-        val order = aOrder().withType(IntentionType.BUY).build()
-
-        assertFalse(order.isSellOrder())
     }
 
 }
