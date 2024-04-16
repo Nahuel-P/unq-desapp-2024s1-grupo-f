@@ -33,8 +33,8 @@ class CryptocurrencyBuilder {
         return name
     }
 
-    fun withPriceHistory(priceHistory: MutableList<PriceHistory>): CryptocurrencyBuilder {
-        this.priceHistory = priceHistory
+    fun withPriceHistory(priceHistory: List<PriceHistory>): CryptocurrencyBuilder {
+        this.priceHistory = priceHistory.toMutableList()
         return this
     }
 }

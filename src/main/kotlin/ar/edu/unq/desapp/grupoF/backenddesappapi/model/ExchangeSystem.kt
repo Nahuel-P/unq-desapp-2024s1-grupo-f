@@ -134,15 +134,11 @@ class ExchangeSystem {
     }
 
     private fun isAvailableToConfirmed(transaction: Transaction) {
-        if (transaction.status != TransactionStatus.PAID) {
-            throw IllegalArgumentException("Transaction is not available to be paid for the buyer")
-        }
+        require(transaction.status == TransactionStatus.PAID) { "Transaction is not available to be paid for the buyer" }
     }
 
     private fun isAvailableToPaid(transaction: Transaction) {
-        if (transaction.status != TransactionStatus.PENDING) {
-            throw IllegalArgumentException("Transaction is not available to be paid for the buyer")
-        }
+        require(transaction.status == TransactionStatus.PENDING) { "Transaction is not available to be paid for the buyer" }
     }
 
     private fun existsTransaction(transaction: Transaction): Boolean {
@@ -156,27 +152,19 @@ class ExchangeSystem {
     }
 
     private fun validateUser(user: User) {
-        if (users.any { it.email == user.email }) {
-            throw IllegalArgumentException("Email already exists")
-        }
+        require(!(users.any { it.email == user.email })) { "Email already exists" }
     }
 
     private fun isUserRegistered(ownerUser: User) {
-        if (!users.contains(ownerUser)) {
-            throw IllegalArgumentException("User is not registered")
-        }
+        require(users.contains(ownerUser)) { "User is not registered" }
     }
 
     private fun isRegisteredOrder(order: Order) {
-        if (!orders.contains(order)) {
-            throw IllegalArgumentException("Order is not registered")
-        }
+        require(orders.contains(order)) { "Order is not registered" }
     }
 
     private fun isTransactableOrder(order: Order) {
-        if (!order.isTransactable()) {
-            throw IllegalArgumentException("Order is not transactable at the moment")
-        }
+        require(order.isTransactable()) { "Order is not transactable at the moment" }
     }
 
 }
