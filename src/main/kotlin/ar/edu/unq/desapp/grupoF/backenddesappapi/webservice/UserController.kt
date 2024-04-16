@@ -24,13 +24,13 @@ class UserController(private val userService: UserService) {
             val userResponseDTO = userService.registerUser(userCreateRequest)
             ResponseEntity(userResponseDTO, HttpStatus.OK)
         } catch (e: Exception) {
-            ResponseEntity("Error registering user: ${e.message}", HttpStatus.BAD_REQUEST)
+            ResponseEntity(mapOf("message" to "Error registering user: ${e.message}"), HttpStatus.BAD_REQUEST)
         }
     }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun handleValidationExceptions(e: MethodArgumentNotValidException): String {
-        return e.bindingResult.allErrors[0].defaultMessage ?: "Validation error"
+    fun handleValidationExceptions(e: MethodArgumentNotValidException): Map<String, String> {
+        return mapOf("message" to (e.bindingResult.allErrors[0].defaultMessage ?: "Validation error"))
     }
 }
