@@ -13,7 +13,7 @@ class Order {
     var entryTime: LocalDateTime = LocalDateTime.now()
     var isActive: Boolean = true
     var state: StateOrder = StateOrder.OPEN
-//    var priceARS: Double? = null
+    var priceARS: Double? = 00.00
 
     fun close(){
         this.isActive = false

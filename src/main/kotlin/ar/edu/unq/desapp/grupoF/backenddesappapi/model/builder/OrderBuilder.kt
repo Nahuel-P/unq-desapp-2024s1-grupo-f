@@ -13,9 +13,8 @@ class OrderBuilder {
     private var amount: Double? = null
     private var price: Double? = null
     private var type: IntentionType? = null
-    private var entryTime: LocalDateTime = LocalDateTime.now()
-    private var isActive: Boolean? = null
-    private var state: StateOrder? = null
+    private var priceARS: Double? = null
+
 
     fun build(): Order {
         requireNotNull(this.ownerUser) { "Owner user must not be null" }
@@ -23,6 +22,7 @@ class OrderBuilder {
         requireNotNull(this.amount) { "Amount must not be null" }
         requireNotNull(this.price) { "Price must not be null" }
         requireNotNull(this.type) { "Type must not be null" }
+        requireNotNull(this.priceARS) { "PriceARS must not be null" }
 
         val order = Order()
         order.ownerUser = this.ownerUser
@@ -30,7 +30,7 @@ class OrderBuilder {
         order.amount = this.amount
         order.price = this.price
         order.type = this.type
-        order.entryTime = this.entryTime
+        order.priceARS = this.priceARS
         return order
     }
 
@@ -59,6 +59,11 @@ class OrderBuilder {
         return this
     }
 
+    fun withPriceARS(priceARS: Double): OrderBuilder {
+        this.priceARS = priceARS
+        return this
+    }
+
     private fun validatePriceMargin(price: Double): Double {
         val lastPrice = this.cryptocurrency?.lastPrice()?.price
         val margin = lastPrice?.times(0.05)
@@ -67,22 +72,5 @@ class OrderBuilder {
 //        }
         return price
     }
-
-//    fun withEntryTime(entryTime: LocalDateTime): OrderBuilder {
-//        this.entryTime = entryTime
-//        return this
-//    }
-//
-//    fun withIsActive(isActive: Boolean): OrderBuilder {
-//        this.isActive = isActive
-//        return this
-//    }
-//
-//    fun withState(state: StateOrder): OrderBuilder {
-//        this.state = state
-//        return this
-//    }
-
-
 
 }

@@ -1,6 +1,8 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.model
 
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.OrderBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.TransactionBuilder
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.StateOrder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.TransactionStatus
 import java.time.Duration
@@ -12,6 +14,7 @@ class ExchangeSystem {
     var orders: MutableList<Order> = mutableListOf()
     var transactions: MutableList<Transaction> = mutableListOf()
     var cryptocurrencies: MutableSet<Cryptocurrency>? = null
+    var USTPrice: Double = 00.00
 
     fun registerUser(user: User) {
         validateUser(user)
@@ -30,10 +33,19 @@ class ExchangeSystem {
         return cryptocurrency.pricesOver24hs()
     }
 
-    fun publishOrder(order: Order) {
-        isUserRegistered(order.ownerUser!!)
+    fun publishOrder(user: User, cryptocurrency: Cryptocurrency, amount: Double, price: Double, type: IntentionType): Order {
+        isUserRegistered(user)
+        val order = OrderBuilder()
+            .withOwnerUser(user)
+            .withCryptocurrency(cryptocurrency)
+            .withAmount(amount)
+            .withPrice(price)
+            .withType(type)
+            .withPriceARS(amount * price * USTPrice)
+            .build()
         validatePriceMargin(order)
         orders.add(order)
+        return order
     }
 
     private fun validatePriceMargin(order: Order) {
@@ -59,7 +71,10 @@ class ExchangeSystem {
         isRegisteredOrder(order)
         areSameUsers(order.ownerUser!!, counterParty)
         order.isAvailable()
-        var transaction = TransactionBuilder().withOrder(order).withCounterParty(counterParty).build()
+        var transaction = TransactionBuilder()
+            .withOrder(order)
+            .withCounterParty(counterParty)
+            .build()
         transactions.add(transaction)
         order.disable()
         return transaction
