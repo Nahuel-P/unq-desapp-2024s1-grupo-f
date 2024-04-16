@@ -75,7 +75,10 @@ class UserCreateRequestDTOTest {
 
         val violations = validator.validate(dto)
         assertEquals(1, violations.size)
-        assertEquals("Password must contain at least 1 lowercase letter, 1 uppercase letter, 1 special character and be at least 6 characters long", violations.first().message)
+        assertEquals(
+            "Password must contain at least 1 lowercase letter, 1 uppercase letter, 1 special character and be at least 6 characters long",
+            violations.first().message
+        )
     }
 
     @Test

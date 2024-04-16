@@ -5,8 +5,9 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.TransactionBuilde
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.StateOrder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.TransactionStatus
-import ar.edu.unq.desapp.grupoF.backenddesappapi.utils.*
-
+import ar.edu.unq.desapp.grupoF.backenddesappapi.utils.aOrder
+import ar.edu.unq.desapp.grupoF.backenddesappapi.utils.aUser
+import ar.edu.unq.desapp.grupoF.backenddesappapi.utils.anotherUser
 import org.junit.jupiter.api.Assertions.assertDoesNotThrow
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -24,7 +25,6 @@ class TransactionTest {
     }
 
 
-
     private fun aBuyOrder(): OrderBuilder {
         return aOrder().withOwnerUser(buyer)
     }
@@ -37,19 +37,23 @@ class TransactionTest {
     @Test
     fun `should create a sale transaction when it has valid data`() {
         val order = aBuyOrder().withType(IntentionType.SELL).withOwnerUser(seller).build()
-        assertDoesNotThrow { aTransaction()
-                            .withOrder(order)
-                            .withCounterParty(buyer)
-                            .build() }
+        assertDoesNotThrow {
+            aTransaction()
+                .withOrder(order)
+                .withCounterParty(buyer)
+                .build()
+        }
     }
 
     @Test
     fun `should create a transaction when the buyer and seller are different`() {
         val order = aBuyOrder().withType(IntentionType.SELL).withOwnerUser(seller).build()
-        assertDoesNotThrow { aTransaction()
-                            .withOrder(order)
-                            .withCounterParty(buyer)
-                            .build() }
+        assertDoesNotThrow {
+            aTransaction()
+                .withOrder(order)
+                .withCounterParty(buyer)
+                .build()
+        }
     }
 
     @Test

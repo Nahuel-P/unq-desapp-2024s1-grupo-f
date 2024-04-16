@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController
 @Transactional
 class UserController(private val userService: UserService) {
 
-        @PostMapping("/registerUser")
+    @PostMapping("/registerUser")
     fun registerUser(@Valid @RequestBody userCreateRequest: UserCreateRequestDTO): User {
         return userService.registerUser(userCreateRequest)
     }

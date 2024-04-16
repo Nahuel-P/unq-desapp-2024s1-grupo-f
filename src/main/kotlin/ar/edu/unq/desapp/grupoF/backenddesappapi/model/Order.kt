@@ -1,4 +1,5 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.model
+
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.StateOrder
 import java.time.LocalDateTime
@@ -32,7 +33,7 @@ class Order {
         this.isActive = true
     }
 
-    fun close(){
+    fun close() {
         this.state = StateOrder.CLOSED
         this.isActive = false
     }

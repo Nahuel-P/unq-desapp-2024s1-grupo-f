@@ -23,7 +23,10 @@ class UserCreateRequestDTO(
     var address: String? = null,
 
     @field:NotBlank(message = "Password cannot be blank")
-    @field:Pattern(regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).{6,}$", message = "Password must contain at least 1 lowercase letter, 1 uppercase letter, 1 special character and be at least 6 characters long")
+    @field:Pattern(
+        regexp = "^(?=.*[a-z])(?=.*[A-Z])(?=.*\\W).{6,}$",
+        message = "Password must contain at least 1 lowercase letter, 1 uppercase letter, 1 special character and be at least 6 characters long"
+    )
     var password: String? = null,
 
     @field:NotBlank(message = "CVU cannot be blank")

@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder
 
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.*
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Cryptocurrency
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.ExchangeSystem
 
 class ExchangeSystemBuilder {
     private var cryptocurrencies: MutableSet<Cryptocurrency> = mutableSetOf()

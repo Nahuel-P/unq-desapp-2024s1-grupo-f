@@ -16,9 +16,9 @@ import java.time.LocalDateTime
 class ExchangeSystemTest {
 
     private fun aExchangeSystem(): ExchangeSystemBuilder {
-        return ExchangeSystemBuilder().
-                withCryptocurrencies(aCryptocurrencySet())
+        return ExchangeSystemBuilder().withCryptocurrencies(aCryptocurrencySet())
     }
+
     @Test
     fun `should create a exchange system when it has valid data`() {
         assertDoesNotThrow { aExchangeSystem().build() }
@@ -44,15 +44,6 @@ class ExchangeSystemTest {
         assertEquals("Email already exists", exception.message)
     }
 
-//    @Test
-//    fun `should place an order from a user`() {
-//        val exchangeSystem = aExchangeSystem().build()
-//        val user = aUser()
-//        exchangeSystem.registerUser(user)
-//        val order = aOrder().withOwnerUser(user).build()
-//        exchangeSystem.publishOrder(order)
-//        assertTrue(exchangeSystem.orders.contains(order))
-//    }
 
     @Test
     fun `cannot place an order from an unregistered user`() {
@@ -69,13 +60,17 @@ class ExchangeSystemTest {
             this.price = 100.0
             this.priceTime = LocalDateTime.now()
         }
-        val crypto1 = CryptocurrencyBuilder().withName(CryptoSymbol.BTCUSDT).withPriceHistory(mutableListOf(priceHistory1)).build()
+        val crypto1 =
+            CryptocurrencyBuilder().withName(CryptoSymbol.BTCUSDT).withPriceHistory(mutableListOf(priceHistory1))
+                .build()
 
         val priceHistory2 = PriceHistory(CryptoSymbol.BTCUSDT, 2.0).apply {
             this.price = 200.0
             this.priceTime = LocalDateTime.now()
         }
-        val crypto2 = CryptocurrencyBuilder().withName(CryptoSymbol.ETHUSDT).withPriceHistory(mutableListOf(priceHistory2)).build()
+        val crypto2 =
+            CryptocurrencyBuilder().withName(CryptoSymbol.ETHUSDT).withPriceHistory(mutableListOf(priceHistory2))
+                .build()
 
         val exchangeSystem = aExchangeSystem().withCryptocurrencies(mutableSetOf(crypto1, crypto2)).build()
 

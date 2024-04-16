@@ -5,7 +5,6 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Transaction
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 
 class TransactionBuilder {
-//    private var id: Long? = null
     private var order: Order? = null
     private var counterParty: User? = null
 

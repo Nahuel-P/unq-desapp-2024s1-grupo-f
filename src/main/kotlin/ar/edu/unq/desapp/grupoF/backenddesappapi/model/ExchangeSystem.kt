@@ -33,7 +33,13 @@ class ExchangeSystem {
         return cryptocurrency.pricesOver24hs()
     }
 
-    fun publishOrder(user: User, cryptocurrency: Cryptocurrency, amount: Double, price: Double, type: IntentionType, ): Order {
+    fun publishOrder(
+        user: User,
+        cryptocurrency: Cryptocurrency,
+        amount: Double,
+        price: Double,
+        type: IntentionType,
+    ): Order {
         isUserRegistered(user)
         val order = OrderBuilder()
             .withOwnerUser(user)
@@ -85,14 +91,12 @@ class ExchangeSystem {
 
     fun buyerPaidTransaction(transaction: Transaction): Transaction {
         existsTransaction(transaction)
-//        areSameUsers(transaction.buyer()!!, user)
         isAvailableToPaid(transaction)
         return transaction.paid()
     }
 
     fun buyerCancelTransaction(transaction: Transaction): Transaction {
         existsTransaction(transaction)
-//        areSameUsers(transaction.seller()!!,user)
         var updateTransaction = transaction.cancelByUser()
         val user = transaction.buyer()!!
         user.decreaseScore()
@@ -101,10 +105,9 @@ class ExchangeSystem {
 
     fun sellerConfirmTransaction(transaction: Transaction): Transaction {
         existsTransaction(transaction)
-//        areSameUsers(transaction.seller()!!,user)
         isAvailableToConfirmed(transaction)
         var updateTransaction = transaction.confirmed()
-        updateReputationBy(transaction.entryTime, transaction.endTime,transaction.buyer()!!, transaction.seller()!!)
+        updateReputationBy(transaction.entryTime, transaction.endTime, transaction.buyer()!!, transaction.seller()!!)
         return updateTransaction
     }
 
@@ -122,10 +125,9 @@ class ExchangeSystem {
             10
         }
     }
+
     fun sellerCancelsTransaction(transaction: Transaction) {
         existsTransaction(transaction)
-//        areSameUsers(transaction.seller()!!,user) // it is not necessary to check if the buyer is the same as the user
-//        isAvailableToConfirmed(transaction)
         val user = transaction.seller()!!
         transaction.cancelByUser()
         user.decreaseScore()
@@ -148,7 +150,7 @@ class ExchangeSystem {
     }
 
     private fun areSameUsers(ownerUser: User, counterParty: User) {
-        if(counterParty==ownerUser){
+        if (counterParty == ownerUser) {
             throw Exception("The buyer and the seller are the same person")
         }
     }
