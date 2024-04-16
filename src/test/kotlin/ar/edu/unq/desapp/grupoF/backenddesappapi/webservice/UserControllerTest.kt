@@ -1,45 +1,42 @@
-package ar.edu.unq.desapp.grupoF.backenddesappapi.webservice
 
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.UserService
+import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.UserController
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserCreateRequestDTO
+import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserResponseDTO
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
-import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
+import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
+import org.springframework.http.HttpStatus
 
-@SpringBootTest
 class UserControllerTest {
 
-    @MockBean
-    private lateinit var userService: UserService
+    private val userService: UserService = mock(UserService::class.java)
 
     @Test
-    fun `registerUser should return registered user`() {
+    fun `registerUser should return UserResponseDTO when valid UserCreateRequestDTO is provided`() {
         val userCreateRequest = UserCreateRequestDTO(
             firstName = "Miguel Angel",
             lastName = "Borja",
             email = "el.colibri09@gmail.com",
             address = "Av. Siempre Viva 742",
-            password = "Contraseña1!",
+            password = "valid",
             cvu = "1234567890123456789012",
             walletAddress = "12345678"
         )
 
-        val expectedUser = UserBuilder().withFirstName("Miguel Angel")
-            .withLastName("Borja")
-            .withEmail("el.colibri09@gmail.com")
-            .withAddress("Av. Siempre Viva 742")
-            .withPassword("Contraseña1!")
-            .withCvu("1234567890123456789012")
-            .withWalletAddress("12345678").build()
+        val userResponseDTO = UserResponseDTO(
+            firstName = "Miguel Angel",
+            email = "el.colibri09@gmail.com",
+        )
 
-        Mockito.`when`(userService.registerUser(userCreateRequest)).thenReturn(expectedUser)
+        `when`(userService.registerUser(userCreateRequest)).thenReturn(userResponseDTO)
 
         val userController = UserController(userService)
-        val actualUser = userController.registerUser(userCreateRequest)
+        val actualResponse = userController.registerUser(userCreateRequest)
 
-        assertEquals(expectedUser, actualUser)
+        assertEquals(HttpStatus.OK, actualResponse.statusCode)
+        assertEquals(userResponseDTO, actualResponse.body)
     }
+
 }

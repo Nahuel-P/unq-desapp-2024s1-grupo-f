@@ -1,16 +1,15 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.webservice
 
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.UserService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserCreateRequestDTO
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.transaction.Transactional
 import jakarta.validation.Valid
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.MethodArgumentNotValidException
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/user")
@@ -20,7 +19,18 @@ import org.springframework.web.bind.annotation.RestController
 class UserController(private val userService: UserService) {
 
     @PostMapping("/registerUser")
-    fun registerUser(@Valid @RequestBody userCreateRequest: UserCreateRequestDTO): User {
-        return userService.registerUser(userCreateRequest)
+    fun registerUser(@Valid @RequestBody userCreateRequest: UserCreateRequestDTO): ResponseEntity<Any> {
+        return try {
+            val userResponseDTO = userService.registerUser(userCreateRequest)
+            ResponseEntity(userResponseDTO, HttpStatus.OK)
+        } catch (e: Exception) {
+            ResponseEntity("Error registering user: ${e.message}", HttpStatus.BAD_REQUEST)
+        }
+    }
+
+    @ExceptionHandler(MethodArgumentNotValidException::class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    fun handleValidationExceptions(e: MethodArgumentNotValidException): String {
+        return e.bindingResult.allErrors[0].defaultMessage ?: "Validation error"
     }
 }
