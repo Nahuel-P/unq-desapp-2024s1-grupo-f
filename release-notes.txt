@@ -1,0 +1,9 @@
+TAG ENTREGA-1.0.0
+---
+NEW FEATURES:
+Added domain models
+Added unit tests for domain models
+Added POST /User/RegisterUser endpoint
+Added github actions (build and test project)
+Added integration with sonarcloud and deploy
+Implemented swagger for documentation
