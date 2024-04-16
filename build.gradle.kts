@@ -54,6 +54,7 @@ dependencies {
 	runtimeOnly("com.h2database:h2")
 	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	implementation("org.hibernate.validator:hibernate-validator:7.0.1.Final")
 	//	testImplementation("org.springframework.security:spring-security-test")
 }
 
