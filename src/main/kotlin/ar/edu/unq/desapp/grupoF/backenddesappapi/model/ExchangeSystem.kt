@@ -109,15 +109,19 @@ class ExchangeSystem {
     }
 
     private fun updateReputationBy(entryTime: LocalDateTime, endTime: LocalDateTime?, buyer: User, seller: User) {
-        var duration = Duration.between(entryTime, endTime)
-        var increment = 10
-        if (duration.toMinutes() > 30) {
-            increment = 5
-        }
+        val increment = calculateScoreBasedOnTimeLapse(entryTime, endTime)
         buyer.increaseScore(increment).increaseTransactions()
         seller.increaseScore(increment).increaseTransactions()
     }
 
+    private fun calculateScoreBasedOnTimeLapse(entryTime: LocalDateTime, endTime: LocalDateTime?): Int {
+        val duration = Duration.between(entryTime, endTime)
+        return if (duration.toMinutes() > 30) {
+            5
+        } else {
+            10
+        }
+    }
     fun sellerCancelsTransaction(transaction: Transaction) {
         existsTransaction(transaction)
 //        areSameUsers(transaction.seller()!!,user) // it is not necessary to check if the buyer is the same as the user

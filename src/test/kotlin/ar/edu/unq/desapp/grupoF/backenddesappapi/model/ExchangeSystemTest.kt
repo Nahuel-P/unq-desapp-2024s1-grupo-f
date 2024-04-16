@@ -7,8 +7,7 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.TransactionStatus
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
@@ -272,6 +271,79 @@ class ExchangeSystemTest {
         exchangeSystem.sellerConfirmTransaction(transaction)
 
         assertEquals(TransactionStatus.CONFIRMED, transaction.status)
+    }
+
+    @Test
+    fun `should increase score by 10 when transaction duration is less than or equal to 30 minutes`() {
+        val exchangeSystem = aExchangeSystem().build()
+        val buyer = aUser()
+        val seller = aUser2()
+        exchangeSystem.registerUser(buyer)
+        exchangeSystem.registerUser(seller)
+        val order = exchangeSystem.publishOrder(seller, aCrypto(), 10.0, 50000.0, IntentionType.SELL)
+        val transaction = exchangeSystem.startTransaction(order, buyer)
+        transaction.paid()
+        transaction.endTime = transaction.entryTime.plusMinutes(30)
+
+        exchangeSystem.sellerConfirmTransaction(transaction)
+
+        assertEquals(10, buyer.score)
+        assertEquals(10, seller.score)
+    }
+
+    @Test
+    fun `should increase score by 5 when transaction duration is more than 30 minutes`() {
+        val exchangeSystem = aExchangeSystem().build()
+        val buyer = aUser()
+        val seller = aUser2()
+        exchangeSystem.registerUser(buyer)
+        exchangeSystem.registerUser(seller)
+        val order = exchangeSystem.publishOrder(seller, aCrypto(), 10.0, 50000.0, IntentionType.SELL)
+        val transaction = exchangeSystem.startTransaction(order, buyer)
+        transaction.paid()
+        transaction.entryTime = transaction.entryTime.minusMinutes(50)
+
+        exchangeSystem.sellerConfirmTransaction(transaction)
+
+        assertEquals(5, buyer.score)
+        assertEquals(5, seller.score)
+    }
+
+    @Test
+    fun `should return only open orders`() {
+        val exchangeSystem = aExchangeSystem().build()
+        val user = aUser()
+        exchangeSystem.registerUser(user)
+        val openOrder = exchangeSystem.publishOrder(user, aCrypto(), 10.0, 50000.0, IntentionType.SELL)
+        val closedOrder = exchangeSystem.publishOrder(user, aCrypto(), 10.0, 50000.0, IntentionType.SELL)
+        closedOrder.disable()
+
+        val activeOrders = exchangeSystem.active0rders()
+
+        assertTrue(activeOrders.contains(openOrder))
+        assertFalse(activeOrders.contains(closedOrder))
+    }
+
+    @Test
+    fun `should return empty list when there are no open orders`() {
+        val exchangeSystem = aExchangeSystem().build()
+        val user = aUser()
+        exchangeSystem.registerUser(user)
+        val closedOrder = exchangeSystem.publishOrder(user, aCrypto(), 10.0, 50000.0, IntentionType.SELL)
+        closedOrder.disable()
+
+        val activeOrders = exchangeSystem.active0rders()
+
+        assertTrue(activeOrders.isEmpty())
+    }
+
+    @Test
+    fun `should return empty list when there are no orders`() {
+        val exchangeSystem = aExchangeSystem().build()
+
+        val activeOrders = exchangeSystem.active0rders()
+
+        assertTrue(activeOrders.isEmpty())
     }
 
 }
