@@ -26,4 +26,13 @@ class Order {
             throw IllegalArgumentException("The order is not available to start a transaction")
         }
     }
+
+    fun disable() {
+        this.isActive = false
+    }
+
+    fun reset() {
+        this.state = StateOrder.OPEN
+        this.isActive = true
+    }
 }

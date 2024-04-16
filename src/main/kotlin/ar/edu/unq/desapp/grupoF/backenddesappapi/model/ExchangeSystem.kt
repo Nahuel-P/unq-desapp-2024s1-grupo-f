@@ -2,6 +2,9 @@ package ar.edu.unq.desapp.grupoF.backenddesappapi.model
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.TransactionBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.StateOrder
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.TransactionStatus
+import java.time.Duration
+import java.time.LocalDateTime
 
 class ExchangeSystem {
 
@@ -58,7 +61,70 @@ class ExchangeSystem {
         order.isAvailable()
         var transaction = TransactionBuilder().withOrder(order).withCounterParty(counterParty).build()
         transactions.add(transaction)
+        order.disable()
         return transaction
+    }
+
+    fun buyerPaidTransaction(transaction: Transaction, user: User): Transaction {
+        existTransaction(transaction)
+        areSameUsers(transaction.buyer()!!, user)
+        isAvaibleToPaid(transaction)
+        var updateTransaction = transaction.paid()
+        increseRepuationBy(transaction.entryTime, transaction.endTime,transaction.buyer()!!, transaction.seller()!!)
+        return updateTransaction
+    }
+
+    fun buyerCancelTransaction(transaction: Transaction, user: User): Transaction {
+        existTransaction(transaction)
+        areSameUsers(transaction.buyer()!!,user)
+        var updateTransaction = transaction.cancelByUser()
+        user.decreaseReputation()
+        return updateTransaction
+    }
+
+    fun sellerCloseTransaction(transaction: Transaction, user: User): Transaction {
+        existTransaction(transaction)
+        areSameUsers(transaction.seller()!!,user)
+        isAvaibleToConfirmed(transaction)
+        var updateTransaction = transaction.confirmed()
+        increseRepuationBy(transaction.entryTime, transaction.endTime,transaction.buyer()!!, transaction.seller()!!)
+        return updateTransaction
+    }
+
+    private fun increseRepuationBy(entryTime: LocalDateTime, endTime: LocalDateTime?, buyer: User, seller: User) {
+        var duration = Duration.between(entryTime, endTime)
+        var increment = 10
+        if (duration.toMinutes() > 30) {
+            increment = 5
+        }
+        buyer.increaseReputation(increment)
+        seller.increaseReputation(increment)
+    }
+
+    fun sellerCancelTransaction(transaction: Transaction, user: User) {
+        existTransaction(transaction)
+        areSameUsers(transaction.seller()!!,user)
+        isAvaibleToConfirmed(transaction)
+        transaction.cancelByUser()
+        user.decreaseReputation()
+    }
+
+    private fun isAvaibleToConfirmed(transaction: Transaction) {
+        if (transaction.status != TransactionStatus.PAID) {
+            throw IllegalArgumentException("Transaction is not available to be paid for the buyer")
+        }
+    }
+
+    private fun isAvaibleToPaid(transaction: Transaction) {
+        if (transaction.status != TransactionStatus.PENDING) {
+            throw IllegalArgumentException("Transaction is not available to be paid for the buyer")
+        }
+    }
+
+    private fun existTransaction(transaction: Transaction) {
+        if (transactions.contains(transaction)) {
+            throw IllegalArgumentException("Transaction is not registered")
+        }
     }
 
     private fun areSameUsers(ownerUser: User, counterParty: User) {
@@ -84,7 +150,4 @@ class ExchangeSystem {
             throw IllegalArgumentException("Order is not registered")
         }
     }
-
-
-
 }

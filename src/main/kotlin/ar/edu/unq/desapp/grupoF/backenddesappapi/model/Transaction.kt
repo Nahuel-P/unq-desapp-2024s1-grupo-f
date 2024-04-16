@@ -16,7 +16,6 @@ class Transaction {
     var status: TransactionStatus? = TransactionStatus.PENDING
     var entryTime: LocalDateTime = LocalDateTime.now()
     var endTime: LocalDateTime? = null
-    var isActive: Boolean = false
 
 //    fun startTransaction(order: Order, counterParty: User): Transaction{
 //        if(counterParty==order.ownerUser){
@@ -57,24 +56,44 @@ class Transaction {
 
 
 
-    fun paid(){
+    fun paid(): Transaction {
         this.status = TransactionStatus.PAID
+        return this
     }
-    fun cancelByUser(){
+    fun cancelByUser(): Transaction {
         this.status = TransactionStatus.CANCELLED_BY_USER
         this.endTime = LocalDateTime.now()
-        this.isActive = false
+        this.order!!.reset()
+        return this
     }
 
-    fun cancelBySystem(){
+    fun cancelBySystem(): Transaction{
         this.status = TransactionStatus.CANCELLED_BY_SYSTEM
         this.endTime = LocalDateTime.now()
-        this.isActive = false
+        this.order!!.reset()
+        return this
     }
-    fun confirmed(){
+
+    fun confirmed(): Transaction{
         this.status = TransactionStatus.CONFIRMED
         this.endTime = LocalDateTime.now()
-        this.isActive = false
         this.order!!.close()
+        return this
+    }
+
+    fun seller(): User? {
+        return when (order!!.type) {
+            IntentionType.SELL -> order!!.ownerUser
+            IntentionType.BUY -> counterParty
+            else -> throw Exception("The order type is not valid")
+        }
+    }
+
+    fun buyer(): User? {
+        return when (order!!.type) {
+            IntentionType.BUY -> order!!.ownerUser
+            IntentionType.SELL -> counterParty
+            else -> throw Exception("The order type is not valid")
+        }
     }
 }
