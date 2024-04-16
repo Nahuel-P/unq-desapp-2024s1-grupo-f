@@ -27,7 +27,7 @@ class UserController(private val userService: UserService) {
             )
             ResponseEntity(response, HttpStatus.OK)
         } catch (e: Exception) {
-            ResponseEntity(mapOf("message" to "Error registering user: ${e.message}"), HttpStatus.BAD_REQUEST)
+            ResponseEntity(mapOf("message" to e.message), HttpStatus.BAD_REQUEST)
         }
     }
 

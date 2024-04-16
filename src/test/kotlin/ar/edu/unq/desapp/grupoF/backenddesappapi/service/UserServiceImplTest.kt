@@ -1,30 +1,47 @@
-package ar.edu.unq.desapp.grupoF.backenddesappapi.service
 
+import ar.edu.unq.desapp.grupoF.backenddesappapi.service.UserServiceImpl
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserCreateRequestDTO
-import org.junit.jupiter.api.Assertions.assertThrows
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import org.springframework.boot.test.context.SpringBootTest
 
-@SpringBootTest
 class UserServiceImplTest {
 
+    private val userService = UserServiceImpl()
     @Test
-    fun `registerUser should throw IllegalArgumentException when UserCreateRequestDTO with null email is provided`() {
-        val userService = UserServiceImpl()
-        val userCreateRequest = UserCreateRequestDTO().apply { email = null }
+    fun `registerUser should return error message when email is null`() {
+        val userCreateRequest = UserCreateRequestDTO(
+            firstName = "Michael",
+            lastName = "Scott",
+            email = null,
+            address = "1725 Slough Avenue, Scranton",
+            password = "Password1!",
+            cvu = "1234567890123456789012",
+            walletAddress = "12345678"
+        )
 
-        assertThrows(IllegalArgumentException::class.java) {
-            userService.registerUser(userCreateRequest)
-        }
+        val expectedResponse = "{\"message\":\"Email must not be null or empty\"}"
+
+        val actualResponse = userService.registerUser(userCreateRequest)
+
+        assertEquals(expectedResponse, actualResponse)
     }
 
     @Test
-    fun `registerUser should throw IllegalArgumentException when UserCreateRequestDTO with empty email is provided`() {
-        val userService = UserServiceImpl()
-        val userCreateRequest = UserCreateRequestDTO().apply { email = "" }
+    fun `registerUser should return error message when email is empty`() {
+        val userCreateRequest = UserCreateRequestDTO(
+            firstName = "Michael",
+            lastName = "Scott",
+            email = "",
+            address = "1725 Slough Avenue, Scranton",
+            password = "Password1!",
+            cvu = "1234567890123456789012",
+            walletAddress = "12345678"
+        )
 
-        assertThrows(IllegalArgumentException::class.java) {
-            userService.registerUser(userCreateRequest)
-        }
+        val expectedResponse = "{\"message\":\"Email must not be null or empty\"}"
+
+        val actualResponse = userService.registerUser(userCreateRequest)
+
+        assertEquals(expectedResponse, actualResponse)
     }
 }
