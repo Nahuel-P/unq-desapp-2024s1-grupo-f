@@ -1,14 +1,10 @@
 
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.PriceHistory
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.CryptocurrencyBuilder
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.OrderBuilder
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
-import ar.edu.unq.desapp.grupoF.backenddesappapi.utils.*
+import ar.edu.unq.desapp.grupoF.backenddesappapi.utils.aCryptocurrency
+import ar.edu.unq.desapp.grupoF.backenddesappapi.utils.aOrder
+import ar.edu.unq.desapp.grupoF.backenddesappapi.utils.aUser
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import java.time.LocalDateTime
 
 class OrderTest {
 
@@ -58,12 +54,56 @@ class OrderTest {
         assertFalse(order.isActive())
     }
 
-//    @Test
-//    fun ``() {
-//        val order = aOrder().build()
-//        order.disable()
-//        assertFalse(order.isActive)
-//    }
+    @Test
+    fun `should return true when order is finished`() {
+        val order = aOrder().build()
+        order.close()
 
+        assertTrue(order.isFinished())
+    }
+
+    @Test
+    fun `should return false when order is not finished`() {
+        val order = aOrder().build()
+
+        assertFalse(order.isFinished())
+    }
+
+    @Test
+    fun `should return false when order is reset after being finished`() {
+        val order = aOrder().build()
+        order.close()
+        order.reset()
+
+        assertFalse(order.isFinished())
+    }
+
+    @Test
+    fun `should return true when order is buy order`() {
+        val order = aOrder().withType(IntentionType.BUY).build()
+
+        assertTrue(order.isBuyOrder())
+    }
+
+    @Test
+    fun `should return false when order is not buy order`() {
+        val order = aOrder().withType(IntentionType.SELL).build()
+
+        assertFalse(order.isBuyOrder())
+    }
+
+    @Test
+    fun `should return true when order is sell order`() {
+        val order = aOrder().withType(IntentionType.SELL).build()
+
+        assertTrue(order.isSellOrder())
+    }
+
+    @Test
+    fun `should return false when order is not sell order`() {
+        val order = aOrder().withType(IntentionType.BUY).build()
+
+        assertFalse(order.isSellOrder())
+    }
 
 }
