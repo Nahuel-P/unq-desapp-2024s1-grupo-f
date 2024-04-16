@@ -5,41 +5,20 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.OrderBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
+import ar.edu.unq.desapp.grupoF.backenddesappapi.utils.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import java.time.LocalDateTime
 
 class OrderTest {
 
-    fun aUser(): UserBuilder {
-        return UserBuilder()
-            .withFirstName("Miguel Angel")
-            .withLastName("Borja")
-            .withEmail("el.colibri09@gmail.com")
-            .withAddress("Av. Siempre Viva 742")
-            .withPassword("Contraseña1!")
-            .withCvu("1234567890123456789012")
-            .withWalletAddress("12345678")
-    }
-
-    fun aCryptocurrency(): CryptocurrencyBuilder {
-        val priceHistory = PriceHistory(CryptoSymbol.BTCUSDT, 2.0)
-        return CryptocurrencyBuilder()
-            .withName(CryptoSymbol.BTCUSDT)
-            .withCreated(LocalDateTime.now())
-            .withPriceHistory(mutableListOf(priceHistory))
-    }
-
-    fun aOrder(): OrderBuilder {
-        return OrderBuilder()
-            .withOwnerUser(aUser().build())
-            .withCryptocurrency(aCryptocurrency().build())
-            .withAmount(10.0)
-            .withPrice(50000.0)
-            .withType(IntentionType.BUY)
-    }
     @Test
-    fun `builds order with correct owner`() {
+    fun `should create a order when it has valid data`() {
+        org.junit.jupiter.api.assertDoesNotThrow { aOrder().build() }
+    }
+
+    @Test
+    fun `builds order with an owner`() {
         val owner = aUser().build()
         val order = aOrder().withOwnerUser(owner).build()
         assertEquals(owner, order.ownerUser)
@@ -67,35 +46,24 @@ class OrderTest {
     }
 
     @Test
-    fun `builds order with correct type`() {
+    fun `builds buy order`() {
         val order = aOrder().withType(IntentionType.BUY).build()
         assertEquals(IntentionType.BUY, order.type)
-    }
-
-
-    @Test
-    fun `should not throw exception when order is available`() {
-        val order = aOrder().build()
-
-        assertDoesNotThrow {
-            order.isAvailable()
-        }
     }
 
     @Test
     fun `should disable order`() {
         val order = aOrder().build()
         order.disable()
-
-        assertFalse(order.isActive)
+        assertFalse(order.isActive())
     }
 
-    @Test
-    fun `should not throw exception when order is open and active`() {
-        val order = aOrder().build()
+//    @Test
+//    fun ``() {
+//        val order = aOrder().build()
+//        order.disable()
+//        assertFalse(order.isActive)
+//    }
 
-        assertDoesNotThrow {
-            order.isAvailable()
-        }
-    }
+
 }

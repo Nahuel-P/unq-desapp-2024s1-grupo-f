@@ -15,13 +15,6 @@ class OrderBuilder {
 
 
     fun build(): Order {
-//        requireNotNull(this.ownerUser) { "Owner user must not be null" }
-//        requireNotNull(this.cryptocurrency) { "Cryptocurrency must not be null" }
-//        requireNotNull(this.amount) { "Amount must not be null" }
-//        requireNotNull(this.price) { "Price must not be null" }
-//        requireNotNull(this.type) { "Type must not be null" }
-//        requireNotNull(this.priceARS) { "PriceARS must not be null" }
-
         val order = Order()
         order.ownerUser = this.ownerUser
         order.cryptocurrency = this.cryptocurrency

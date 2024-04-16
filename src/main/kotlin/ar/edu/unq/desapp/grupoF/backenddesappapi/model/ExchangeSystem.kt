@@ -73,7 +73,7 @@ class ExchangeSystem {
         isUserRegistered(counterParty)
         isRegisteredOrder(order)
         areSameUsers(order.ownerUser!!, counterParty)
-        order.isAvailable()
+        order.isTransactable()
         val transaction = TransactionBuilder()
             .withOrder(order)
             .withCounterParty(counterParty)
