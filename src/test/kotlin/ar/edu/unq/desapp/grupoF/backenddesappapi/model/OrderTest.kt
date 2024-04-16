@@ -48,8 +48,22 @@ class OrderTest {
     @Test
     fun `builds buy order`() {
         val order = aOrder().withType(IntentionType.BUY).build()
-        assertEquals(IntentionType.BUY, order.type)
+        assertTrue(order.isBuyOrder())
     }
+
+    @Test
+    fun `builds sell order`() {
+        val order = aOrder().withType(IntentionType.SELL).build()
+        assertTrue(order.isSellOrder())
+    }
+
+    @Test
+    fun `order with valid data is available`() {
+        val order = aOrder().build()
+        order.disable()
+        assertFalse(order.isActive)
+    }
+
 
     @Test
     fun `should disable order`() {
@@ -58,12 +72,6 @@ class OrderTest {
         assertFalse(order.isActive())
     }
 
-//    @Test
-//    fun ``() {
-//        val order = aOrder().build()
-//        order.disable()
-//        assertFalse(order.isActive)
-//    }
 
 
 }

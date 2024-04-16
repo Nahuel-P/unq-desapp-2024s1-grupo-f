@@ -14,29 +14,13 @@ class Order {
     var priceARS: Double? = 0.00
     private var isActive: Boolean = true
 
-    fun close(){
-        this.state = StateOrder.CLOSED
-        this.isActive = false
+
+    fun isActive(): Boolean {
+        return isActive
     }
 
     fun isTransactable(): Boolean {
         return (state != StateOrder.OPEN && isActive)
-    }
-
-    fun isBuyOrder(): Boolean {
-        return type == IntentionType.BUY
-    }
-
-    fun isSellOrder(): Boolean {
-        return type == IntentionType.SELL
-    }
-
-    fun isActive(): Boolean {
-        return (state == StateOrder.OPEN && isActive)
-    }
-
-    fun isFinished(): Boolean {
-        return (state == StateOrder.CLOSED && !isActive)
     }
 
     fun disable() {
@@ -47,4 +31,22 @@ class Order {
         this.state = StateOrder.OPEN
         this.isActive = true
     }
+
+    fun close(){
+        this.state = StateOrder.CLOSED
+        this.isActive = false
+    }
+
+    fun isFinished(): Boolean {
+        return (state == StateOrder.CLOSED && !isActive)
+    }
+
+    fun isBuyOrder(): Boolean {
+        return type == IntentionType.BUY
+    }
+
+    fun isSellOrder(): Boolean {
+        return type == IntentionType.SELL
+    }
+
 }
