@@ -21,8 +21,11 @@ class UserController(private val userService: UserService) {
     @PostMapping("/registerUser")
     fun registerUser(@Valid @RequestBody userCreateRequest: UserCreateRequestDTO): ResponseEntity<Any> {
         return try {
-            val userResponseDTO = userService.registerUser(userCreateRequest)
-            ResponseEntity(userResponseDTO, HttpStatus.OK)
+            userService.registerUser(userCreateRequest)
+            val response = mapOf(
+                "message" to "User registration successful",
+            )
+            ResponseEntity(response, HttpStatus.OK)
         } catch (e: Exception) {
             ResponseEntity(mapOf("message" to "Error registering user: ${e.message}"), HttpStatus.BAD_REQUEST)
         }
