@@ -1,7 +1,6 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.model
 
 class User{
-    var id: Long? = null
     var firstName: String? = null
     var lastName: String? = null
     var email: String? = null
@@ -13,12 +12,24 @@ class User{
     var successfulTransaction: Int = 0
     var score: Int = 0
 
-    fun decreaseReputation() {
+    fun decreaseScore(): User {
         score -= 20
+        return this
     }
 
-    fun increaseReputation(increment: Int) {
+    fun increaseScore(increment: Int): User {
         score += increment
+        return this
     }
+
+    fun increaseTransactions(): User {
+        successfulTransaction++
+        return this
+    }
+
+    fun reputation(): Int {
+        return score / successfulTransaction
+    }
+
 
 }

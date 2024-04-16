@@ -11,10 +11,9 @@ class Order {
     var price: Double? = null   //validar que este +-5% del precio actual
     var type: IntentionType? = null
     var entryTime: LocalDateTime = LocalDateTime.now()
-    var isActive: Boolean? = null
-    var state: StateOrder? = null
-
-    var priceARS: Double? = null
+    var isActive: Boolean = true
+    var state: StateOrder = StateOrder.OPEN
+//    var priceARS: Double? = null
 
     fun close(){
         this.isActive = false
@@ -22,7 +21,7 @@ class Order {
     }
 
     fun isAvailable() {
-        if (state != StateOrder.OPEN && isActive != true) {
+        if (state != StateOrder.OPEN && !isActive) {
             throw IllegalArgumentException("The order is not available to start a transaction")
         }
     }

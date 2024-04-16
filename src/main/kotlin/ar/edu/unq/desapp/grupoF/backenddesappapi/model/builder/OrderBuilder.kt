@@ -19,13 +19,9 @@ class OrderBuilder {
 
     fun build(): Order {
         requireNotNull(this.ownerUser) { "Owner user must not be null" }
-
         requireNotNull(this.cryptocurrency) { "Cryptocurrency must not be null" }
-
         requireNotNull(this.amount) { "Amount must not be null" }
-
         requireNotNull(this.price) { "Price must not be null" }
-
         requireNotNull(this.type) { "Type must not be null" }
 
         val order = Order()
@@ -35,8 +31,6 @@ class OrderBuilder {
         order.price = this.price
         order.type = this.type
         order.entryTime = this.entryTime
-        order.isActive = this.isActive
-        order.state = this.state
         return order
     }
 
@@ -56,30 +50,38 @@ class OrderBuilder {
     }
 
     fun withPrice(price: Double): OrderBuilder {
-        this.price = price
+        this.price = validatePriceMargin(price)
         return this
     }
-
 
     fun withType(type: IntentionType): OrderBuilder {
         this.type = type
         return this
     }
 
-    fun withEntryTime(entryTime: LocalDateTime): OrderBuilder {
-        this.entryTime = entryTime
-        return this
+    private fun validatePriceMargin(price: Double): Double? {
+        val lastPrice = this.cryptocurrency?.lastPrice()?.price
+        val margin = lastPrice?.times(0.05)
+        if (lastPrice!! > price!! + margin!! || lastPrice < price - margin) {
+            throw IllegalArgumentException("Price is out of margin range of 5% of the last price of the cryptocurrency")
+        }
+        return price
     }
 
-    fun withIsActive(isActive: Boolean): OrderBuilder {
-        this.isActive = isActive
-        return this
-    }
-
-    fun withState(state: StateOrder): OrderBuilder {
-        this.state = state
-        return this
-    }
+//    fun withEntryTime(entryTime: LocalDateTime): OrderBuilder {
+//        this.entryTime = entryTime
+//        return this
+//    }
+//
+//    fun withIsActive(isActive: Boolean): OrderBuilder {
+//        this.isActive = isActive
+//        return this
+//    }
+//
+//    fun withState(state: StateOrder): OrderBuilder {
+//        this.state = state
+//        return this
+//    }
 
 
 

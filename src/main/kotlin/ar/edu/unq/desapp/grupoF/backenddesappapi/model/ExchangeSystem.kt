@@ -69,36 +69,34 @@ class ExchangeSystem {
         existTransaction(transaction)
         areSameUsers(transaction.buyer()!!, user)
         isAvaibleToPaid(transaction)
-        var updateTransaction = transaction.paid()
-        increseRepuationBy(transaction.entryTime, transaction.endTime,transaction.buyer()!!, transaction.seller()!!)
-        return updateTransaction
+        return transaction.paid()
     }
 
     fun buyerCancelTransaction(transaction: Transaction, user: User): Transaction {
         existTransaction(transaction)
         areSameUsers(transaction.buyer()!!,user)
         var updateTransaction = transaction.cancelByUser()
-        user.decreaseReputation()
+        user.decreaseScore()
         return updateTransaction
     }
 
-    fun sellerCloseTransaction(transaction: Transaction, user: User): Transaction {
+    fun sellerConfirmTransaction(transaction: Transaction, user: User): Transaction {
         existTransaction(transaction)
         areSameUsers(transaction.seller()!!,user)
         isAvaibleToConfirmed(transaction)
         var updateTransaction = transaction.confirmed()
-        increseRepuationBy(transaction.entryTime, transaction.endTime,transaction.buyer()!!, transaction.seller()!!)
+        updateReputationBy(transaction.entryTime, transaction.endTime,transaction.buyer()!!, transaction.seller()!!)
         return updateTransaction
     }
 
-    private fun increseRepuationBy(entryTime: LocalDateTime, endTime: LocalDateTime?, buyer: User, seller: User) {
+    private fun updateReputationBy(entryTime: LocalDateTime, endTime: LocalDateTime?, buyer: User, seller: User) {
         var duration = Duration.between(entryTime, endTime)
         var increment = 10
         if (duration.toMinutes() > 30) {
             increment = 5
         }
-        buyer.increaseReputation(increment)
-        seller.increaseReputation(increment)
+        buyer.increaseScore(increment).increaseTransactions()
+        seller.increaseScore(increment).increaseTransactions()
     }
 
     fun sellerCancelTransaction(transaction: Transaction, user: User) {
@@ -106,7 +104,7 @@ class ExchangeSystem {
         areSameUsers(transaction.seller()!!,user)
         isAvaibleToConfirmed(transaction)
         transaction.cancelByUser()
-        user.decreaseReputation()
+        user.decreaseScore()
     }
 
     private fun isAvaibleToConfirmed(transaction: Transaction) {
