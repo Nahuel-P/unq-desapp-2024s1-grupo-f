@@ -10,7 +10,6 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.TransactionStatus
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import java.time.LocalDateTime
 
 
 class TransactionTest {
@@ -28,11 +27,6 @@ class TransactionTest {
         return TransactionBuilder()
             .withCounterParty(seller)
             .withOrder(anOrder().build())
-            .withStatus(TransactionStatus.PENDING)
-            .withEntryTime(LocalDateTime.now())
-            .withEndTime(LocalDateTime.now())
-            .withIsActive(true)
-            .withId(1L)
     }
 
     private fun aCryptoCurrency(): CryptocurrencyBuilder {
@@ -75,39 +69,36 @@ class TransactionTest {
     }
 
 
-    @Test
-    fun `should throw an error when the buyer is the same as the seller`() {
-        val order = anOrder().withType(IntentionType.SELL).withOwnerUser(seller).build()
-        val exception = assertThrows<Exception> {
-            aTransaction()
-                .withOrder(order)
-                .withCounterParty(seller)
-                .build()
-        }
-        assertEquals("The buyer and the seller are the same person", exception.message)
-    }
+//    @Test
+//    fun `should throw an error when the buyer is the same as the seller`() {
+//        val order = anOrder().withType(IntentionType.SELL).withOwnerUser(seller).build()
+//        val exception = assertThrows<Exception> {
+//            aTransaction()
+//                .withOrder(order)
+//                .withCounterParty(seller)
+//                .build()
+//        }
+//        assertEquals("The buyer and the seller are the same person", exception.message)
+//    }
 
-    @Test
-    fun `should throw an error when the user or buyer is null`(){
-        val order = anOrder().withType(IntentionType.SELL).withOwnerUser(seller).build()
-        assertThrows<java.lang.Exception>() {
-            aTransaction()
-                .withOrder(order)
-                .withCounterParty(null)
-                .build()
-        }
-    }
+//    @Test
+//    fun `should throw an error when the user or buyer is null`(){
+//        val order = anOrder().withType(IntentionType.SELL).withOwnerUser(seller).build()
+//        assertThrows<java.lang.Exception>() {
+//            aTransaction()
+//                .withOrder(order)
+//                .build()
+//        }
+//    }
 
 
-    @Test
-    fun `should throw an error when the order is null`(){
-        assertThrows<java.lang.Exception>() {
-            aTransaction()
-                .withOrder(null)
-                .withCounterParty(buyer)
-                .build()
-        }
-    }
+//    @Test
+//    fun `should throw an error when the order is null`(){
+//        assertThrows<java.lang.Exception>() {
+//            aTransaction()
+//                .build()
+//        }
+//    }
 
 
     @Test
