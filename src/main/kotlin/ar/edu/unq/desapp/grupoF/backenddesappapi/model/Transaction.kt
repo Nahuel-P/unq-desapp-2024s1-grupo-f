@@ -5,7 +5,6 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.TransactionStatus
 import java.time.LocalDateTime
 
 class Transaction {
-    var id: Long? = null
 //    var cryptocurrency: Cryptocurrency? = null
 //    var quantity: Double = 0.0
 //    var price: Double = 0.0
@@ -82,18 +81,18 @@ class Transaction {
     }
 
     fun seller(): User? {
-        return when (order!!.type) {
-            IntentionType.SELL -> order!!.ownerUser
-            IntentionType.BUY -> counterParty
-            null -> throw Exception("The order type cannot be null")
+        return if (order!!.type == IntentionType.SELL ){
+            order!!.ownerUser
+        } else {
+            counterParty
         }
     }
 
     fun buyer(): User? {
-        return when (order!!.type) {
-            IntentionType.BUY -> order!!.ownerUser
-            IntentionType.SELL -> counterParty
-            null -> throw Exception("The order type cannot be null")
+        return if (order!!.type == IntentionType.BUY ){
+            order!!.ownerUser
+        } else {
+            counterParty
         }
     }
 }
