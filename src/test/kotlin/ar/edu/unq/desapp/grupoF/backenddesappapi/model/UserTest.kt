@@ -140,4 +140,24 @@ class UserTest {
         }
         assertEquals(100, user.score)
     }
+
+    @Test
+    fun `should increase transactions by 1`() {
+        val user = aUser().build()
+        user.increaseTransactions()
+        assertEquals(1, user.successfulTransaction)
+    }
+
+    @Test
+    fun `user reputation is 0 when no transactions`() {
+        val user = aUser().build()
+        assertEquals(0, user.reputation())
+    }
+
+    @Test
+    fun `user reputation is 10 when 1 transaction and 10 score`() {
+        val user = aUser().build()
+        user.increaseScore(10).increaseTransactions()
+        assertEquals(10, user.reputation())
+    }
 }

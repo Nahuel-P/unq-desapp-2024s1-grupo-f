@@ -131,4 +131,47 @@ class TransactionTest {
         assertEquals(TransactionStatus.CONFIRMED, transaction.status)
         assertEquals(StateOrder.CLOSED, transaction.order!!.state)
     }
+
+    @Test
+    fun `should set endTime when cancelByUser is called`() {
+        val transaction = aTransaction().build()
+        transaction.cancelByUser()
+        assertDoesNotThrow { transaction.endTime }
+    }
+
+    @Test
+    fun `should set endTime when cancelBySystem is called`() {
+        val transaction = aTransaction().build()
+        transaction.cancelBySystem()
+        assertDoesNotThrow { transaction.endTime }
+    }
+
+    @Test
+    fun `the seller should be the owner of the order when the order is a sale`() {
+        val order = anOrder().withType(IntentionType.SELL).withOwnerUser(seller).build()
+        val transaction = aTransaction().withOrder(order).withCounterParty(buyer).build()
+        assertEquals(seller, transaction.seller())
+    }
+
+    @Test
+    fun `the seller should be the counterParty when the order is a purchase`() {
+        val order = anOrder().withType(IntentionType.BUY).withOwnerUser(buyer).build()
+        val transaction = aTransaction().withOrder(order).withCounterParty(seller).build()
+        assertEquals(seller, transaction.seller())
+    }
+
+    @Test
+    fun `the buyer should be the owner of the order when the order is a purchase`() {
+        val order = anOrder().withType(IntentionType.BUY).withOwnerUser(buyer).build()
+        val transaction = aTransaction().withOrder(order).withCounterParty(seller).build()
+        assertEquals(buyer, transaction.buyer())
+    }
+
+    @Test
+    fun `the buyer should be the counterParty when the order is a sale`() {
+        val order = anOrder().withType(IntentionType.SELL).withOwnerUser(seller).build()
+        val transaction = aTransaction().withOrder(order).withCounterParty(buyer).build()
+        assertEquals(buyer, transaction.buyer())
+    }
+
 }

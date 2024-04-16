@@ -28,6 +28,9 @@ class User{
     }
 
     fun reputation(): Int {
+        if (successfulTransaction == 0) {
+            return score
+        }
         return score / successfulTransaction
     }
 
