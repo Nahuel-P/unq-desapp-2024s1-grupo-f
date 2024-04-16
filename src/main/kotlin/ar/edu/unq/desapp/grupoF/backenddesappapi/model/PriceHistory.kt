@@ -6,6 +6,6 @@ import java.time.LocalDateTime
 class PriceHistory(symbol: CryptoSymbol, price: Double) {
 
     var cryptocurrency: CryptoSymbol? = symbol
-    var price: Double? = 0.0
+    var price: Double? = price
     var priceTime: LocalDateTime = LocalDateTime.now()
 }
