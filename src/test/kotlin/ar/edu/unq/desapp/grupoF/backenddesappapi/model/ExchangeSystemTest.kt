@@ -2,11 +2,11 @@ package ar.edu.unq.desapp.grupoF.backenddesappapi.model
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.CryptocurrencyBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.ExchangeSystemBuilder
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.OrderBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.TransactionStatus
+import ar.edu.unq.desapp.grupoF.backenddesappapi.utils.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
@@ -15,41 +15,10 @@ import java.time.LocalDateTime
 
 class ExchangeSystemTest {
 
-    fun cryptoHistory(): MutableList<PriceHistory> {
-        val priceHistory = PriceHistory(CryptoSymbol.BTCUSDT, 50000.0)
-        return mutableListOf(priceHistory)
-    }
-    fun aCrypto(): Cryptocurrency {
-        return CryptocurrencyBuilder().withName(CryptoSymbol.BTCUSDT).withPriceHistory(cryptoHistory()).build()
-    }
-
-    fun aUser(): User {
-        return UserBuilder().build()
-    }
-
-    fun aUser2(): User{
-        return UserBuilder().withEmail("test@gmail.com").build()
-    }
-
-    fun aCryptocurrencySet(): MutableSet<Cryptocurrency> {
-        return mutableSetOf(aCrypto())
-    }
-
-    fun aOrder(): OrderBuilder {
-        return OrderBuilder()
-            .withOwnerUser(aUser())
-            .withCryptocurrency(aCrypto())
-            .withAmount(10.0)
-            .withPrice(50000.0)
-            .withType(IntentionType.BUY)
-    }
-
     private fun aExchangeSystem(): ExchangeSystemBuilder {
         return ExchangeSystemBuilder().
                 withCryptocurrencies(aCryptocurrencySet())
-
     }
-
     @Test
     fun `should create a exchange system when it has valid data`() {
         assertDoesNotThrow { aExchangeSystem().build() }
@@ -89,7 +58,7 @@ class ExchangeSystemTest {
     fun `cannot place an order from an unregistered user`() {
         val exchangeSystem = aExchangeSystem().build()
         val exception = assertThrows<IllegalArgumentException> {
-            exchangeSystem.publishOrder(aUser(), aCrypto(), 1.0, 1.0, IntentionType.SELL)
+            exchangeSystem.publishOrder(aUser().build(), btcusdt(), 1.0, 1.0, IntentionType.SELL)
         }
         assertEquals("User is not registered", exception.message)
     }
@@ -148,7 +117,7 @@ class ExchangeSystemTest {
     @Test
     fun `ordersByUser returns empty list when user has no actives orders`() {
         val exchangeSystem = aExchangeSystem().build()
-        val user = aUser()
+        val user = aUser().build()
         exchangeSystem.registerUser(user)
 
         val userOrders = exchangeSystem.active0rdersByUser(user)
@@ -159,7 +128,7 @@ class ExchangeSystemTest {
     @Test
     fun `startTransaction throws IllegalArgumentException when user is not registered`() {
         val exchangeSystem = aExchangeSystem().build()
-        val user = aUser()
+        val user = aUser().build()
         val order = aOrder().withOwnerUser(user).build()
 
         assertThrows<IllegalArgumentException> {
@@ -170,7 +139,7 @@ class ExchangeSystemTest {
     @Test
     fun `startTransaction throws IllegalArgumentException when order is not registered`() {
         val exchangeSystem = aExchangeSystem().build()
-        val user = aUser()
+        val user = aUser().build()
         exchangeSystem.registerUser(user)
         val order = aOrder().withOwnerUser(user).build()
 
@@ -183,8 +152,8 @@ class ExchangeSystemTest {
     @Test
     fun `should throw exception when user is not registered`() {
         val exchangeSystem = aExchangeSystem().build()
-        val user = aUser()
-        val cryptocurrency = aCrypto()
+        val user = aUser().build()
+        val cryptocurrency = btcusdt()
         val amount = 10.0
         val price = 50000.0
         val type = IntentionType.BUY
@@ -197,9 +166,9 @@ class ExchangeSystemTest {
     @Test
     fun `should throw exception when the buyer is the same as the seller`() {
         val exchangeSystem = aExchangeSystem().build()
-        val user = aUser()
+        val user = aUser().build()
         exchangeSystem.registerUser(user)
-        val cryptocurrency = aCrypto()
+        val cryptocurrency = btcusdt()
         val amount = 10.0
         val price = 50000.0
         val order = exchangeSystem.publishOrder(user, cryptocurrency, amount, price, IntentionType.BUY)
@@ -212,12 +181,12 @@ class ExchangeSystemTest {
     @Test
     fun `should cancel transaction when seller is the same as transaction seller`() {
         val exchangeSystem = aExchangeSystem().build()
-        val seller = aUser()
-        val buyer = aUser2()
+        val seller = aUser().build()
+        val buyer = anotherUser().build()
         exchangeSystem.registerUser(seller)
         exchangeSystem.registerUser(buyer)
 
-        val order = exchangeSystem.publishOrder(seller, aCrypto(), 10.0, 50000.0, IntentionType.SELL)
+        val order = exchangeSystem.publishOrder(seller, btcusdt(), 10.0, 50000.0, IntentionType.SELL)
         val transaction = exchangeSystem.startTransaction(order, buyer)
 
         exchangeSystem.sellerCancelsTransaction(transaction)
@@ -229,11 +198,11 @@ class ExchangeSystemTest {
     @Test
     fun `should mark transaction as paid when buyer pays`() {
         val exchangeSystem = aExchangeSystem().build()
-        val buyer = aUser()
-        val seller = aUser2()
+        val buyer = aUser().build()
+        val seller = anotherUser().build()
         exchangeSystem.registerUser(buyer)
         exchangeSystem.registerUser(seller)
-        val order = exchangeSystem.publishOrder(seller, aCrypto(), 10.0, 50000.0, IntentionType.SELL)
+        val order = exchangeSystem.publishOrder(seller, btcusdt(), 10.0, 50000.0, IntentionType.SELL)
         val transaction = exchangeSystem.startTransaction(order, buyer)
 
         exchangeSystem.buyerPaidTransaction(transaction)
@@ -244,11 +213,11 @@ class ExchangeSystemTest {
     @Test
     fun `should decrease buyer score when buyer cancels transaction`() {
         val exchangeSystem = aExchangeSystem().build()
-        val buyer = aUser()
-        val seller = aUser2()
+        val buyer = aUser().build()
+        val seller = anotherUser().build()
         exchangeSystem.registerUser(buyer)
         exchangeSystem.registerUser(seller)
-        val order = exchangeSystem.publishOrder(seller, aCrypto(), 10.0, 50000.0, IntentionType.SELL)
+        val order = exchangeSystem.publishOrder(seller, btcusdt(), 10.0, 50000.0, IntentionType.SELL)
         val transaction = exchangeSystem.startTransaction(order, buyer)
 
         exchangeSystem.buyerCancelTransaction(transaction)
@@ -260,11 +229,11 @@ class ExchangeSystemTest {
     @Test
     fun `should mark transaction as confirmed when seller confirms`() {
         val exchangeSystem = aExchangeSystem().build()
-        val buyer = aUser()
-        val seller = aUser2()
+        val buyer = aUser().build()
+        val seller = anotherUser().build()
         exchangeSystem.registerUser(buyer)
         exchangeSystem.registerUser(seller)
-        val order = exchangeSystem.publishOrder(seller, aCrypto(), 10.0, 50000.0, IntentionType.SELL)
+        val order = exchangeSystem.publishOrder(seller, btcusdt(), 10.0, 50000.0, IntentionType.SELL)
         val transaction = exchangeSystem.startTransaction(order, buyer)
         transaction.paid()
 
@@ -276,11 +245,11 @@ class ExchangeSystemTest {
     @Test
     fun `should increase score by 10 when transaction duration is less than or equal to 30 minutes`() {
         val exchangeSystem = aExchangeSystem().build()
-        val buyer = aUser()
-        val seller = aUser2()
+        val buyer = aUser().build()
+        val seller = anotherUser().build()
         exchangeSystem.registerUser(buyer)
         exchangeSystem.registerUser(seller)
-        val order = exchangeSystem.publishOrder(seller, aCrypto(), 10.0, 50000.0, IntentionType.SELL)
+        val order = exchangeSystem.publishOrder(seller, btcusdt(), 10.0, 50000.0, IntentionType.SELL)
         val transaction = exchangeSystem.startTransaction(order, buyer)
         transaction.paid()
         transaction.endTime = transaction.entryTime.plusMinutes(30)
@@ -294,11 +263,11 @@ class ExchangeSystemTest {
     @Test
     fun `should increase score by 5 when transaction duration is more than 30 minutes`() {
         val exchangeSystem = aExchangeSystem().build()
-        val buyer = aUser()
-        val seller = aUser2()
+        val buyer = aUser().build()
+        val seller = anotherUser().build()
         exchangeSystem.registerUser(buyer)
         exchangeSystem.registerUser(seller)
-        val order = exchangeSystem.publishOrder(seller, aCrypto(), 10.0, 50000.0, IntentionType.SELL)
+        val order = exchangeSystem.publishOrder(seller, btcusdt(), 10.0, 50000.0, IntentionType.SELL)
         val transaction = exchangeSystem.startTransaction(order, buyer)
         transaction.paid()
         transaction.entryTime = transaction.entryTime.minusMinutes(50)
@@ -312,10 +281,10 @@ class ExchangeSystemTest {
     @Test
     fun `should return only open orders`() {
         val exchangeSystem = aExchangeSystem().build()
-        val user = aUser()
+        val user = aUser().build()
         exchangeSystem.registerUser(user)
-        val openOrder = exchangeSystem.publishOrder(user, aCrypto(), 10.0, 50000.0, IntentionType.SELL)
-        val closedOrder = exchangeSystem.publishOrder(user, aCrypto(), 10.0, 50000.0, IntentionType.SELL)
+        val openOrder = exchangeSystem.publishOrder(user, btcusdt(), 10.0, 50000.0, IntentionType.SELL)
+        val closedOrder = exchangeSystem.publishOrder(user, btcusdt(), 10.0, 50000.0, IntentionType.SELL)
         closedOrder.disable()
 
         val activeOrders = exchangeSystem.active0rders()
@@ -327,9 +296,9 @@ class ExchangeSystemTest {
     @Test
     fun `should return empty list when there are no open orders`() {
         val exchangeSystem = aExchangeSystem().build()
-        val user = aUser()
+        val user = aUser().build()
         exchangeSystem.registerUser(user)
-        val closedOrder = exchangeSystem.publishOrder(user, aCrypto(), 10.0, 50000.0, IntentionType.SELL)
+        val closedOrder = exchangeSystem.publishOrder(user, btcusdt(), 10.0, 50000.0, IntentionType.SELL)
         closedOrder.disable()
 
         val activeOrders = exchangeSystem.active0rders()

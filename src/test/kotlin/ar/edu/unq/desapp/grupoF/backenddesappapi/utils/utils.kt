@@ -1,6 +1,8 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.utils
 
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Cryptocurrency
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.PriceHistory
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.CryptocurrencyBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.OrderBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
@@ -19,6 +21,10 @@ fun aUser(): UserBuilder {
         .withWalletAddress("12345678")
 }
 
+fun anotherUser(): UserBuilder {
+    return UserBuilder().withEmail("test@gmail.com")
+}
+
 fun aCryptocurrency(): CryptocurrencyBuilder {
     val priceHistory = PriceHistory(CryptoSymbol.BTCUSDT, 2.0)
     return CryptocurrencyBuilder()
@@ -34,4 +40,17 @@ fun aOrder(): OrderBuilder {
         .withAmount(10.0)
         .withPrice(50000.0)
         .withType(IntentionType.BUY)
+}
+
+fun aCryptocurrencySet(): MutableSet<Cryptocurrency> {
+    return mutableSetOf(btcusdt())
+}
+
+fun btcusdt(): Cryptocurrency {
+    return CryptocurrencyBuilder().withName(CryptoSymbol.BTCUSDT).withPriceHistory(btcusdtHistory()).build()
+}
+
+fun btcusdtHistory(): MutableList<PriceHistory> {
+    val priceHistory = PriceHistory(CryptoSymbol.BTCUSDT, 50000.0)
+    return mutableListOf(priceHistory)
 }

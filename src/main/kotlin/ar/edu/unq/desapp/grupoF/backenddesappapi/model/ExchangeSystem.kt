@@ -73,7 +73,7 @@ class ExchangeSystem {
         isUserRegistered(counterParty)
         isRegisteredOrder(order)
         areSameUsers(order.ownerUser!!, counterParty)
-        order.isTransactable()
+        isTransactableOrder(order)
         val transaction = TransactionBuilder()
             .withOrder(order)
             .withCounterParty(counterParty)
@@ -170,4 +170,11 @@ class ExchangeSystem {
             throw IllegalArgumentException("Order is not registered")
         }
     }
+
+    private fun isTransactableOrder(order: Order) {
+        if (!order.isTransactable()) {
+            throw IllegalArgumentException("Order is not transactable at the moment")
+        }
+    }
+
 }
