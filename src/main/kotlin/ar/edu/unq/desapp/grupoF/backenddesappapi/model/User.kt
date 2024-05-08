@@ -1,17 +1,25 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.model
 
-class User {
-    var firstName: String? = null
-    var lastName: String? = null
-    var email: String? = null
-    var address: String? = null
-    var password: String? = null
-    var cvu: String? = null
-    var walletAddress: String? = null
+import jakarta.persistence.Entity
+import jakarta.persistence.GeneratedValue
+import jakarta.persistence.GenerationType
+import jakarta.persistence.Id
 
-    var successfulTransaction: Int = 0
+@Entity(name = "exchange_user")
+class User(
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    var id: Int? = null,
+    var firstName: String? = null,
+    var lastName: String? = null,
+    var email: String? = null,
+    var address: String? = null,
+    var password: String? = null,
+    var cvu: String? = null,
+    var walletAddress: String? = null,
+    var successfulTransaction: Int = 0,
     var score: Int = 0
-
+){
     fun decreaseScore(): User {
         score -= 20
         return this
