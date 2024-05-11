@@ -1,7 +1,9 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.webservice
 
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.UserService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserCreateRequestDTO
+import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.transaction.Transactional
 import jakarta.validation.Valid
@@ -17,23 +19,30 @@ import org.springframework.web.bind.annotation.*
 @Validated
 @Transactional
 class UserController(private val userService: UserService) {
-
+    @Operation(summary = "Registrar un usuario")
     @PostMapping("/registerUser")
     fun registerUser(@Valid @RequestBody userCreateRequest: UserCreateRequestDTO): ResponseEntity<Any> {
-        return try {
-            userService.registerUser(userCreateRequest)
-            val response = mapOf(
-                "message" to "User registration successful",
-            )
-            ResponseEntity(response, HttpStatus.OK)
+        try {
+            val anUser = UserBuilder()
+                .withFirstName(userCreateRequest.firstName!!)
+                .withLastName(userCreateRequest.lastName!!)
+                .withEmail(userCreateRequest.email!!)
+                .withAddress(userCreateRequest.address!!)
+                .withPassword(userCreateRequest.password!!)
+                .withCvu(userCreateRequest.cvu!!)
+                .withWalletAddress(userCreateRequest.walletAddress!!)
+                .build()
+
+            val newUser = userService.registerUser(anUser)
+            return ResponseEntity.status(HttpStatus.OK).body(mapOf("message" to "User registration successful. Id: ${newUser.id}"))
         } catch (e: Exception) {
-            ResponseEntity(mapOf("message" to e.message), HttpStatus.BAD_REQUEST)
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to e.message));
         }
     }
 
-    @ExceptionHandler(MethodArgumentNotValidException::class)
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    fun handleValidationExceptions(e: MethodArgumentNotValidException): Map<String, String> {
-        return mapOf("message" to (e.bindingResult.allErrors[0].defaultMessage ?: "Validation error"))
-    }
+//    @ExceptionHandler(MethodArgumentNotValidException::class)
+//    @ResponseStatus(HttpStatus.BAD_REQUEST)
+//    fun handleValidationExceptions(e: MethodArgumentNotValidException): Map<String, String> {
+//        return mapOf("message" to (e.bindingResult.allErrors[0].defaultMessage ?: "Validation error"))
+//    }
 }

@@ -1,9 +1,6 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.model
 
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
+import jakarta.persistence.*
 
 @Entity(name = "exchange_user")
 class User(
@@ -12,6 +9,7 @@ class User(
     var id: Int? = null,
     var firstName: String? = null,
     var lastName: String? = null,
+    @Column(unique = true)
     var email: String? = null,
     var address: String? = null,
     var password: String? = null,

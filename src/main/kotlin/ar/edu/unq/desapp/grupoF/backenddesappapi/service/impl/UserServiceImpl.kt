@@ -11,24 +11,10 @@ import org.springframework.stereotype.Service
 class UserServiceImpl( private val userRepository: UserRepository) : UserService{
 //    private val objectMapper = jacksonObjectMapper()
 
-    override fun registerUser(userCreateRequest: UserCreateRequestDTO): User {
-//        if (userCreateRequest.email == null || userCreateRequest.email!!.isEmpty()) {
-//            return objectMapper.writeValueAsString(mapOf("message" to "Email must not be null or empty"))
-//        }
-        val newUser = UserBuilder()
-                    .withFirstName(userCreateRequest.firstName!!)
-                    .withLastName(userCreateRequest.lastName!!)
-                    .withAddress(userCreateRequest.address!!)
-                    .withPassword(userCreateRequest.password!!)
-                    .withCvu(userCreateRequest.cvu!!)
-                    .withWalletAddress(userCreateRequest.walletAddress!!)
-                    .build()
-
-        newUser.email = userCreateRequest.email
-//      // to do
-//        return user.firstName?.let { user.email?.let { it1 -> objectMapper.writeValueAsString(UserResponseDTO(it, it1)) } }
-//            ?: objectMapper.writeValueAsString(mapOf("message" to "User registration failed"))
-
-        return userRepository.save(newUser)
+    override fun registerUser(user: User): User {
+        if (userRepository.existsByEmail(user.email!!)) {
+            throw Exception("User with email ${user.email} already exists")
+        }
+        return userRepository.save(user)
     }
 }
