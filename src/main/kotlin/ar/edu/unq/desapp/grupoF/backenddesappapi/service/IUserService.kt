@@ -5,4 +5,6 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserCreateReques
 
 interface UserService {
     fun registerUser(user: User): User
+    fun getUsers(): List<User>
+    fun findUser(id: Long): User
 }

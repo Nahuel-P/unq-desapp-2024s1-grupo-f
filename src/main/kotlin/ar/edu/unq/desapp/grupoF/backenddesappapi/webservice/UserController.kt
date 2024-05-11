@@ -40,9 +40,18 @@ class UserController(private val userService: UserService) {
         }
     }
 
-//    @ExceptionHandler(MethodArgumentNotValidException::class)
-//    @ResponseStatus(HttpStatus.BAD_REQUEST)
-//    fun handleValidationExceptions(e: MethodArgumentNotValidException): Map<String, String> {
-//        return mapOf("message" to (e.bindingResult.allErrors[0].defaultMessage ?: "Validation error"))
-//    }
+    @Operation(summary = "Obtener todos los usuarios registrados")
+    @GetMapping("/users")
+    fun getUsers(): ResponseEntity<Any> {
+        val users = userService.getUsers()
+        return ResponseEntity.status(HttpStatus.OK).body(users)
+    }
+
+    @Operation(summary = "Obtener todos los datos de un usuario")
+    @GetMapping("{id}")
+    fun getUsersByID(@PathVariable id: Long): ResponseEntity<Any> {
+        val user = userService.findUser(id)
+        return ResponseEntity.status(HttpStatus.OK).body(user)
+    }
+
 }
