@@ -1,59 +1,52 @@
+package ar.edu.unq.desapp.grupoF.backenddesappapi.webservice
 
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IUserService
-import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.UserController
-import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserCreateRequestDTO
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.springframework.http.HttpStatus
 
 class UserControllerTest {
-
     private val userService: IUserService = mock(IUserService::class.java)
 
     @Test
-    fun `registerUser returns success message when valid UserCreateRequestDTO is provided`() {
-        val userCreateRequest = UserCreateRequestDTO(
-            firstName = "Miguel Angel",
-            lastName = "Borja",
-            email = "el.colibri09@gmail.com",
-            address = "Av. Siempre Viva 742",
-            password = "validPassword!1",
-            cvu = "1234567890123456789012",
-            walletAddress = "12345678"
-        )
-
-        val response = mapOf("message" to "User registration successful")
-
-        `when`(userService.registerUser(userCreateRequest)).thenReturn(Unit)
+    fun `getUsers returns all registered users`() {
+        val users = listOf(UserBuilder().withFirstName("Michael").withLastName("Scott").withEmail("mscott@gmail.com").withAddress("1725 Slough Avenue").withPassword("P45sword!1").withCvu("1234567890123456789012").withWalletAddress("12345678").build())
+        `when`(userService.getUsers()).thenReturn(users)
 
         val userController = UserController(userService)
-        val actualResponse = userController.registerUser(userCreateRequest)
+        val actualResponse = userController.getUsers()
 
         assertEquals(HttpStatus.OK, actualResponse.statusCode)
-        assertEquals(response, actualResponse.body)
+        assertEquals(users, actualResponse.body)
     }
 
     @Test
-    fun `registerUser returns error message when exception is thrown`() {
-        val userCreateRequest = UserCreateRequestDTO(
-            firstName = "Miguel Angel",
-            lastName = "Borja",
-            email = "el.colibri09@gmail.com",
-            address = "Av. Siempre Viva 742",
-            password = "validPassword!1",
-            cvu = "1234567890123456789012",
-            walletAddress = "12345678"
-        )
-
-        val exceptionMessage = "Error registering user"
-        `when`(userService.registerUser(userCreateRequest)).thenThrow(RuntimeException(exceptionMessage))
+    fun `getUsersByID returns user with given id`() {
+        val user = UserBuilder().withFirstName("Michael").withLastName("Scott").withEmail("mscott@gmail.com").withAddress("1725 Slough Avenue").withPassword("P45sword!1").withCvu("1234567890123456789012").withWalletAddress("12345678").build()
+        `when`(userService.findUser(1)).thenReturn(user)
 
         val userController = UserController(userService)
-        val actualResponse = userController.registerUser(userCreateRequest)
+        val actualResponse = userController.getUsersByID(1)
 
-        assertEquals(HttpStatus.BAD_REQUEST, actualResponse.statusCode)
-        assertEquals(mapOf("message" to exceptionMessage), actualResponse.body)
+        assertEquals(HttpStatus.OK, actualResponse.statusCode)
+        assertEquals(user, actualResponse.body)
+    }
+
+    @Test
+    fun `getUsersByID returns error message when user with given id does not exist`() {
+        val exceptionMessage = "User not found"
+        `when`(userService.findUser(3)).thenThrow(RuntimeException(exceptionMessage))
+
+        val userController = UserController(userService)
+
+        val exception = assertThrows<RuntimeException> {
+            userController.getUsersByID(3)
+        }
+
+        assertEquals(exceptionMessage, exception.message)
     }
 }

@@ -1,47 +1,60 @@
+package ar.edu.unq.desapp.grupoF.backenddesappapi.service
 
-import ar.edu.unq.desapp.grupoF.backenddesappapi.service.UserServiceImpl
-import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserCreateRequestDTO
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
+import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.UserRepository
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.mockito.Mockito
+import org.mockito.Mockito.`when`
+import org.springframework.boot.test.context.SpringBootTest
+import java.util.*
 
+@SpringBootTest
 class UserServiceImplTest {
 
-    private val userService = UserServiceImpl()
+    private val userRepository: UserRepository = Mockito.mock(UserRepository::class.java)
+    private val userService = UserServiceImpl(userRepository)
+
     @Test
-    fun `registerUser should return error message when email is null`() {
-        val userCreateRequest = UserCreateRequestDTO(
-            firstName = "Michael",
-            lastName = "Scott",
-            email = null,
-            address = "1725 Slough Avenue, Scranton",
-            password = "Password1!",
-            cvu = "1234567890123456789012",
-            walletAddress = "12345678"
-        )
+    fun `registerUser throws exception when email already exists`() {
+        val user = UserBuilder().withFirstName("Michael").withLastName("Scott").withEmail("mscott@gmail.com").withAddress("1725 Slough Avenue").withPassword("P45sword!1").withCvu("1234567890123456789012").withWalletAddress("12345678").build()
+        `when`(userRepository.existsByEmail(user.email!!)).thenReturn(true)
 
-        val expectedResponse = "{\"message\":\"Email must not be null or empty\"}"
-
-        val actualResponse = userService.registerUser(userCreateRequest)
-
-        assertEquals(expectedResponse, actualResponse)
+        assertThrows<Exception> {
+            userService.registerUser(user)
+        }
     }
 
     @Test
-    fun `registerUser should return error message when email is empty`() {
-        val userCreateRequest = UserCreateRequestDTO(
-            firstName = "Michael",
-            lastName = "Scott",
-            email = "",
-            address = "1725 Slough Avenue, Scranton",
-            password = "Password1!",
-            cvu = "1234567890123456789012",
-            walletAddress = "12345678"
-        )
+    fun `registerUser returns user when email does not exist`() {
+        val user = UserBuilder().withFirstName("Michael").withLastName("Scott").withEmail("mscott@gmail.com").withAddress("1725 Slough Avenue").withPassword("P45sword!1").withCvu("1234567890123456789012").withWalletAddress("12345678").build()
+        `when`(userRepository.existsByEmail(user.email!!)).thenReturn(false)
+        `when`(userRepository.save(user)).thenReturn(user)
 
-        val expectedResponse = "{\"message\":\"Email must not be null or empty\"}"
+        val result = userService.registerUser(user)
 
-        val actualResponse = userService.registerUser(userCreateRequest)
-
-        assertEquals(expectedResponse, actualResponse)
+        assertEquals(user, result)
     }
+
+    @Test
+    fun `getUsers returns all users`() {
+        val user = UserBuilder().withFirstName("Michael").withLastName("Scott").withEmail("mscott@gmail.com").withAddress("1725 Slough Avenue").withPassword("P45sword!1").withCvu("1234567890123456789012").withWalletAddress("12345678").build()
+        `when`(userRepository.findAll()).thenReturn(listOf(user))
+
+        val result = userService.getUsers()
+
+        assertEquals(listOf(user), result)
+    }
+
+    @Test
+    fun `findUser throws exception when user does not exist`() {
+        val id = 1L
+        `when`(userRepository.findById(id)).thenReturn(Optional.empty())
+
+        assertThrows<Exception> {
+            userService.findUser(id)
+        }
+    }
+    
 }
