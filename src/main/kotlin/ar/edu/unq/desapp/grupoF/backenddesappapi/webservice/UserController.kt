@@ -10,7 +10,6 @@ import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
-import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.*
 
 @RestController
@@ -19,7 +18,7 @@ import org.springframework.web.bind.annotation.*
 @Validated
 @Transactional
 class UserController(private val userService: UserService) {
-    @Operation(summary = "Registrar un usuario")
+    @Operation(summary = "Register a new user")
     @PostMapping("/registerUser")
     fun registerUser(@Valid @RequestBody userCreateRequest: UserCreateRequestDTO): ResponseEntity<Any> {
         try {
@@ -40,14 +39,14 @@ class UserController(private val userService: UserService) {
         }
     }
 
-    @Operation(summary = "Obtener todos los usuarios registrados")
+    @Operation(summary = "Get all registered users")
     @GetMapping("/users")
     fun getUsers(): ResponseEntity<Any> {
         val users = userService.getUsers()
         return ResponseEntity.status(HttpStatus.OK).body(users)
     }
 
-    @Operation(summary = "Obtener todos los datos de un usuario")
+    @Operation(summary = "Get all data from an user by id")
     @GetMapping("{id}")
     fun getUsersByID(@PathVariable id: Long): ResponseEntity<Any> {
         val user = userService.findUser(id)
