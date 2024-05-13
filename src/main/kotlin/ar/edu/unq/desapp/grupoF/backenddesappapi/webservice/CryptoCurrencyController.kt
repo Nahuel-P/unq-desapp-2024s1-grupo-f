@@ -1,11 +1,10 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.webservice
 
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
-import ar.edu.unq.desapp.grupoF.backenddesappapi.service.client.BinanceClient
-import ar.edu.unq.desapp.grupoF.backenddesappapi.service.dto.CryptocurrencyPriceDTO
+import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICryptoService
+import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
@@ -13,16 +12,15 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/crypto")
 @Tag(name = "Crypto", description = "Endpoints for crypto information")
-class CryptoCurrencyController {
-
-    private val binanceClient = BinanceClient()
-
+class CryptoCurrencyController(private val cryptoService: ICryptoService) {
+    @Operation(summary = "Get all registered users")
     @GetMapping("/prices")
-    fun getPrices(): List<CryptocurrencyPriceDTO> = runBlocking {
-        CryptoSymbol.entries.map { symbol ->
-            async {
-                CryptocurrencyPriceDTO(symbol.toString(), binanceClient.getCryptoCurrencyPrice(symbol).price!!)
-            }
-        }.map { it.await() }
+    fun getPrices(): ResponseEntity<Any> {
+        return try {
+            val prices = cryptoService.getPrices()
+            ResponseEntity.status(HttpStatus.OK).body(prices)
+        } catch (e: Exception) {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to e.message))
+        }
     }
 }

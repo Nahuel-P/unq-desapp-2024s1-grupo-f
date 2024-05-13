@@ -1,7 +1,7 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.webservice
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
-import ar.edu.unq.desapp.grupoF.backenddesappapi.service.UserService
+import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IUserService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserCreateRequestDTO
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.*
 @Tag(name = "Users", description = "Endpoints for user")
 @Validated
 @Transactional
-class UserController(private val userService: UserService) {
+class UserController(private val userService: IUserService) {
     @Operation(summary = "Register a new user")
     @PostMapping("/registerUser")
     fun registerUser(@Valid @RequestBody userCreateRequest: UserCreateRequestDTO): ResponseEntity<Any> {

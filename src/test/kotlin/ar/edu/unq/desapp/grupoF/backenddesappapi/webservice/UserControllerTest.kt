@@ -1,5 +1,5 @@
 
-import ar.edu.unq.desapp.grupoF.backenddesappapi.service.UserService
+import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IUserService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.UserController
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserCreateRequestDTO
 import org.junit.jupiter.api.Assertions.assertEquals
@@ -10,7 +10,7 @@ import org.springframework.http.HttpStatus
 
 class UserControllerTest {
 
-    private val userService: UserService = mock(UserService::class.java)
+    private val userService: IUserService = mock(IUserService::class.java)
 
     @Test
     fun `registerUser returns success message when valid UserCreateRequestDTO is provided`() {
