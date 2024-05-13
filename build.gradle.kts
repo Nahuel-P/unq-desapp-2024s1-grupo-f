@@ -55,6 +55,7 @@ dependencies {
 	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	implementation("org.hibernate.validator:hibernate-validator:7.0.1.Final")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
 	//	testImplementation("org.springframework.security:spring-security-test")
 }
 

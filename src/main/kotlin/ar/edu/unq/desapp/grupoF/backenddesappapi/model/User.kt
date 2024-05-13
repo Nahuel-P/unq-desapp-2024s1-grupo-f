@@ -3,6 +3,7 @@ package ar.edu.unq.desapp.grupoF.backenddesappapi.model
 import jakarta.persistence.*
 
 @Entity(name = "exchange_user")
+@Table(name= "Users")
 class User(
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
