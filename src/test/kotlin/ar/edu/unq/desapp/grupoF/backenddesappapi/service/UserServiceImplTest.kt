@@ -56,5 +56,5 @@ class UserServiceImplTest {
             userService.findUser(id)
         }
     }
-    
+
 }
