@@ -23,12 +23,8 @@ class Order {
     var entryTime: LocalDateTime = LocalDateTime.now()
     var state: StateOrder = StateOrder.OPEN
     var priceARS: Double? = 0.00
-    private var isActive: Boolean = true
-
-
-    fun isActive(): Boolean {
-        return isActive
-    }
+    @Column(name = "is_active", nullable = false)
+    var isActive: Boolean = true
 
     fun isTransactable(): Boolean {
         return (state == StateOrder.OPEN && isActive)
@@ -59,5 +55,4 @@ class Order {
     fun isSellOrder(): Boolean {
         return type == IntentionType.SELL
     }
-
 }

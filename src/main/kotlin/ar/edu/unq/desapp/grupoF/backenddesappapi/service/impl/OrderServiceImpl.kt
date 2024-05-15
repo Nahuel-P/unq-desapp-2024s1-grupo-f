@@ -6,11 +6,11 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.CryptocurrencyBui
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.OrderBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
+import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.CryptocurrencyRepository
 import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.OrderRepository
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IOrderService
 import org.springframework.stereotype.Service
 import java.util.*
-import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.CryptocurrencyRepository
 
 @Service
 class OrderServiceImpl(
@@ -37,5 +37,9 @@ class OrderServiceImpl(
             .build()
         orderRepository.save(order)
         return order
+    }
+
+    override fun getActiveOrders(): List<Order> {
+        return orderRepository.findByIsActiveTrue()
     }
 }

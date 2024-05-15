@@ -67,7 +67,7 @@ class ExchangeSystem {
     }
 
     fun active0rders(): List<Order> {
-        return orders.filter { it.isActive() }
+        return orders.filter { it.isActive }
     }
 
     fun active0rdersByUser(user: User): List<Order> {

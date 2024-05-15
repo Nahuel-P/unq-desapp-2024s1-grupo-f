@@ -7,10 +7,7 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 @RestController
 @RequestMapping("/order")
@@ -27,6 +24,17 @@ class OrderController(
             val user = userService.findUser(request.userId)
             val order = orderService.createOrder(user, request.cryptocurrency, request.amount, request.price, request.type)
             ResponseEntity.status(HttpStatus.OK).body(order)
+        } catch (e: Exception) {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to e.message))
+        }
+    }
+
+    @Operation (summary = "Get all active orders")
+    @GetMapping("/activeOrders")
+    fun getActiveOrders(): ResponseEntity<Any> {
+        return try {
+            val orders = orderService.getActiveOrders()
+            ResponseEntity.status(HttpStatus.OK).body(orders)
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to e.message))
         }

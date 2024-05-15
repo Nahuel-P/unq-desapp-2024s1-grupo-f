@@ -9,4 +9,5 @@ interface IOrderService {
                     amount: Double,
                     price: Double,
                     type: String) : Order
+    fun getActiveOrders(): List<Order>
 }
