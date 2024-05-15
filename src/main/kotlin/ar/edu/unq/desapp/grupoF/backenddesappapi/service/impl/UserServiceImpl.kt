@@ -1,7 +1,8 @@
-package ar.edu.unq.desapp.grupoF.backenddesappapi.service
+package ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.UserRepository
+import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IUserService
 import org.springframework.stereotype.Service
 
 
