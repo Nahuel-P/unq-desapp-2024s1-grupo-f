@@ -12,6 +12,7 @@ class Cryptocurrency {
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null
 
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     @NotNull(message = "The crypto name cannot be null.")
     var name: CryptoSymbol? = null
@@ -29,4 +30,3 @@ class Cryptocurrency {
     }
 
 }
-
