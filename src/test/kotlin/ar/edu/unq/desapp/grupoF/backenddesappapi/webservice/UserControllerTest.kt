@@ -27,7 +27,7 @@ class UserControllerTest {
     @Test
     fun `getUsersByID returns user with given id`() {
         val user = UserBuilder().withFirstName("Michael").withLastName("Scott").withEmail("mscott@gmail.com").withAddress("1725 Slough Avenue").withPassword("P45sword!1").withCvu("1234567890123456789012").withWalletAddress("12345678").build()
-        `when`(userService.findUser(1)).thenReturn(user)
+        `when`(userService.getUser(1)).thenReturn(user)
 
         val userController = UserController(userService)
         val actualResponse = userController.getUserByID(1)
@@ -39,7 +39,7 @@ class UserControllerTest {
     @Test
     fun `getUsersByID returns error message when user with given id does not exist`() {
         val exceptionMessage = "User not found"
-        `when`(userService.findUser(3)).thenThrow(RuntimeException(exceptionMessage))
+        `when`(userService.getUser(3)).thenThrow(RuntimeException(exceptionMessage))
 
         val userController = UserController(userService)
 

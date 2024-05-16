@@ -21,7 +21,7 @@ class OrderController(
     @PostMapping("/createOrder")
     fun createOrder(@RequestBody request: OrderRequestDTO): ResponseEntity<Any> {
         return try {
-            val user = userService.findUser(request.userId)
+            val user = userService.getUser(request.userId)
             val order = orderService.createOrder(user, request.cryptocurrency, request.amount, request.price, request.type)
             ResponseEntity.status(HttpStatus.OK).body(order)
         } catch (e: Exception) {

@@ -42,4 +42,8 @@ class OrderServiceImpl(
     override fun getActiveOrders(): List<Order> {
         return orderRepository.findByIsActiveTrue()
     }
+
+    override fun getOrder(id: Long): Order {
+        return orderRepository.findById(id).orElseThrow { Exception("Order with id $id not found") }
+    }
 }
