@@ -49,7 +49,7 @@ class UserController(private val userService: IUserService) {
     @Operation(summary = "Get all data from an user by id")
     @GetMapping("{id}")
     fun getUserByID(@PathVariable id: Long): ResponseEntity<Any> {
-        val user = userService.findUser(id)
+        val user = userService.getUser(id)
         return ResponseEntity.status(HttpStatus.OK).body(user)
     }
 

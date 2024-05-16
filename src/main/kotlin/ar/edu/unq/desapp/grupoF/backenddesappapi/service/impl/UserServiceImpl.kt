@@ -20,7 +20,7 @@ class UserServiceImpl( private val userRepository: UserRepository) : IUserServic
         return userRepository.findAll()
     }
 
-    override fun findUser(id: Long): User {
+    override fun getUser(id: Long): User {
         return userRepository.findById(id).orElseThrow { Exception("User with id $id not found") }
     }
 }
