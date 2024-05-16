@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service
 
 @Service
 class UserServiceImpl( private val userRepository: UserRepository) : IUserService{
-//    private val objectMapper = jacksonObjectMapper()
 
     override fun registerUser(user: User): User {
         if (userRepository.existsByEmail(user.email!!)) {

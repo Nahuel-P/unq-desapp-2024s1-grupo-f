@@ -30,7 +30,7 @@ class UserControllerTest {
         `when`(userService.findUser(1)).thenReturn(user)
 
         val userController = UserController(userService)
-        val actualResponse = userController.getUsersByID(1)
+        val actualResponse = userController.getUserByID(1)
 
         assertEquals(HttpStatus.OK, actualResponse.statusCode)
         assertEquals(user, actualResponse.body)
@@ -44,7 +44,7 @@ class UserControllerTest {
         val userController = UserController(userService)
 
         val exception = assertThrows<RuntimeException> {
-            userController.getUsersByID(3)
+            userController.getUserByID(3)
         }
 
         assertEquals(exceptionMessage, exception.message)
