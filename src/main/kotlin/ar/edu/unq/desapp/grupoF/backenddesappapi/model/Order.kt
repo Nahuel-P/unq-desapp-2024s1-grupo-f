@@ -11,8 +11,6 @@ class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
-    @Column(name = "user_id")
-    var userId: Long? = null
     @ManyToOne
     var ownerUser: User? = null
     @ManyToOne
