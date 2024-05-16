@@ -75,7 +75,7 @@ class OrderTest {
     @Test
     fun `order with valid data is active`() {
         val order = aOrder().build()
-        assertTrue(order.isActive())
+        assertTrue(order.isActive)
     }
 
     @Test
@@ -88,7 +88,7 @@ class OrderTest {
     fun `should disable an order to make it inactive`() {
         val order = aOrder().build()
         order.disable()
-        assertFalse(order.isActive())
+        assertFalse(order.isActive)
     }
 
     @Test

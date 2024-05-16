@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupoF.backenddesappapi.service
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.UserRepository
+import ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl.UserServiceImpl
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
