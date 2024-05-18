@@ -1,10 +1,10 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.service.client
 
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
-import ar.edu.unq.desapp.grupoF.backenddesappapi.service.dto.CryptocurrencyPriceDTO
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.dto.ExchangeRateDTO
+import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 
+@Service
 class DolarApiClient {
 
     private var restTemplate: RestTemplate = RestTemplate()

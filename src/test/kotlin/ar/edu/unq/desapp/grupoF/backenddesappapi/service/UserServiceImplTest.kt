@@ -54,7 +54,7 @@ class UserServiceImplTest {
         `when`(userRepository.findById(id)).thenReturn(Optional.empty())
 
         assertThrows<Exception> {
-            userService.findUser(id)
+            userService.getUser(id)
         }
     }
 
