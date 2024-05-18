@@ -2,16 +2,14 @@ package ar.edu.unq.desapp.grupoF.backenddesappapi.service.client
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ActiveProfiles
 
-@SpringBootTest
 @ActiveProfiles("dev")
-class BinanceClientTest (@Autowired val binanceClient: IBinanceClientService, @Autowired val dolarApiClient: DolarApiClient){
+class BinanceClientTest {
 
     @Test
     fun `returns correct cryptocurrency price when valid symbol is provided`() {
+        val binanceClient = BinanceClient()
         val symbol = CryptoSymbol.BTCUSDT
 
         val result = binanceClient.getCryptoCurrencyPrice(symbol)
@@ -24,6 +22,7 @@ class BinanceClientTest (@Autowired val binanceClient: IBinanceClientService, @A
 
     @Test
     fun `returns correct cryptocurrency price when valid symbol is provided2`() {
+        val dolarApiClient = DolarApiClient()
         val result = dolarApiClient.getRateUsdToArs().compra
 
         val lowerBound = 900.0
@@ -34,6 +33,7 @@ class BinanceClientTest (@Autowired val binanceClient: IBinanceClientService, @A
 
     @Test
     fun `returns correct cryptocurrency price when valid symbol is provided22`() {
+        val binanceClient = BinanceClient()
         val symbols = mutableListOf(CryptoSymbol.BTCUSDT, CryptoSymbol.ETHUSDT)
 
         val results = binanceClient.getAllCryptoCurrencyPrices(symbols)
