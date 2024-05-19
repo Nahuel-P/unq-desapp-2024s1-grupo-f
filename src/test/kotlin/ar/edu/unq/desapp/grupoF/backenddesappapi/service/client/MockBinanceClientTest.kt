@@ -3,19 +3,17 @@ package ar.edu.unq.desapp.grupoF.backenddesappapi.service.client
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.condition.DisabledIf
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.ContextConfiguration
+import org.springframework.test.context.ActiveProfiles
 
 
 @SpringBootTest
-@ContextConfiguration(initializers = [ActiveProfileResolver::class])
-@DisabledIf("environment['SPRING_PROFILES_ACTIVE'] != 'integration'")
-class MockBinanceClientTest(@Autowired val binanceClientService: IBinanceClientService) {
+@ActiveProfiles("integration")
+class MockBinanceClientTest {
 
     @Test
     fun `returns correct cryptocurrency price when valid symbol is provided`() {
+        val binanceClientService = MockBinanceClientService()
         val symbol = CryptoSymbol.BTCUSDT
 
         val result = binanceClientService.getCryptoCurrencyPrice(symbol)

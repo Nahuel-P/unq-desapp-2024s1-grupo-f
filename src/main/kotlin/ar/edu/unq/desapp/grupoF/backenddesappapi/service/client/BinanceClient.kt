@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 
 @Service
-@Profile("!integration")
+@Profile("dev")
 class BinanceClient : IBinanceClientService{
 
     private var restTemplate: RestTemplate = RestTemplate()

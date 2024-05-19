@@ -2,25 +2,11 @@ package ar.edu.unq.desapp.grupoF.backenddesappapi.service.client
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.condition.EnabledIf
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.context.ApplicationContextInitializer
-import org.springframework.context.ConfigurableApplicationContext
-import org.springframework.core.env.MapPropertySource
-import org.springframework.test.context.ContextConfiguration
-
-class ActiveProfileResolver : ApplicationContextInitializer<ConfigurableApplicationContext> {
-    override fun initialize(applicationContext: ConfigurableApplicationContext) {
-        val profiles = System.getenv("SPRING_PROFILES_ACTIVE") ?: "dev"
-        val map: Map<String, Any> = mapOf("spring.profiles.active" to profiles)
-        val propertySource = MapPropertySource("myPropertySource", map)
-        applicationContext.environment.propertySources.addFirst(propertySource)
-    }
-}
+import org.springframework.test.context.ActiveProfiles
 
 @SpringBootTest
-@ContextConfiguration(initializers = [ActiveProfileResolver::class])
-@EnabledIf("environment['SPRING_PROFILES_ACTIVE'] != 'integration'")
+@ActiveProfiles("dev")
 class BinanceClientTest {
 
     @Test
