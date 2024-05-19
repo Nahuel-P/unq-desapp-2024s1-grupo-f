@@ -14,7 +14,10 @@ import org.springframework.stereotype.Service
 import java.util.*
 
 @Service
-class CryptoServiceImpl(@Autowired private val cryptocurrencyRepository: CryptocurrencyRepository) : ICryptoService {
+class CryptoServiceImpl : ICryptoService {
+    @Autowired
+    private lateinit var cryptocurrencyRepository: CryptocurrencyRepository
+
     private val binanceClient = BinanceClient()
     private val logger = LoggerFactory.getLogger(CryptoServiceImpl::class.java)
 

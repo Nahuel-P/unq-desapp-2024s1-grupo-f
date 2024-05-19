@@ -1,16 +1,16 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Order
-import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.CryptocurrencyRepository
 import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.OrderRepository
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IOrderService
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class OrderServiceImpl(
-    private val orderRepository: OrderRepository,
-    private val cryptocurrencyRepository: CryptocurrencyRepository
-) : IOrderService {
+class OrderServiceImpl : IOrderService {
+
+    @Autowired
+    private lateinit var orderRepository: OrderRepository
     override fun createOrder(order: Order) : Order {
         orderRepository.save(order)
         return order

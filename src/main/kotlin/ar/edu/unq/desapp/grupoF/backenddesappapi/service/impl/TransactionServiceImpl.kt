@@ -5,13 +5,18 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.TransactionReposit
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IOrderService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ITransactionService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IUserService
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class TransactionServiceImpl(
-    private val transactionRepository: TransactionRepository,
-    private val userService: IUserService,
-    private val orderService: IOrderService) : ITransactionService {
+class TransactionServiceImpl: ITransactionService {
+
+    @Autowired
+    private lateinit var transactionRepository: TransactionRepository
+    @Autowired
+    private lateinit var userService: IUserService
+    @Autowired
+    private lateinit var orderService: IOrderService
 
     override fun create(transaction: Transaction): Transaction {
 ////        recoverTrade(transaction)
