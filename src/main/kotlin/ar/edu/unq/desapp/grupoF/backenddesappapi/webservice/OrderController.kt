@@ -1,5 +1,7 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.webservice
 
+import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.OrderMapper
+import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICryptoService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IOrderService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IUserService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.OrderRequestDTO
@@ -14,15 +16,17 @@ import org.springframework.web.bind.annotation.*
 @Tag(name = "Order", description = "Endpoints for order operations")
 class OrderController(
     private val orderService: IOrderService,
-    private val userService: IUserService
+    private val userService: IUserService,
+    private val cryptoService: ICryptoService
+
 ) {
 
     @Operation (summary = "Create a new order")
     @PostMapping("/createOrder")
     fun createOrder(@RequestBody request: OrderRequestDTO): ResponseEntity<Any> {
         return try {
-            val user = userService.getUser(request.userId)
-            val order = orderService.createOrder(user, request.cryptocurrency, request.amount, request.price, request.type)
+            val order = OrderMapper.fromCreateDto(userService,cryptoService, request)
+            orderService.createOrder(order)
             ResponseEntity.status(HttpStatus.OK).body(order)
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to e.message))

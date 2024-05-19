@@ -1,5 +1,7 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl
 
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Cryptocurrency
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.CryptocurrencyRepository
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICryptoService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.client.BinanceClient
@@ -7,10 +9,12 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.service.dto.CryptocurrencyPrice
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.util.*
 
 @Service
-class CryptoServiceImpl(private val cryptocurrencyRepository: CryptocurrencyRepository) : ICryptoService {
+class CryptoServiceImpl(@Autowired private val cryptocurrencyRepository: CryptocurrencyRepository) : ICryptoService {
     private val binanceClient = BinanceClient()
     private val logger = LoggerFactory.getLogger(CryptoServiceImpl::class.java)
 
@@ -22,5 +26,11 @@ class CryptoServiceImpl(private val cryptocurrencyRepository: CryptocurrencyRepo
                 CryptocurrencyPriceDTO(cryptocurrency.name.toString(), price!!)
             }
         }.map { it.await() }
+    }
+
+    override fun getCrypto(symbol: String): Cryptocurrency {
+        val cryptoSymbol = CryptoSymbol.valueOf(symbol.uppercase(Locale.getDefault()))
+        return cryptocurrencyRepository.findByName(cryptoSymbol)
+            ?: throw Exception("Cryptocurrency with symbol $symbol not found")
     }
 }

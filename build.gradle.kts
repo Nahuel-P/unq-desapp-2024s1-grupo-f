@@ -50,12 +50,12 @@ dependencies {
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0")
+	implementation("org.hibernate.validator:hibernate-validator:7.0.1.Final")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("com.h2database:h2")
 	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	implementation("org.hibernate.validator:hibernate-validator:7.0.1.Final")
-	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
 	//	testImplementation("org.springframework.security:spring-security-test")
 }
 
