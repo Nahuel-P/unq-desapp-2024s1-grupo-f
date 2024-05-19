@@ -3,13 +3,15 @@ package ar.edu.unq.desapp.grupoF.backenddesappapi.service.client
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.condition.DisabledIf
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.test.context.ActiveProfiles
+import org.springframework.test.context.ContextConfiguration
 
 
 @SpringBootTest
-@ActiveProfiles("integration")
+@ContextConfiguration(initializers = [ActiveProfileResolver::class])
+@DisabledIf("environment['SPRING_PROFILES_ACTIVE'] != 'integration'")
 class MockBinanceClientTest(@Autowired val binanceClientService: IBinanceClientService) {
 
     @Test

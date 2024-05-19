@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupoF.backenddesappapi.service.client
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.condition.EnabledIf
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.context.ApplicationContextInitializer
 import org.springframework.context.ConfigurableApplicationContext
@@ -19,6 +20,7 @@ class ActiveProfileResolver : ApplicationContextInitializer<ConfigurableApplicat
 
 @SpringBootTest
 @ContextConfiguration(initializers = [ActiveProfileResolver::class])
+@EnabledIf("environment['SPRING_PROFILES_ACTIVE'] != 'integration'")
 class BinanceClientTest {
 
     @Test
