@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service
 
 
 @Service
-class UserServiceImpl() : IUserService{
+class UserServiceImpl : IUserService{
 
     @Autowired
     private lateinit var userRepository: UserRepository

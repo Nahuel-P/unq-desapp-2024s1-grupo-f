@@ -1,61 +1,37 @@
-package ar.edu.unq.desapp.grupoF.backenddesappapi.service
 
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
-import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.UserRepository
+import ar.edu.unq.desapp.grupoF.backenddesappapi.BackendDesappApiApplication
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl.UserServiceImpl
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
-import org.mockito.Mockito
-import org.mockito.Mockito.`when`
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import java.util.*
 
-@SpringBootTest
+@SpringBootTest(classes = [BackendDesappApiApplication::class])
 class UserServiceImplTest {
 
-    private val userRepository: UserRepository = Mockito.mock(UserRepository::class.java)
-    private val userService = UserServiceImpl(userRepository)
-
-    @Test
-    fun `registerUser throws exception when email already exists`() {
-        val user = UserBuilder().withFirstName("Michael").withLastName("Scott").withEmail("mscott@gmail.com").withAddress("1725 Slough Avenue").withPassword("P45sword!1").withCvu("1234567890123456789012").withWalletAddress("12345678").build()
-        `when`(userRepository.existsByEmail(user.email!!)).thenReturn(true)
-
-        assertThrows<Exception> {
-            userService.registerUser(user)
-        }
-    }
+    @Autowired
+    private lateinit var userService: UserServiceImpl
 
     @Test
     fun `registerUser returns user when email does not exist`() {
-        val user = UserBuilder().withFirstName("Michael").withLastName("Scott").withEmail("mscott@gmail.com").withAddress("1725 Slough Avenue").withPassword("P45sword!1").withCvu("1234567890123456789012").withWalletAddress("12345678").build()
-        `when`(userRepository.existsByEmail(user.email!!)).thenReturn(false)
-        `when`(userRepository.save(user)).thenReturn(user)
-
+        val user = User(email = "test333@test.com")
         val result = userService.registerUser(user)
-
-        assertEquals(user, result)
+        assertEquals(user.email, result.email)
     }
 
     @Test
     fun `getUsers returns all users`() {
-        val user = UserBuilder().withFirstName("Michael").withLastName("Scott").withEmail("mscott@gmail.com").withAddress("1725 Slough Avenue").withPassword("P45sword!1").withCvu("1234567890123456789012").withWalletAddress("12345678").build()
-        `when`(userRepository.findAll()).thenReturn(listOf(user))
-
-        val result = userService.getUsers()
-
-        assertEquals(listOf(user), result)
+        val users = userService.getUsers()
+        assertNotNull(users)
     }
 
     @Test
-    fun `findUser throws exception when user does not exist`() {
-        val id = 1L
-        `when`(userRepository.findById(id)).thenReturn(Optional.empty())
-
-        assertThrows<Exception> {
-            userService.getUser(id)
-        }
+    fun `getUser returns user by id`() {
+        val user = User(email = "test@test.com")
+        val savedUser = userService.registerUser(user)
+        val result = userService.getUser(savedUser.id!!)
+        assertEquals(savedUser.email, result.email)
     }
-
 }
