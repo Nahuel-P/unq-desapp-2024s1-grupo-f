@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
 import jakarta.transaction.Transactional
 import jakarta.validation.Valid
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
@@ -17,7 +18,10 @@ import org.springframework.web.bind.annotation.*
 @Tag(name = "Users", description = "Endpoints for user")
 @Validated
 @Transactional
-class UserController(private val userService: IUserService) {
+class UserController{
+
+    @Autowired
+    private lateinit var userService: IUserService
     @Operation(summary = "Register a new user")
     @PostMapping("/registerUser")
     fun registerUser(@Valid @RequestBody userCreateRequest: UserCreateRequestDTO): ResponseEntity<Any> {

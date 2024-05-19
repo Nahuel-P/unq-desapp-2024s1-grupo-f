@@ -17,13 +17,9 @@ import java.util.*
 @RestController
 @RequestMapping("/order")
 @Tag(name = "Order", description = "Endpoints for order operations")
-class OrderController(
-
-
-) {
+class OrderController {
     @Autowired
     private lateinit var orderService: IOrderService
-
     @Autowired
     private lateinit var userService: IUserService
     @Autowired
