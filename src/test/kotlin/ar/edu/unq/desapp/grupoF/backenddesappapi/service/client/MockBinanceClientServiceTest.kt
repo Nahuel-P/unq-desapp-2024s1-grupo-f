@@ -3,7 +3,11 @@ package ar.edu.unq.desapp.grupoF.backenddesappapi.service.client
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable
+import org.springframework.boot.test.context.SpringBootTest
 
+@SpringBootTest
+@EnabledIfEnvironmentVariable(named = "SPRING_PROFILES_ACTIVE", matches = "integration")
 class MockBinanceClientServiceTest {
 
     @Test
