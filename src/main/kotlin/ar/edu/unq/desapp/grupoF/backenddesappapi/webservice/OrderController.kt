@@ -27,16 +27,16 @@ class OrderController {
 
     @Operation (summary = "Create a new order")
     @PostMapping("/createOrder")
-    fun createOrder(@RequestBody dto: OrderRequestDTO): ResponseEntity<Any> {
+    fun createOrder(@RequestBody orderDTO: OrderRequestDTO): ResponseEntity<Any> {
         return try {
-            val user = userService.getUser(dto.userId)
-            val intentionType = IntentionType.valueOf(dto.type.uppercase(Locale.getDefault()))
-            val crypto = cryptoService.getCrypto(dto.cryptocurrency)
-
-            val order = OrderMapper.fromCreateDto(dto, user, intentionType, crypto)
-
-            orderService.createOrder(order)
-            ResponseEntity.status(HttpStatus.OK).body(order)
+//            val user = userService.getUser(dto.userId)
+//            val intentionType = IntentionType.valueOf(dto.type.uppercase(Locale.getDefault()))
+//            val crypto = cryptoService.getCrypto(dto.cryptocurrency)
+//
+//            val order = OrderMapper.fromCreateDto(dto, user, intentionType, crypto)
+            var order = orderService.createOrder(orderDTO)
+            var orderResponse = OrderMapper.toDTO(order)
+            ResponseEntity.status(HttpStatus.OK).body(orderResponse)
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to e.message))
         }

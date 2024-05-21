@@ -11,7 +11,6 @@ private val logger = LoggerFactory.getLogger(UserMapper::class.java)
 class UserMapper {
     companion object {
         fun userToDTO(user: User): UserResponseDTO {
-            logger.info("User with email ${user.email} registered")
             return UserResponseDTO(
                 user.id!!,
                 user.firstName!!,
