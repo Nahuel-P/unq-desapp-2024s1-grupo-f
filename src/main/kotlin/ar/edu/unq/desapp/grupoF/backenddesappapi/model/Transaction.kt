@@ -52,7 +52,7 @@ class Transaction {
     fun confirmed(): Transaction {
         this.status = TransactionStatus.CONFIRMED
         this.endTime = LocalDateTime.now()
-//        this.order!!.close()
+        this.order!!.close()
         return this
     }
 
