@@ -1,7 +1,7 @@
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.BackendDesappApiApplication
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl.UserServiceImpl
+import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserCreateDTO
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
@@ -16,9 +16,15 @@ class UserServiceImplTest {
 
     @Test
     fun `registerUser returns user when email does not exist`() {
-        val user = User(email = "test333@test.com")
-        val result = userService.registerUser(user)
-        assertEquals(user.email, result.email)
+        val userCreateRequest = UserCreateDTO(firstName = "Michael",
+            lastName = "Scott",
+            email = "michael.scott322@test.com",
+            address = "123 Main St",
+            password = "Password1!",
+            cvu = "1234567890123456789012",
+            walletAddress = "12345678")
+        val result = userService.registerUser(userCreateRequest)
+        assertEquals(result.email, result.email)
     }
 
     @Test
@@ -29,8 +35,14 @@ class UserServiceImplTest {
 
     @Test
     fun `getUser returns user by id`() {
-        val user = User(email = "test@test.com")
-        val savedUser = userService.registerUser(user)
+        val userCreateRequest = UserCreateDTO(firstName = "Michael",
+                     lastName = "Scott",
+                     email = "michael.scott32@test.com",
+                     address = "123 Main St",
+                     password = "Password1!",
+                     cvu = "1234567890123456789012",
+                     walletAddress = "12345678")
+        val savedUser = userService.registerUser(userCreateRequest)
         val result = userService.getUser(savedUser.id!!)
         assertEquals(savedUser.email, result.email)
     }
