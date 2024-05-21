@@ -1,3 +1,22 @@
+TAG ENTREGA-2.0.0
+NEW FEATURES:
+Added services and controller services
+Added H2DB for data persistence
+Endpoint testing with Postman
+
+New endpoints:
+- Crypto prices endpoint
+- Allow a user to express their purchase/sale intention
+- Transaction 
+- View active buy/sale intentions
+
+
+KNOWN Issues:
+- Cannot cancel a transaction
+- Cannot inform the user the traded volume of crypto assets between two dates 
+- Coverage job isn´t >80%
+- Missing testing of 2 controllers (end-to-end)
+--------------------------------------------
 TAG ENTREGA-1.0.0
 ---
 NEW FEATURES:
