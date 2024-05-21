@@ -1,7 +1,6 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.service.client
 
-import ar.edu.unq.desapp.grupoF.backenddesappapi.service.dto.ExchangeRateDTO
-import org.springframework.stereotype.Service
+import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.ExchangeRateDTO
 import org.springframework.web.client.RestTemplate
 
 class DolarApiClient {

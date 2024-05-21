@@ -8,7 +8,7 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.OrderRepository
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICryptoService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IUserService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.client.DolarApiClient
-import ar.edu.unq.desapp.grupoF.backenddesappapi.service.dto.ExchangeRateDTO
+import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.ExchangeRateDTO
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.OrderRequestDTO
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertTrue

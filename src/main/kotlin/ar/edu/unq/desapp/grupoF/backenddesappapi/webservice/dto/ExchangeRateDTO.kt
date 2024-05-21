@@ -1,4 +1,4 @@
-package ar.edu.unq.desapp.grupoF.backenddesappapi.service.dto
+package ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto
 
 data class ExchangeRateDTO (
     var moneda: String?,
