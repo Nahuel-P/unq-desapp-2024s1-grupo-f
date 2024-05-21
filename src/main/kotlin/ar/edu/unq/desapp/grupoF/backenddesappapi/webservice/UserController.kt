@@ -35,7 +35,7 @@ class UserController{
                 .withCvu(userCreateRequest.cvu!!)
                 .withWalletAddress(userCreateRequest.walletAddress!!)
                 .build()
-
+    
             val newUser = userService.registerUser(anUser)
             return ResponseEntity.status(HttpStatus.OK).body(newUser)
         } catch (e: Exception) {
