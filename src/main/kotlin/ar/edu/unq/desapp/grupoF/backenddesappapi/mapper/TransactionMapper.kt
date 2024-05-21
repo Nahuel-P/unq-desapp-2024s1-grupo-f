@@ -6,25 +6,21 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.TransactionBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.TransactionCreateDTO
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.TransactionRequestDTO
+import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.TransactionResponseDTO
 
 class TransactionMapper {
     companion object {
-
-        fun fromCreateDto(dto: TransactionCreateDTO): Transaction {
-            val order = Order()
-            order.id = dto.orderId
-            val user = User()
-            user.id = dto.counterId
+        fun toModel(dto: TransactionCreateDTO, user: User, order: Order): Transaction {
             return TransactionBuilder().withOrder(order).withCounterParty(user).build()
         }
 
-        fun fromRequestDto(dto: TransactionRequestDTO): Transaction {
-            val transaction = Transaction()
-            transaction.id = dto.idTransaction
-            val user = User()
-            user.id = dto.idUserRequest
-            transaction.counterParty = user
-            return transaction
+        fun toResponseDTO(transaction: Transaction): TransactionResponseDTO {
+            return TransactionResponseDTO(
+                UserMapper.userToDTO(transaction.counterParty!!),
+                OrderMapper.toDTO(transaction.order!!),
+                transaction.status!!,
+                transaction.entryTime
+            )
         }
     }
 }

@@ -30,4 +30,6 @@ class UserServiceImpl : IUserService{
     override fun getUser(id: Long): User {
         return userRepository.findById(id).orElseThrow { Exception("User with id $id not found") }
     }
+
+
 }

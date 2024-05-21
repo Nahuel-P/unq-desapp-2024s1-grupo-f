@@ -1,6 +1,6 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto
 
 data class TransactionCreateDTO(
-    var counterId : Long,
+    var idUserRequest : Long,
     var orderId : Long,
 )

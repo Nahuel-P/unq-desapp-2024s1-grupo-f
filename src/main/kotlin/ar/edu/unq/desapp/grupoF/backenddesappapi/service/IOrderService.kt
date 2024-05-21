@@ -7,4 +7,5 @@ interface IOrderService {
     fun createOrder(orderDTO: OrderRequestDTO) : Order
     fun getActiveOrders(): List<Order>
     fun getOrder(id: Long): Order
+    fun update(order: Order): Order
 }

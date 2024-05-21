@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.OrderMapper
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Order
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Transaction
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.OrderRepository
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICryptoService
@@ -26,7 +27,7 @@ class OrderServiceImpl : IOrderService {
         var user = userService.getUser(orderDTO.userId)
         var cryptocurrency = cryptoService.getCrypto(orderDTO.cryptocurrency)
         var intentionType = orderDTO.type
-        var usdArsCotization = 0.0
+        var usdArsCotization: Double
         if (intentionType == IntentionType.BUY) {
             usdArsCotization = cotizationService.getRateUsdToArs().compra!!
         }else
@@ -44,5 +45,9 @@ class OrderServiceImpl : IOrderService {
 
     override fun getOrder(id: Long): Order {
         return orderRepository.findById(id).orElseThrow { Exception("Order with id $id not found") }
+    }
+
+    override fun update(order: Order): Order {
+        return orderRepository.save(order)
     }
 }
