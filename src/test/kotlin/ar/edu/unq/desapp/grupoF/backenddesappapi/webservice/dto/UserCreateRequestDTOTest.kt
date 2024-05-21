@@ -13,7 +13,7 @@ class UserCreateRequestDTOTest {
 
     @Test
     fun `valid DTO should pass all validations`() {
-        val dto = UserCreateRequestDTO(
+        val dto = UserCreateDTO(
             firstName = "Miguel Angel",
             lastName = "Borja",
             email = "el.colibri09@gmail.com",
@@ -29,7 +29,7 @@ class UserCreateRequestDTOTest {
 
     @Test
     fun `DTO with short first name should fail validation`() {
-        val dto = UserCreateRequestDTO(
+        val dto = UserCreateDTO(
             firstName = "Mi",
             lastName = "Borja",
             email = "el.colibri09@gmail.com",
@@ -46,7 +46,7 @@ class UserCreateRequestDTOTest {
 
     @Test
     fun `DTO with invalid email should fail validation`() {
-        val dto = UserCreateRequestDTO(
+        val dto = UserCreateDTO(
             firstName = "Miguel Angel",
             lastName = "Borja",
             email = "el.colibri09",
@@ -63,7 +63,7 @@ class UserCreateRequestDTOTest {
 
     @Test
     fun `DTO with weak password should fail validation`() {
-        val dto = UserCreateRequestDTO(
+        val dto = UserCreateDTO(
             firstName = "Miguel Angel",
             lastName = "Borja",
             email = "el.colibri09@gmail.com",
@@ -83,7 +83,7 @@ class UserCreateRequestDTOTest {
 
     @Test
     fun `DTO with short CVU should fail validation`() {
-        val dto = UserCreateRequestDTO(
+        val dto = UserCreateDTO(
             firstName = "Miguel Angel",
             lastName = "Borja",
             email = "el.colibri09@gmail.com",
@@ -100,7 +100,7 @@ class UserCreateRequestDTOTest {
 
     @Test
     fun `DTO with short wallet address should fail validation`() {
-        val dto = UserCreateRequestDTO(
+        val dto = UserCreateDTO(
             firstName = "Miguel Angel",
             lastName = "Borja",
             email = "el.colibri09@gmail.com",

@@ -5,7 +5,7 @@ import jakarta.validation.constraints.NotBlank
 import jakarta.validation.constraints.Pattern
 import jakarta.validation.constraints.Size
 
-class UserCreateRequestDTO(
+class UserCreateDTO(
     @field:NotBlank(message = "First name cannot be blank")
     @field:Size(min = 3, max = 30, message = "First name must be between 3 and 30 characters")
     var firstName: String? = null,

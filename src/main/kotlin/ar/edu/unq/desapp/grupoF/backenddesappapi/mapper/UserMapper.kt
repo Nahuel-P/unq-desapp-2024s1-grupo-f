@@ -1,6 +1,8 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.mapper
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
+import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserCreateDTO
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserResponseDTO
 import org.slf4j.LoggerFactory
 
@@ -16,6 +18,14 @@ class UserMapper {
                 user.lastName!!,
                 user.email!!,
             )
+        }
+
+        fun toModel(userDTO: UserCreateDTO): User {
+            return UserBuilder().withFirstName(userDTO.firstName!!)
+                .withLastName(userDTO.lastName!!)
+                .withEmail(userDTO.email!!)
+                .withPassword(userDTO.password!!)
+                .build()
         }
     }
 }
