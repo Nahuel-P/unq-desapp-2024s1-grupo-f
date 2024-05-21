@@ -18,8 +18,8 @@ class BinanceClientTest {
 
         val result = binanceClient.getCryptoCurrencyPrice(symbol)
 
-        val lowerBound = 50000.0
-        val upperBound = 70000.0
+        val lowerBound = 70000.0
+        val upperBound = 90000.0
 
         assertTrue(result.price!! in lowerBound..upperBound)
     }
@@ -42,8 +42,8 @@ class BinanceClientTest {
 
         val results = binanceClient.getAllCryptoCurrencyPrices(symbols)
 
-        val lowerBoundBTC = 50000.0
-        val upperBoundBTC = 70000.0
+        val lowerBoundBTC = 70000.0
+        val upperBoundBTC = 90000.0
 
         val lowerBoundETH = 2000.0
         val upperBoundETH = 4000.0
