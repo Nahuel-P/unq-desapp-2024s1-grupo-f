@@ -37,7 +37,7 @@ class UserController{
                 .build()
 
             val newUser = userService.registerUser(anUser)
-            return ResponseEntity.status(HttpStatus.OK).body(mapOf("message" to "User registration successful. Id: ${newUser.id}"))
+            return ResponseEntity.status(HttpStatus.OK).body(newUser)
         } catch (e: Exception) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to e.message));
         }
