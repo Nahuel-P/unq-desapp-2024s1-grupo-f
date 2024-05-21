@@ -1,11 +1,12 @@
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
+package ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums
+
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.Test
 
 class CryptoSymbolTest {
 
     @Test
-    fun `CrytoSymbol values should match predefined list`() {
+    fun `CryptoSymbol values should match predefined list`() {
         val expectedSymbols = listOf(
             "ALICEUSDT",
             "MATICUSDT",
@@ -29,7 +30,7 @@ class CryptoSymbolTest {
     }
 
     @Test
-    fun `CrytoSymbol count should match predefined list count`() {
+    fun `CryptoSymbol count should match predefined list count`() {
         val expectedCount = 14
         val actualCount = CryptoSymbol.entries.size
 
