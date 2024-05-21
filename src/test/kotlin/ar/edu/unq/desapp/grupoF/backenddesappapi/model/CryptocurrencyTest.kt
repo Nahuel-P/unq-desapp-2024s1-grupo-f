@@ -29,35 +29,31 @@ class CryptocurrencyTest {
 
     @Test
     fun `lastPrice returns the most recent price history`() {
-        val oldPrice = PriceHistory(CryptoSymbol.BTCUSDT, 2.0).apply {
-            this.price = 100.0
+        val cryptocurrency = aCryptocurrency().build()
+        val oldPrice = PriceHistory(cryptocurrency, 100.0).apply {
             this.priceTime = LocalDateTime.now().minusDays(1)
         }
-        val recentPrice = PriceHistory(CryptoSymbol.BTCUSDT, 2.0).apply {
-            this.price = 200.0
+        val recentPrice = PriceHistory(cryptocurrency, 200.0).apply {
             this.priceTime = LocalDateTime.now()
         }
 
-        val cryptocurrency = aCryptocurrency()
-            .withPriceHistory(mutableListOf(oldPrice, recentPrice))
-            .build()
+        cryptocurrency.priceHistory = mutableListOf(oldPrice, recentPrice)
+
         assertFalse(cryptocurrency.priceHistory.isEmpty())
         assertEquals(recentPrice, cryptocurrency.lastPrice())
     }
 
     @Test
     fun `pricesOver24hs returns only the prices from the last 24 hours`() {
-        val oldPrice = PriceHistory(CryptoSymbol.BTCUSDT, 2.0).apply {
-            this.price = 100.0
+        val cryptocurrency = aCryptocurrency().build()
+        val oldPrice = PriceHistory(cryptocurrency, 100.0).apply {
             this.priceTime = LocalDateTime.now().minusDays(2)
         }
-        val recentPrice = PriceHistory(CryptoSymbol.BTCUSDT, 2.0).apply {
-            this.price = 200.0
+        val recentPrice = PriceHistory(cryptocurrency, 200.0).apply {
             this.priceTime = LocalDateTime.now()
         }
-        val cryptocurrency = aCryptocurrency()
-            .withPriceHistory(mutableListOf(oldPrice, recentPrice))
-            .build()
+
+        cryptocurrency.priceHistory = mutableListOf(oldPrice, recentPrice)
 
         val pricesOver24hs = cryptocurrency.pricesOver24hs()
 
@@ -67,13 +63,12 @@ class CryptocurrencyTest {
 
     @Test
     fun `pricesOver24hs returns an empty list when there are no prices from the last 24 hours`() {
-        val oldPrice = PriceHistory(CryptoSymbol.BTCUSDT, 2.0).apply {
-            this.price = 100.0
+        val cryptocurrency = aCryptocurrency().build()
+        val oldPrice = PriceHistory(cryptocurrency, 100.0).apply {
             this.priceTime = LocalDateTime.now().minusDays(2)
         }
-        val cryptocurrency = aCryptocurrency()
-            .withPriceHistory(mutableListOf(oldPrice))
-            .build()
+
+        cryptocurrency.priceHistory = mutableListOf(oldPrice)
 
         val pricesOver24hs = cryptocurrency.pricesOver24hs()
 

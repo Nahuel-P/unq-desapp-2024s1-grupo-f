@@ -25,7 +25,8 @@ fun anotherUser(): UserBuilder {
 }
 
 fun aCryptocurrency(): CryptocurrencyBuilder {
-    val priceHistory = PriceHistory(CryptoSymbol.BTCUSDT, 2.0)
+    val cryptocurrency = CryptocurrencyBuilder().withName(CryptoSymbol.BTCUSDT).build()
+    val priceHistory = PriceHistory(cryptocurrency, 2.0)
     return CryptocurrencyBuilder()
         .withName(CryptoSymbol.BTCUSDT)
         .withCreated(LocalDateTime.now())
@@ -50,6 +51,7 @@ fun btcusdt(): Cryptocurrency {
 }
 
 fun btcusdtHistory(): MutableList<PriceHistory> {
-    val priceHistory = PriceHistory(CryptoSymbol.BTCUSDT, 50000.0)
+    val cryptocurrency = CryptocurrencyBuilder().withName(CryptoSymbol.BTCUSDT).build()
+    val priceHistory = PriceHistory(cryptocurrency, 50000.0)
     return mutableListOf(priceHistory)
 }

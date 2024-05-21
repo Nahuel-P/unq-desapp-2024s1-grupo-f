@@ -10,10 +10,10 @@ import org.springframework.stereotype.Service
 class MockBinanceClientService : IBinanceClientService {
 
     override fun getCryptoCurrencyPrice(symbol: CryptoSymbol): CryptocurrencyPriceDTO {
-        return CryptocurrencyPriceDTO("BTCUSDT", 50000.0)
+        return CryptocurrencyPriceDTO(CryptoSymbol.BTCUSDT, 50000.0)
     }
 
     override fun getAllCryptoCurrencyPrices(symbols: MutableList<CryptoSymbol>): Array<CryptocurrencyPriceDTO> {
-        return arrayOf(CryptocurrencyPriceDTO("BTCUSDT", 50000.0), CryptocurrencyPriceDTO("ETHUSDT", 4000.0))
+        return arrayOf(CryptocurrencyPriceDTO(CryptoSymbol.BTCUSDT, 50000.0), CryptocurrencyPriceDTO(CryptoSymbol.ETHUSDT, 4000.0))
     }
 }

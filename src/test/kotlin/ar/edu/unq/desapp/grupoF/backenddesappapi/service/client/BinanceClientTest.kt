@@ -48,7 +48,7 @@ class BinanceClientTest {
         val lowerBoundETH = 2000.0
         val upperBoundETH = 4000.0
 
-        assertTrue(results.find { it.symbol == CryptoSymbol.BTCUSDT.toString() }?.price!! in (lowerBoundBTC..upperBoundBTC))
-        assertTrue(results.find { it.symbol == CryptoSymbol.ETHUSDT.toString() }?.price!! in lowerBoundETH..upperBoundETH)
+        assertTrue(results.find { it.symbol == CryptoSymbol.BTCUSDT }?.price!! in (lowerBoundBTC..upperBoundBTC))
+        assertTrue(results.find { it.symbol == CryptoSymbol.ETHUSDT}?.price!! in lowerBoundETH..upperBoundETH)
     }
 }

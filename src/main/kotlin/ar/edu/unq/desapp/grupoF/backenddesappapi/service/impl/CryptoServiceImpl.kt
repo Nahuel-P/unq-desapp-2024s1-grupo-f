@@ -11,7 +11,6 @@ import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import java.util.*
 
 @Service
 class CryptoServiceImpl : ICryptoService {
@@ -26,14 +25,13 @@ class CryptoServiceImpl : ICryptoService {
             async {
                 val price = binanceClient.getCryptoCurrencyPrice(cryptocurrency.name!!).price
                 logger.info("Price for symbol ${cryptocurrency.name}: $price")
-                CryptocurrencyPriceDTO(cryptocurrency.name.toString(), price!!)
+                CryptocurrencyPriceDTO(cryptocurrency.name, price!!)
             }
         }.map { it.await() }
     }
 
-    override fun getCrypto(symbol: String): Cryptocurrency {
-        val cryptoSymbol = CryptoSymbol.valueOf(symbol.uppercase(Locale.getDefault()))
-        return cryptocurrencyRepository.findByName(cryptoSymbol)
+    override fun getCrypto(symbol: CryptoSymbol): Cryptocurrency {
+        return cryptocurrencyRepository.findByName(symbol)
             ?: throw Exception("Cryptocurrency with symbol $symbol not found")
     }
 }

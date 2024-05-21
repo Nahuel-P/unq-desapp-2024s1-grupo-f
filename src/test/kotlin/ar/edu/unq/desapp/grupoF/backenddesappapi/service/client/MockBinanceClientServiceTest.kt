@@ -24,13 +24,13 @@ class MockBinanceClientServiceTest {
         val symbols = mutableListOf(CryptoSymbol.BTCUSDT, CryptoSymbol.ETHUSDT)
         val results = service.getAllCryptoCurrencyPrices(symbols)
 
-        val btcPrice = results.find { it.symbol == "BTCUSDT" }
-        val ethPrice = results.find { it.symbol == "ETHUSDT" }
+        val btcPrice = results.find { it.symbol == CryptoSymbol.BTCUSDT }
+        val ethPrice = results.find { it.symbol == CryptoSymbol.ETHUSDT}
 
-        assertEquals("BTCUSDT", btcPrice?.symbol)
+        assertEquals(CryptoSymbol.BTCUSDT, btcPrice?.symbol)
         assertEquals(50000.0, btcPrice?.price)
 
-        assertEquals("ETHUSDT", ethPrice?.symbol)
+        assertEquals(CryptoSymbol.ETHUSDT, ethPrice?.symbol)
         assertEquals(4000.0, ethPrice?.price)
     }
 }

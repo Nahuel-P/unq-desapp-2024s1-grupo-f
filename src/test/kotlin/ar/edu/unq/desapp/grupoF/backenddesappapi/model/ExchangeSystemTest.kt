@@ -56,21 +56,17 @@ class ExchangeSystemTest {
 
     @Test
     fun `getPrices returns list of last prices for each cryptocurrency`() {
-        val priceHistory1 = PriceHistory(CryptoSymbol.BTCUSDT, 2.0).apply {
-            this.price = 100.0
+        val crypto1 = CryptocurrencyBuilder().withName(CryptoSymbol.BTCUSDT).build()
+        val priceHistory1 = PriceHistory(crypto1, 100.0).apply {
             this.priceTime = LocalDateTime.now()
         }
-        val crypto1 =
-            CryptocurrencyBuilder().withName(CryptoSymbol.BTCUSDT).withPriceHistory(mutableListOf(priceHistory1))
-                .build()
+        crypto1.priceHistory = mutableListOf(priceHistory1)
 
-        val priceHistory2 = PriceHistory(CryptoSymbol.BTCUSDT, 2.0).apply {
-            this.price = 200.0
+        val crypto2 = CryptocurrencyBuilder().withName(CryptoSymbol.ETHUSDT).build()
+        val priceHistory2 = PriceHistory(crypto2, 200.0).apply {
             this.priceTime = LocalDateTime.now()
         }
-        val crypto2 =
-            CryptocurrencyBuilder().withName(CryptoSymbol.ETHUSDT).withPriceHistory(mutableListOf(priceHistory2))
-                .build()
+        crypto2.priceHistory = mutableListOf(priceHistory2)
 
         val exchangeSystem = aExchangeSystem().withCryptocurrencies(mutableSetOf(crypto1, crypto2)).build()
 

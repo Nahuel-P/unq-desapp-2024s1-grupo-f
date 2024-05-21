@@ -1,20 +1,23 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.model
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
-import jakarta.persistence.Entity
-import jakarta.persistence.GeneratedValue
-import jakarta.persistence.GenerationType
-import jakarta.persistence.Id
+import jakarta.persistence.*
 import java.time.LocalDateTime
 
 @Entity
-class PriceHistory(symbol: CryptoSymbol, price: Double) {
+class PriceHistory(
+    @ManyToOne
+    @JoinColumn(name = "cryptocurrency_id")
+    var cryptocurrency: Cryptocurrency,
+    var price: Double
+) {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     var id: Long? = null
 
-    var cryptocurrency: CryptoSymbol? = symbol
-    var price: Double? = price
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false, name = "symbol")
+    var symbol: CryptoSymbol = cryptocurrency.name!!
     var priceTime: LocalDateTime = LocalDateTime.now()
 }
