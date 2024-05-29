@@ -29,11 +29,6 @@ class OrderController {
     @PostMapping("/createOrder")
     fun createOrder(@RequestBody orderDTO: OrderRequestDTO): ResponseEntity<Any> {
         return try {
-//            val user = userService.getUser(dto.userId)
-//            val intentionType = IntentionType.valueOf(dto.type.uppercase(Locale.getDefault()))
-//            val crypto = cryptoService.getCrypto(dto.cryptocurrency)
-//
-//            val order = OrderMapper.fromCreateDto(dto, user, intentionType, crypto)
             var order = orderService.createOrder(orderDTO)
             var orderResponse = OrderMapper.toDTO(order)
             ResponseEntity.status(HttpStatus.OK).body(orderResponse)

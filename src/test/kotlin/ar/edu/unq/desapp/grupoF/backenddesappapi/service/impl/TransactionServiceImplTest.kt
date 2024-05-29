@@ -50,7 +50,7 @@ class TransactionServiceImplTest {
 
         assertNotEquals(order.ownerUser, anotherUser)
 
-        val result = service.open(transactionDTO)
+        val result = service.create(transactionDTO)
 
         assertEquals(transaction, result)
         verify(orderService).update(order)
@@ -67,7 +67,7 @@ class TransactionServiceImplTest {
         `when`(order.isTransactable()).thenReturn(false)
 
         assertThrows(Exception::class.java) {
-            service.open(transactionDTO)
+            service.create(transactionDTO)
         }
     }
 

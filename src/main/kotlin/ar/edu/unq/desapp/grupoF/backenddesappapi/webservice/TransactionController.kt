@@ -1,6 +1,5 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.webservice
 
-import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.OrderMapper
 import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.TransactionMapper
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ITransactionService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.TransactionCreateDTO
@@ -20,10 +19,10 @@ class TransactionController() {
 
     @Autowired
     private lateinit var transactionService: ITransactionService
-    @PostMapping("/open")
+    @PostMapping("/create")
     fun create(@RequestBody transactionDTO: TransactionCreateDTO) : ResponseEntity<Any> {
         return try {
-            var transaction = transactionService.open(transactionDTO)
+            var transaction = transactionService.create(transactionDTO)
             var transactionResponse = TransactionMapper.toResponseDTO(transaction)
             ResponseEntity.status(HttpStatus.OK).body(transactionResponse)
         } catch (e: Exception) {
@@ -45,7 +44,18 @@ class TransactionController() {
     @PutMapping("/confirm")
     fun confirm(@RequestBody transactionDTO: TransactionRequestDTO) : ResponseEntity<Any>{
         return try {
-            var transaction = transactionService.confirm(transactionDTO)
+            var transaction = transactionService.cancel(transactionDTO)
+            var transactionResponse = TransactionMapper.toResponseDTO(transaction)
+            ResponseEntity.ok().body(transactionResponse)
+        } catch (e: Exception) {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to e.message))
+        }
+    }
+
+    @PutMapping("/cancel")
+    fun cancel(@RequestBody transactionDTO: TransactionRequestDTO) : ResponseEntity<Any>{
+        return try {
+            var transaction = transactionService.cancel(transactionDTO)
             var transactionResponse = TransactionMapper.toResponseDTO(transaction)
             ResponseEntity.ok().body(transactionResponse)
         } catch (e: Exception) {

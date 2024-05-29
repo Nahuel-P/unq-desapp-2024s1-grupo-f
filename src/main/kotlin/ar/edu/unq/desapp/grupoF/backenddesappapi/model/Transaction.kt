@@ -4,6 +4,7 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.TransactionStatus
 import jakarta.persistence.*
 import jakarta.validation.constraints.NotNull
+import java.time.Duration
 import java.time.LocalDateTime
 
 @Entity(name = "transaction")
@@ -26,6 +27,7 @@ class Transaction {
 
     @Column
     var entryTime: LocalDateTime = LocalDateTime.now()
+
     @Column
     var endTime: LocalDateTime? = null
 
@@ -70,5 +72,10 @@ class Transaction {
         } else {
             counterParty
         }
+    }
+
+    fun scoreBasedOnTimeLapse(): Int {
+        val endTime = this.endTime ?: throw Exception("Transaction has not ended yet")
+        return if (endTime.isAfter(entryTime.plusMinutes(31))) 5 else 10
     }
 }

@@ -8,4 +8,5 @@ interface IUserService {
     fun registerUser(userDTO: UserCreateDTO): User
     fun getUsers(): List<User>
     fun getUser(id: Long): User
+    fun update(User: User): User
 }

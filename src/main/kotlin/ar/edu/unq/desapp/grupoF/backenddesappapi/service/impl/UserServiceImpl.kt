@@ -31,5 +31,9 @@ class UserServiceImpl : IUserService{
         return userRepository.findById(id).orElseThrow { Exception("User with id $id not found") }
     }
 
+    override fun update(user: User): User {
+        return userRepository.save(user)
+    }
+
 
 }

@@ -26,29 +26,24 @@ class TransactionServiceImpl: ITransactionService {
     @Autowired
     private lateinit var orderService: IOrderService
 
-    override fun open(transactionDTO: TransactionCreateDTO): Transaction {
+    override fun create(transactionDTO: TransactionCreateDTO): Transaction {
         try {
-            var user = userService.getUser(transactionDTO.idUserRequest)
-            var order = orderService.getOrder(transactionDTO.orderId)
-            validateStartTransaction(order,user)
-            var transaction = TransactionMapper.toModel(transactionDTO, user, order)
+            val userRequest = userService.getUser(transactionDTO.idUserRequest)
+            val order = orderService.getOrder(transactionDTO.orderId)
+            validateStartTransaction(order,userRequest)
             disableOrder(order)
+            val transaction = TransactionMapper.toModel(transactionDTO, userRequest, order)
             return transactionRepository.save(transaction)
         } catch (e: Exception) {
             throw Exception("${e.message}")
         }
     }
-
-    override fun getTransaction(id: Long): Transaction {
-        return transactionRepository.findById(id).orElseThrow { Exception("Transaction with id $id not found") }
-    }
-
+    
     override fun paid(transactionDTO: TransactionRequestDTO): Transaction {
         try {
-            var transaction = this.getTransaction(transactionDTO.idTransaction)
-            var userRequest = userService.getUser(transactionDTO.idUserRequest)
-            var order = orderService.getOrder(transactionDTO.idTransaction)
-            validatePaid(transaction,userRequest,order)
+            val transaction = this.getTransaction(transactionDTO.idTransaction)
+            val userRequest = userService.getUser(transactionDTO.idUserRequest)
+            validatePaid(transaction,userRequest)
             transaction.paid()
             return update(transaction)
         } catch ( e: Exception) {
@@ -57,14 +52,33 @@ class TransactionServiceImpl: ITransactionService {
     }
 
     override fun confirm(transactionDTO: TransactionRequestDTO): Transaction {
-        var transaction = this.getTransaction(transactionDTO.idTransaction)
-        var user = userService.getUser(transactionDTO.idUserRequest)
-        var order = orderService.getOrder(transactionDTO.idTransaction)
-        validateConfirm(transaction,user)
-        transaction.confirmed()
-        order.close()
-        updateReputacionTo(transaction, transaction.buyer()!!, transaction.seller()!!)
-        return update(transaction)
+        try {
+            val transaction = this.getTransaction(transactionDTO.idTransaction)
+            val userRequest = userService.getUser(transactionDTO.idUserRequest)
+            validateConfirm(transaction,userRequest)
+            transaction.confirmed()
+            increseReputacionTo(transaction)
+            return update(transaction)
+        } catch ( e: Exception) {
+            throw Exception("${e.message}")
+        }
+    }
+
+    override fun cancel(transactionDTO: TransactionRequestDTO): Transaction {
+        try {
+            val transaction = this.getTransaction(transactionDTO.idTransaction)
+            val userRequest = userService.getUser(transactionDTO.idUserRequest)
+            validateCancel(transaction,userRequest)
+            transaction.cancelByUser()
+            decreseReputacionTo(userRequest)
+            return update(transaction)
+        } catch ( e: Exception) {
+            throw Exception("${e.message}")
+        }
+    }
+
+    override fun getTransaction(id: Long): Transaction {
+        return transactionRepository.findById(id).orElseThrow { Exception("Transaction with id $id not found") }
     }
 
     private fun update(transaction: Transaction): Transaction {
@@ -76,9 +90,9 @@ class TransactionServiceImpl: ITransactionService {
         validateRequestUser(order.ownerUser!!, user)
     }
 
-    private fun validatePaid(transaction: Transaction, userRequest: User, order: Order) {
+    private fun validatePaid(transaction: Transaction, userRequest: User) {
         validateStatus(transaction, TransactionStatus.PENDING)
-        validateBuyerUser(transaction.buyer()!!, userRequest)
+        validateUserAbleToPaid(transaction.buyer()!!, userRequest)
     }
 
 
@@ -87,11 +101,20 @@ class TransactionServiceImpl: ITransactionService {
         validateUserAbleToConfirm(userRequest,transaction.seller()!!)
     }
 
-
+    private fun validateCancel(transaction: Transaction, userRequest: User) {
+        isInProgress(transaction)
+        validateUserAbleToCancel(userRequest,transaction.buyer()!!,transaction.seller()!!)
+    }
 
     private fun validateStatus(transaction: Transaction, status: TransactionStatus) {
         if (transaction.status != status) {
             throw Exception("Transaction status is not $status")
+        }
+    }
+
+    private fun isInProgress(transaction: Transaction) {
+        if (transaction.status == TransactionStatus.CONFIRMED) {
+            throw Exception("Transaction is already confirmed. Can't be canceled")
         }
     }
 
@@ -107,7 +130,7 @@ class TransactionServiceImpl: ITransactionService {
         }
     }
 
-    private fun validateBuyerUser(buyer: User, userRequest: User) {
+    private fun validateUserAbleToPaid(buyer: User, userRequest: User) {
         if (buyer.id != userRequest.id) {
             throw Exception("User ${userRequest.id} can't pay his own order")
         }
@@ -118,26 +141,29 @@ class TransactionServiceImpl: ITransactionService {
             throw Exception("User ${userRequest.id} can't confirm because he is not the seller")
         }
     }
-    private fun disableOrder(order: Order) {
-        order.disable()
-        orderService.update(order)
+
+    private fun validateUserAbleToCancel(userRequest: User, buyer: User, seller: User) {
+        if (userRequest.id != buyer.id && userRequest.id != seller.id) {
+            throw Exception("User ${userRequest.id} can't cancel because he is not the buyer or the seller")
+        }
+
     }
 
-    private fun updateReputacionTo(transaction: Transaction, buyer: User, seller: User) {
-        val increment = calculateScoreBasedOnTimeLapse(transaction.entryTime, transaction.endTime)
+    private fun disableOrder(order: Order) {
+        order.disable()
+    }
+
+    private fun increseReputacionTo(transaction: Transaction) {
+        val increment = transaction.scoreBasedOnTimeLapse()
+        val buyer = transaction.buyer()!!
+        val seller = transaction.seller()!!
         buyer.increaseScore(increment).increaseTransactions()
         seller.increaseScore(increment).increaseTransactions()
     }
 
-    private fun calculateScoreBasedOnTimeLapse(entryTime: LocalDateTime, endTime: LocalDateTime?): Int {
-        val duration = Duration.between(entryTime, endTime)
-        return if (duration.toMinutes() > 30) {
-            5
-        } else {
-            10
-        }
+    private fun decreseReputacionTo(userRequest: User) {
+        userRequest.decreaseScore()
     }
-
 
 }
 
