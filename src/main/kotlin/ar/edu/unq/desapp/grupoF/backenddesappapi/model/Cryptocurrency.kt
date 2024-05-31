@@ -13,12 +13,13 @@ class Cryptocurrency {
     var id: Long? = null
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     @NotNull(message = "The crypto name cannot be null.")
     var name: CryptoSymbol? = null
-    @Column
-    var createdAt: LocalDateTime? = null
-    @OneToMany
+
+    var price: Double = 0.00
+
+//    @OneToMany(mappedBy = "cryptocurrency", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.EAGER)
     var priceHistory: MutableList<PriceHistory> = mutableListOf()
 
     fun lastPrice(): PriceHistory? {
@@ -28,5 +29,4 @@ class Cryptocurrency {
     fun pricesOver24hs(): List<PriceHistory> {
         return priceHistory.filter { it.priceTime.isAfter(LocalDateTime.now().minusDays(1)) }
     }
-
 }

@@ -2,23 +2,31 @@ package ar.edu.unq.desapp.grupoF.backenddesappapi.model
 
 import jakarta.persistence.*
 
-@Entity(name = "exchange_user")
-@Table(name= "Users")
-class User(
+@Entity(name = "users")
+class User{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    var id: Long? = null,
-    var firstName: String? = null,
-    var lastName: String? = null,
+    var id: Long? = null
+
+    var firstName: String? = null
+
+    var lastName: String? = null
+
     @Column(unique = true)
-    var email: String? = null,
-    var address: String? = null,
-    var password: String? = null,
-    var cvu: String? = null,
-    var walletAddress: String? = null,
-    var successfulTransaction: Int = 0,
+    var email: String? = null
+
+    var address: String? = null
+
+    var password: String? = null
+
+    var cvu: String? = null
+
+    var walletAddress: String? = null
+
+    var successfulTransaction: Int = 0
+
     var score: Int = 0
-){
+
     fun decreaseScore(): User {
         score -= 20
         return this
@@ -40,6 +48,4 @@ class User(
         }
         return score / successfulTransaction
     }
-
-
 }

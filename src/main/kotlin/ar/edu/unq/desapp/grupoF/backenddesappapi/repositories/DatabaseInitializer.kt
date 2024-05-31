@@ -2,11 +2,10 @@ package ar.edu.unq.desapp.grupoF.backenddesappapi.repositories
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Cryptocurrency
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.PriceHistory
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.OrderBuilder
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.TransactionBuilder
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.*
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
+import ar.edu.unq.desapp.grupoF.backenddesappapi.service.client.BinanceClient
 import org.springframework.boot.CommandLineRunner
 import org.springframework.stereotype.Component
 import java.time.LocalDateTime
@@ -23,48 +22,101 @@ class DatabaseInitializer(
     override fun run(vararg args: String?) {
         generateDataForUsers()
         generateDataForCryptocurrency()
-        generateDataForOrders()
-        generateDataForTransactions()
         generateDataForPriceHistory()
+        generateDataForOrders()
+////        generateDataForTransactions()
+
 
     }
 
     fun generateDataForUsers() {
         userRepository.save(
-            UserBuilder().withAddress("Av. siempre viva 742").withEmail("test1@gmail.com").withFirstName("Test1")
-                .withLastName("User").build()
+            UserBuilder()
+                .withFirstName("Homero").withLastName("Simpson").withEmail("hom.jsi@gmail.com").withPassword("Password1!")
+                .withAddress("Evergreen Terrace 742").withCvu("0000003100000000046721").withWalletAddress("1A2B3C4D").build()
         )
         userRepository.save(
-            UserBuilder().withAddress("Calle falsa 123").withEmail("test2@gmail.com").withFirstName("Test2")
-                .withLastName("User").build()
+            UserBuilder()
+                .withFirstName("Eric").withLastName("Cartman").withEmail("realcoon@hotmail.com").withPassword("Coon@2024")
+                .withAddress("E. Bonanza St. 28201").withCvu("0000007900000000078392").withWalletAddress("5E6F7G8H").build()
         )
         userRepository.save(
-            UserBuilder().withAddress("Calle falsa 456").withEmail("test3@gmail.com").withFirstName("Test3")
-                .withLastName("User").build()
+            UserBuilder()
+                .withFirstName("Peter").withLastName("Griffin").withEmail("petergriffin@quahog.com").withPassword("Hello#123")
+                .withAddress("31 Spooner Street").withCvu("0000002100000000023456").withWalletAddress("9I0J1K2L").build()
         )
     }
 
+
     fun generateDataForCryptocurrency() {
         CryptoSymbol.entries.forEach { symbol ->
-            val cryptocurrency = Cryptocurrency().apply {
-                name = symbol
-                createdAt = LocalDateTime.now()
-            }
+            var price = BinanceClient().getCryptoCurrencyPrice(symbol).price!!
+            val cryptocurrency = CryptocurrencyBuilder().withName(symbol).withPrice(price).build()
             cryptocurrencyRepository.save(cryptocurrency)
         }
     }
 
+    fun generateDataForPriceHistory() {
+        val dotusdt = cryptocurrencyRepository.findByName(CryptoSymbol.DOTUSDT)
+        val ethusdt = cryptocurrencyRepository.findByName(CryptoSymbol.ETHUSDT)
+        val btcusdt = cryptocurrencyRepository.findByName(CryptoSymbol.BTCUSDT)
+        val bnbusdt = cryptocurrencyRepository.findByName(CryptoSymbol.BNBUSDT)
+        val cakeusdt = cryptocurrencyRepository.findByName(CryptoSymbol.CAKEUSDT)
+
+        priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(dotusdt).withPrice(6.89900000).withPriceTime(LocalDateTime.now().minusHours(1)).build())
+        priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(dotusdt).withPrice(7.0).withPriceTime(LocalDateTime.now().minusHours(2)).build())
+        priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(ethusdt).withPrice(3760.77).withPriceTime(LocalDateTime.now().minusHours(1)).build())
+        priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(ethusdt).withPrice(3760.47).withPriceTime(LocalDateTime.now().minusHours(2)).build())
+        priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(btcusdt).withPrice(68574.40).withPriceTime(LocalDateTime.now().minusHours(1)).build())
+        priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(btcusdt).withPrice(68574.50).withPriceTime(LocalDateTime.now().minusHours(2)).build())
+        priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(btcusdt).withPrice(68574.30).withPriceTime(LocalDateTime.now().minusHours(3)).build())
+        priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(bnbusdt).withPrice(586.4).withPriceTime(LocalDateTime.now().minusHours(1)).build())
+        priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(bnbusdt).withPrice(536.4).withPriceTime(LocalDateTime.now().minusHours(2)).build())
+        priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(cakeusdt).withPrice(3.18).withPriceTime(LocalDateTime.now().minusHours(1)).build())
+        priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(cakeusdt).withPrice(2.88).withPriceTime(LocalDateTime.now().minusHours(2)).build())
+    }
+
     fun generateDataForOrders() {
-        val user1 = userRepository.findById(1L).get()
-        val user2 = userRepository.findById(2L).get()
 
-        val order1 = OrderBuilder().withOwnerUser(user1).withAmount(1.0).withPrice(1.0).withType(IntentionType.BUY)
-            .withPriceARS(1000.0).build()
-        val order2 = OrderBuilder().withOwnerUser(user2).withAmount(2.0).withPrice(2.0).withType(IntentionType.SELL)
-            .withPriceARS(2000.0).build()
+        orderRepository.save(
+            OrderBuilder()
+                .withOwnerUser(userRepository.findById(1L).get())
+                .withCryptocurrency(cryptocurrencyRepository.findByName(CryptoSymbol.BTCUSDT)!!)
+                .withAmount(1.0)
+                .withPrice(68315.99)
+                .withType(IntentionType.BUY)
+                .withPriceARS(80407920.23).build()
+        )
 
-        orderRepository.save(order1)
-        orderRepository.save(order2)
+        orderRepository.save(
+            OrderBuilder()
+                .withOwnerUser(userRepository.findById(2L).get())
+                .withCryptocurrency(cryptocurrencyRepository.findByName(CryptoSymbol.BTCUSDT)!!)
+                .withAmount(1.0)
+                .withPrice(68314.00)
+                .withType(IntentionType.BUY)
+                .withPriceARS(80405578.0).build()
+        )
+
+        orderRepository.save(
+            OrderBuilder()
+                .withOwnerUser(userRepository.findById(2L).get())
+                .withCryptocurrency(cryptocurrencyRepository.findByName(CryptoSymbol.BNBUSDT)!!)
+                .withAmount(1.0)
+                .withPrice(595.10)
+                .withType(IntentionType.SELL)
+                .withPriceARS(700432.7).build()
+        )
+
+        orderRepository.save(
+            OrderBuilder()
+                .withOwnerUser(userRepository.findById(2L).get())
+                .withCryptocurrency(cryptocurrencyRepository.findByName(CryptoSymbol.CAKEUSDT)!!)
+                .withAmount(2.0)
+                .withPrice(5.54)
+                .withType(IntentionType.SELL)
+                .withPriceARS(6520.58).build()
+        )
     }
 
     fun generateDataForTransactions() {
@@ -82,18 +134,5 @@ class DatabaseInitializer(
         transactionRepository.save(transaction2)
     }
 
-    fun generateDataForPriceHistory() {
-        val optionalCryptocurrency = cryptocurrencyRepository.findByName(CryptoSymbol.BTCUSDT)
 
-        if (optionalCryptocurrency != null) {
-
-            val priceHistory1 = PriceHistory(optionalCryptocurrency, 1000.0)
-            val priceHistory2 = PriceHistory(optionalCryptocurrency, 2000.0)
-
-            priceHistoryRepository.save(priceHistory1)
-            priceHistoryRepository.save(priceHistory2)
-        } else {
-            throw Exception("Cryptocurrency not found")
-        }
-    }
 }

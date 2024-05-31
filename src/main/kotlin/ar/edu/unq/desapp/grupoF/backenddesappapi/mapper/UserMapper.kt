@@ -20,10 +20,14 @@ class UserMapper {
         }
 
         fun toModel(userDTO: UserCreateDTO): User {
-            return UserBuilder().withFirstName(userDTO.firstName!!)
+            return UserBuilder()
+                .withFirstName(userDTO.firstName!!)
                 .withLastName(userDTO.lastName!!)
                 .withEmail(userDTO.email!!)
+                .withAddress(userDTO.address!!)
                 .withPassword(userDTO.password!!)
+                .withCvu(userDTO.cvu!!)
+                .withWalletAddress(userDTO.walletAddress!!)
                 .build()
         }
     }

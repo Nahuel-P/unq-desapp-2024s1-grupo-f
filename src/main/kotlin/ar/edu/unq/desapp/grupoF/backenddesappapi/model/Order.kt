@@ -11,16 +11,28 @@ class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
+
     @ManyToOne
     var ownerUser: User? = null
+
     @ManyToOne
     var cryptocurrency: Cryptocurrency? = null
+
     var amount: Double? = null
     var price: Double? = null
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "intention_type")
     var type: IntentionType? = null
+
     var entryTime: LocalDateTime = LocalDateTime.now()
+
+    @Column(name = "state_order")
+    @Enumerated(EnumType.STRING)
     var state: StateOrder = StateOrder.OPEN
+
     var priceARS: Double? = 0.00
+
     @Column(name = "is_active", nullable = false)
     var isActive: Boolean = true
 

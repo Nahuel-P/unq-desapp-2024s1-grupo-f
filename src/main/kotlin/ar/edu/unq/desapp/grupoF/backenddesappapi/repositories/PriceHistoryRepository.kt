@@ -7,5 +7,5 @@ import org.springframework.stereotype.Repository
 
 @Repository
 interface PriceHistoryRepository : JpaRepository<PriceHistory, Long> {
-    fun findByCryptocurrency(symbol: CryptoSymbol): List<PriceHistory>
+//    fun findByCryptocurrency(id: Long): MutableList<PriceHistory>
 }
