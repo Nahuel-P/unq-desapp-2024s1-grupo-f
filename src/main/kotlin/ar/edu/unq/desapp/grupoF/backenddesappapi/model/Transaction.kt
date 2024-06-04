@@ -31,9 +31,11 @@ class Transaction {
     @Column
     var endTime: LocalDateTime? = null
 
+//    var paidTime: LocalDateTime? = null
 
     fun paid(): Transaction {
         this.status = TransactionStatus.PAID
+//        this.paidTime = LocalDateTime.now()
         return this
     }
 

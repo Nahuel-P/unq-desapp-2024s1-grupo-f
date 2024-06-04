@@ -9,7 +9,7 @@ import java.time.LocalDateTime
 class Cryptocurrency {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
     @Enumerated(EnumType.STRING)
@@ -19,7 +19,8 @@ class Cryptocurrency {
     var price: Double = 0.00
 
 //    @OneToMany(mappedBy = "cryptocurrency", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.EAGER)
-    @OneToMany(fetch = FetchType.EAGER)
+//    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "cryptocurrency", cascade = [CascadeType.ALL],fetch = FetchType.EAGER )
     var priceHistory: MutableList<PriceHistory> = mutableListOf()
 
     fun lastPrice(): PriceHistory? {

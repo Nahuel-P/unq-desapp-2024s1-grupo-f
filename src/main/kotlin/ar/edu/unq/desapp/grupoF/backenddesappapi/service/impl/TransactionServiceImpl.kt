@@ -28,6 +28,8 @@ class TransactionServiceImpl: ITransactionService {
 
     override fun create(transactionDTO: TransactionCreateDTO): Transaction {
         try {
+            // si !canProceedByMarketPrice(transaction)
+            //      cancelBySystem(transaction) Y NO PENALIZA
             val userRequest = userService.getUser(transactionDTO.idUserRequest)
             val order = orderService.getOrder(transactionDTO.orderId)
             validateStartTransaction(order,userRequest)
@@ -41,6 +43,8 @@ class TransactionServiceImpl: ITransactionService {
     
     override fun paid(transactionDTO: TransactionRequestDTO): Transaction {
         try {
+            // si elapsedTimeCreation > 1 hora
+                //      cancelBySystem(transaction) y penalizo al buyer
             val transaction = this.getTransaction(transactionDTO.idTransaction)
             val userRequest = userService.getUser(transactionDTO.idUserRequest)
             validatePaid(transaction,userRequest)
@@ -53,6 +57,8 @@ class TransactionServiceImpl: ITransactionService {
 
     override fun confirm(transactionDTO: TransactionRequestDTO): Transaction {
         try {
+            // si elapsedTimePaid > 1 hora
+            //      cancelBySystem(transaction) y penalizo al seller
             val transaction = this.getTransaction(transactionDTO.idTransaction)
             val userRequest = userService.getUser(transactionDTO.idUserRequest)
             validateConfirm(transaction,userRequest)
