@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.TransactionStatus
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.TransactionCreateDTO
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.TransactionRequestDTO
-import java.time.Duration
-import java.time.LocalDateTime
 
 @Service
 class TransactionServiceImpl: ITransactionService {
@@ -33,7 +31,7 @@ class TransactionServiceImpl: ITransactionService {
             val userRequest = userService.getUser(transactionDTO.idUserRequest)
             val order = orderService.getOrder(transactionDTO.orderId)
             validateStartTransaction(order,userRequest)
-            disableOrder(order)
+            order.disable()
             val transaction = TransactionMapper.toModel(transactionDTO, userRequest, order)
             return transactionRepository.save(transaction)
         } catch (e: Exception) {
@@ -43,8 +41,6 @@ class TransactionServiceImpl: ITransactionService {
     
     override fun paid(transactionDTO: TransactionRequestDTO): Transaction {
         try {
-            // si elapsedTimeCreation > 1 hora
-                //      cancelBySystem(transaction) y penalizo al buyer
             val transaction = this.getTransaction(transactionDTO.idTransaction)
             val userRequest = userService.getUser(transactionDTO.idUserRequest)
             validatePaid(transaction,userRequest)
@@ -57,8 +53,6 @@ class TransactionServiceImpl: ITransactionService {
 
     override fun confirm(transactionDTO: TransactionRequestDTO): Transaction {
         try {
-            // si elapsedTimePaid > 1 hora
-            //      cancelBySystem(transaction) y penalizo al seller
             val transaction = this.getTransaction(transactionDTO.idTransaction)
             val userRequest = userService.getUser(transactionDTO.idUserRequest)
             validateConfirm(transaction,userRequest)
@@ -99,12 +93,13 @@ class TransactionServiceImpl: ITransactionService {
     private fun validatePaid(transaction: Transaction, userRequest: User) {
         validateStatus(transaction, TransactionStatus.PENDING)
         validateUserAbleToPaid(transaction.buyer()!!, userRequest)
+        validateElapseTimeCreation(transaction)
     }
-
 
     private fun validateConfirm(transaction: Transaction, userRequest: User) {
         validateStatus(transaction, TransactionStatus.PAID)
         validateUserAbleToConfirm(userRequest,transaction.seller()!!)
+        validateElapseTimePaid(transaction)
     }
 
     private fun validateCancel(transaction: Transaction, userRequest: User) {
@@ -152,11 +147,20 @@ class TransactionServiceImpl: ITransactionService {
         if (userRequest.id != buyer.id && userRequest.id != seller.id) {
             throw Exception("User ${userRequest.id} can't cancel because he is not the buyer or the seller")
         }
-
     }
 
-    private fun disableOrder(order: Order) {
-        order.disable()
+    private fun validateElapseTimeCreation(transaction: Transaction) {
+        if (transaction.elapsedMinutesCreation() >= 60 ) {
+            transaction.cancelBySystem()
+            throw Exception("The transaction was created more than an hour ago and the buyer has not paid it. The system will cancel it.")
+        }
+    }
+
+    private fun validateElapseTimePaid(transaction: Transaction) {
+        if (transaction.elapsedMinutesPaid() >= 60 ) {
+            transaction.cancelBySystem()
+            throw Exception("The transaction was paid more than an hour ago and the buyer has not paid it. The system will cancel it.")
+        }
     }
 
     private fun increseReputacionTo(transaction: Transaction) {

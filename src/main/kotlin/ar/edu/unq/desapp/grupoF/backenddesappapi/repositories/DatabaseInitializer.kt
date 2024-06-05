@@ -24,7 +24,7 @@ class DatabaseInitializer(
         generateDataForCryptocurrency()
         generateDataForPriceHistory()
         generateDataForOrders()
-////        generateDataForTransactions()
+        generateDataForTransactions()
 
 
     }
@@ -126,12 +126,15 @@ class DatabaseInitializer(
         val order1 = orderRepository.findById(1L).get()
         val order2 = orderRepository.findById(2L).get()
 
-        val transaction1 = TransactionBuilder().withOrder(order1).withCounterParty(user2).build()
-
+        val transaction1 = TransactionBuilder().withOrder(order1).withCounterParty(user2).withEntryTime(LocalDateTime.now().minusHours(2)).build()
+        transaction1.order!!.disable()
         val transaction2 = TransactionBuilder().withOrder(order2).withCounterParty(user1).build()
+        transaction2.order!!.disable()
 
         transactionRepository.save(transaction1)
+        orderRepository.save(order1)
         transactionRepository.save(transaction2)
+        orderRepository.save(order2)
     }
 
 

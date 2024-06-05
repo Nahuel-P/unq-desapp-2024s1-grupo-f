@@ -18,26 +18,16 @@ class Transaction {
     var order: Order? = null
 
     @ManyToOne
-    @JoinColumn(name = "counter_id", referencedColumnName = "id")
+    @JoinColumn(name = "counterParty_id", referencedColumnName = "id")
     var counterParty: User? = null
 
-    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     @NotNull(message = "The status cannot be null.")
     var status: TransactionStatus? = TransactionStatus.PENDING
 
-    @Column
     var entryTime: LocalDateTime = LocalDateTime.now()
-
-    @Column
     var endTime: LocalDateTime? = null
-
-//    var paidTime: LocalDateTime? = null
-
-    fun paid(): Transaction {
-        this.status = TransactionStatus.PAID
-//        this.paidTime = LocalDateTime.now()
-        return this
-    }
+    var paidTime: LocalDateTime? = null
 
     fun cancelByUser(): Transaction {
         this.status = TransactionStatus.CANCELLED_BY_USER
@@ -60,6 +50,12 @@ class Transaction {
         return this
     }
 
+    fun paid(): Transaction {
+        this.status = TransactionStatus.PAID
+        this.paidTime = LocalDateTime.now()
+        return this
+    }
+
     fun seller(): User? {
         return if (order!!.type == IntentionType.SELL) {
             order!!.ownerUser
@@ -79,5 +75,13 @@ class Transaction {
     fun scoreBasedOnTimeLapse(): Int {
         val endTime = this.endTime ?: throw Exception("Transaction has not ended yet")
         return if (endTime.isAfter(entryTime.plusMinutes(31))) 5 else 10
+    }
+
+    fun elapsedMinutesCreation(): Double {
+        return Duration.between(entryTime, LocalDateTime.now()).toMinutes().toDouble()
+    }
+
+    fun elapsedMinutesPaid(): Double {
+        return Duration.between(paidTime, LocalDateTime.now()).toMinutes().toDouble()
     }
 }
