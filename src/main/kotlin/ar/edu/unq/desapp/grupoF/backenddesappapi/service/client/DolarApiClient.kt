@@ -10,7 +10,6 @@ class DolarApiClient {
 
     fun getRateUsdToArs(): ExchangeRateDTO {
         val url = "$baseURL/dolares/cripto"
-        val response: ExchangeRateDTO = restTemplate.getForObject(url, ExchangeRateDTO::class.java)!!
-        return response
+        return restTemplate.getForObject(url, ExchangeRateDTO::class.java)!!
     }
 }

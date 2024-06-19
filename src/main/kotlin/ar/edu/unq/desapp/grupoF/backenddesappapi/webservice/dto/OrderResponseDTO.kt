@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
+import java.math.BigDecimal
 
 data class OrderResponseDTO(
     var userId: Long,
@@ -9,5 +10,5 @@ data class OrderResponseDTO(
     var amount: Double,
     var price: Double,
     var type: IntentionType,
-    var arsPrice : Double
+    var arsPrice: Double
 )

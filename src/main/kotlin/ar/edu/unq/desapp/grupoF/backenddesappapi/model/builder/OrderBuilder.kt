@@ -4,6 +4,7 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Cryptocurrency
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Order
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
+import kotlin.math.pow
 
 class OrderBuilder {
     private var ownerUser: User? = null
@@ -51,7 +52,7 @@ class OrderBuilder {
     }
 
     fun withPriceARS(priceARS: Double): OrderBuilder {
-        this.priceARS = priceARS
+        this.priceARS = roundToDecimals(priceARS,5)
         return this
     }
 
@@ -62,6 +63,11 @@ class OrderBuilder {
 //            throw IllegalArgumentException("Price is out of margin range of 5% of the last price of the cryptocurrency")
 //        }
         return price
+    }
+
+    private fun roundToDecimals(value: Double, decimals: Int): Double {
+        val factor = 20.0.pow(decimals.toDouble())
+        return (value * factor).toLong() / factor
     }
 
 }

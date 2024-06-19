@@ -22,20 +22,16 @@ class OrderServiceImpl : IOrderService {
     @Autowired
     private lateinit var cryptoService: ICryptoService
     private var cotizationService: DolarApiClient = DolarApiClient()
+
     override fun createOrder(orderDTO: OrderRequestDTO) : Order {
-        var user = userService.getUser(orderDTO.userId)
-        var cryptocurrency = cryptoService.getCrypto(orderDTO.cryptocurrency)
-        var intentionType = orderDTO.type
-        var usdArsCotization: Double
-        if (intentionType == IntentionType.BUY) {
-            usdArsCotization = cotizationService.getRateUsdToArs().compra!!
-        }else
-        {
-            usdArsCotization = cotizationService.getRateUsdToArs().venta!!
+        val user = userService.getUser(orderDTO.userId)
+        val cryptocurrency = cryptoService.getCrypto(orderDTO.cryptocurrency)
+        val intentionType = orderDTO.type
+        val usdToArsRate = getUsdToArsRate(intentionType)
+        val arsPrice = calculateArsPrice(orderDTO.amount, orderDTO.price, usdToArsRate)
+        return OrderMapper.toModel(orderDTO, user, cryptocurrency, intentionType, arsPrice).also {
+            orderRepository.save(it)
         }
-        var order = OrderMapper.toModel(orderDTO, user, cryptocurrency, intentionType, usdArsCotization)
-        orderRepository.save(order)
-        return order
     }
 
     override fun getActiveOrders(): List<Order> {
@@ -48,5 +44,17 @@ class OrderServiceImpl : IOrderService {
 
     override fun update(order: Order): Order {
         return orderRepository.save(order)
+    }
+
+    private fun getUsdToArsRate(intentionType: IntentionType): Double {
+        return if (intentionType == IntentionType.BUY) {
+            cotizationService.getRateUsdToArs().compra!!
+        } else {
+            cotizationService.getRateUsdToArs().venta!!
+        }
+    }
+
+    private fun calculateArsPrice(amount: Double, price: Double, usdArsCotization: Double): Double {
+        return (amount * price) * usdArsCotization
     }
 }

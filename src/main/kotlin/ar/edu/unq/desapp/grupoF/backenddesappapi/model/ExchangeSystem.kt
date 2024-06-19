@@ -47,7 +47,7 @@ class ExchangeSystem {
             .withAmount(amount)
             .withPrice(price)
             .withType(type)
-            .withPriceARS(amount * price * USTPrice)
+//            .withPriceARS(amount * price * USTPrice)
             .build()
         validatePriceMargin(order)
         orders.add(order)

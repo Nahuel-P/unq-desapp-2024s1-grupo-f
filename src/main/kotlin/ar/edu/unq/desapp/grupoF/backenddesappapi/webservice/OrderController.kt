@@ -26,7 +26,7 @@ class OrderController {
     private lateinit var cryptoService: ICryptoService
 
     @Operation (summary = "Create a new order")
-    @PostMapping("/createOrder")
+    @PostMapping("/create")
     fun createOrder(@RequestBody orderDTO: OrderRequestDTO): ResponseEntity<Any> {
         return try {
             var order = orderService.createOrder(orderDTO)
