@@ -52,7 +52,7 @@ class OrderBuilder {
     }
 
     fun withPriceARS(priceARS: Double): OrderBuilder {
-        this.priceARS = roundToDecimals(priceARS,5)
+        this.priceARS = priceARS
         return this
     }
 
@@ -63,11 +63,6 @@ class OrderBuilder {
 //            throw IllegalArgumentException("Price is out of margin range of 5% of the last price of the cryptocurrency")
 //        }
         return price
-    }
-
-    private fun roundToDecimals(value: Double, decimals: Int): Double {
-        val factor = 20.0.pow(decimals.toDouble())
-        return (value * factor).toLong() / factor
     }
 
 }

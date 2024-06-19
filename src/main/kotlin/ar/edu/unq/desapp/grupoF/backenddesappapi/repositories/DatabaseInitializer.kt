@@ -84,7 +84,7 @@ class DatabaseInitializer(
                 .withPrice(68315.99)
                 .withType(IntentionType.BUY)
 //                .withPriceARS(80407920.23).build()
-                .withPriceARS((0.02*68315.99)*1270).build()
+                .withPriceARS((0.02*68315.99)*1270.0).build()
         )
 
         orderRepository.save(
@@ -92,10 +92,10 @@ class DatabaseInitializer(
                 .withOwnerUser(userRepository.findById(2L).get())
                 .withCryptocurrency(cryptocurrencyRepository.findByName(CryptoSymbol.BTCUSDT)!!)
                 .withAmount(1.0)
-                .withPrice(68314.00)
+                .withPrice(68314.0)
                 .withType(IntentionType.BUY)
 //                .withPriceARS(80405578.0).build()
-                .withPriceARS((1*68314.00)*1270).build()
+                .withPriceARS((1.0*68315.99)*1270.0).build()
         )
 
         orderRepository.save(
@@ -106,7 +106,7 @@ class DatabaseInitializer(
                 .withPrice(595.10)
                 .withType(IntentionType.SELL)
 //                .withPriceARS(700432.7).build()
-                .withPriceARS((1*595.10)*1270).build()
+                .withPriceARS((1.0*595.10)*1270.0).build()
         )
 
         orderRepository.save(
@@ -117,7 +117,7 @@ class DatabaseInitializer(
                 .withPrice(5.54)
                 .withType(IntentionType.SELL)
 //                .withPriceARS(6520.58).build()
-                .withPriceARS((2*5.54)*1270).build()
+                .withPriceARS((2.0*5.54)*1270.0).build()
 
         )
     }

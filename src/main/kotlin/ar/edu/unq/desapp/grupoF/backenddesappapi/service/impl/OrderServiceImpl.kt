@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.OrderMapper
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Cryptocurrency
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Order
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.OrderRepository
@@ -24,13 +25,15 @@ class OrderServiceImpl : IOrderService {
     private var cotizationService: DolarApiClient = DolarApiClient()
 
     override fun createOrder(orderDTO: OrderRequestDTO) : Order {
-        val user = userService.getUser(orderDTO.userId)
-        val cryptocurrency = cryptoService.getCrypto(orderDTO.cryptocurrency)
-        val intentionType = orderDTO.type
-        val usdToArsRate = getUsdToArsRate(intentionType)
-        val arsPrice = calculateArsPrice(orderDTO.amount, orderDTO.price, usdToArsRate)
-        return OrderMapper.toModel(orderDTO, user, cryptocurrency, intentionType, arsPrice).also {
-            orderRepository.save(it)
+        try {
+            val cryptocurrency = cryptoService.getCrypto(orderDTO.cryptocurrency)
+            validatePriceMargin(orderDTO.price, cryptocurrency)
+            val user = userService.getUser(orderDTO.userId)
+            val intentionType = orderDTO.type
+            val arsPrice = calculateArsPrice(orderDTO.amount, orderDTO.price, intentionType)
+            return OrderMapper.toModel(orderDTO, user, cryptocurrency, intentionType, arsPrice).also { orderRepository.save(it) }
+        } catch (e: Exception) {
+            throw Exception("${e.message}")
         }
     }
 
@@ -46,15 +49,23 @@ class OrderServiceImpl : IOrderService {
         return orderRepository.save(order)
     }
 
+    private fun validatePriceMargin(price: Double, cryptocurrency: Cryptocurrency) {
+        if (cryptocurrency.isAboveMargin(5.0,price))
+            throw Exception("Price out of margin range of 5% above the last price of the cryptocurrency")
+        if (cryptocurrency.isBelowMargin(5.0,price))
+            throw Exception("Price out of margin range of 5% below the last price of the cryptocurrency")
+    }
+
+    private fun calculateArsPrice(amount: Double, price: Double, intentionType: IntentionType): Double {
+        val usdToArsRate = getUsdToArsRate(intentionType)
+        return (amount * price) * usdToArsRate
+    }
+
     private fun getUsdToArsRate(intentionType: IntentionType): Double {
         return if (intentionType == IntentionType.BUY) {
             cotizationService.getRateUsdToArs().compra!!
         } else {
             cotizationService.getRateUsdToArs().venta!!
         }
-    }
-
-    private fun calculateArsPrice(amount: Double, price: Double, usdArsCotization: Double): Double {
-        return (amount * price) * usdArsCotization
     }
 }

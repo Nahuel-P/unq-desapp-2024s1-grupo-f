@@ -39,7 +39,7 @@ class Transaction {
     fun cancelBySystem(): Transaction {
         this.status = TransactionStatus.CANCELLED_BY_SYSTEM
         this.endTime = LocalDateTime.now()
-        this.order!!.reset()
+        this.order!!.close()
         return this
     }
 

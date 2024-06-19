@@ -30,4 +30,16 @@ class Cryptocurrency {
     fun pricesOver24hs(): List<PriceHistory> {
         return priceHistory.filter { it.priceTime.isAfter(LocalDateTime.now().minusDays(1)) }
     }
+
+    fun isAboveMargin(marginPercentage: Double, userPrice: Double): Boolean {
+        val marginFactor = 1 + marginPercentage / 100
+        val upperBound = price * marginFactor
+        return userPrice > upperBound
+    }
+
+    fun isBelowMargin(marginPercentage: Double, userPrice: Double): Boolean {
+        val marginFactor = 1 - marginPercentage / 100
+        val lowerBound = price * marginFactor
+        return userPrice < lowerBound
+    }
 }

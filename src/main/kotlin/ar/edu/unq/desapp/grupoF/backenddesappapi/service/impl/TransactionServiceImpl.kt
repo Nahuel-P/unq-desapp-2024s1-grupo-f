@@ -11,11 +11,13 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IUserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.TransactionStatus
+import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICryptoService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.TransactionCreateDTO
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.TransactionRequestDTO
 
 @Service
 class TransactionServiceImpl: ITransactionService {
+
 
     @Autowired
     private lateinit var transactionRepository: TransactionRepository
@@ -23,22 +25,23 @@ class TransactionServiceImpl: ITransactionService {
     private lateinit var userService: IUserService
     @Autowired
     private lateinit var orderService: IOrderService
+    @Autowired
+    private lateinit var cryptoService: ICryptoService
 
     override fun create(transactionDTO: TransactionCreateDTO): Transaction {
         try {
-            // si !canProceedByMarketPrice(transaction)
-            //      cancelBySystem(transaction) Y NO PENALIZA
             val userRequest = userService.getUser(transactionDTO.idUserRequest)
             val order = orderService.getOrder(transactionDTO.orderId)
             validateStartTransaction(order,userRequest)
-            order.disable()
             val transaction = TransactionMapper.toModel(transactionDTO, userRequest, order)
+            order.disable()
+            if (!canProceedByMarketPrice(order)) { transaction.cancelBySystem() }
             return transactionRepository.save(transaction)
         } catch (e: Exception) {
             throw Exception("${e.message}")
         }
     }
-    
+
     override fun paid(transactionDTO: TransactionRequestDTO): Transaction {
         try {
             val transaction = this.getTransaction(transactionDTO.idTransaction)
@@ -90,6 +93,10 @@ class TransactionServiceImpl: ITransactionService {
         validateRequestUser(order.ownerUser!!, user)
     }
 
+    private fun canProceedByMarketPrice(order: Order): Boolean {
+        val cypto = cryptoService.getCrypto(order.cryptocurrency!!.name!!)
+        return !cypto.isAboveMargin(5.0, order.price!!) && !cypto.isBelowMargin(5.0, order.price!!)
+    }
     private fun validatePaid(transaction: Transaction, userRequest: User) {
         validateStatus(transaction, TransactionStatus.PENDING)
         validateUserAbleToPaid(transaction.buyer()!!, userRequest)
