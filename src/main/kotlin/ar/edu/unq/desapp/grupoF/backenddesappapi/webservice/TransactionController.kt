@@ -44,7 +44,7 @@ class TransactionController() {
     @PutMapping("/confirm")
     fun confirm(@RequestBody transactionDTO: TransactionRequestDTO) : ResponseEntity<Any>{
         return try {
-            var transaction = transactionService.cancel(transactionDTO)
+            var transaction = transactionService.confirm(transactionDTO)
             var transactionResponse = TransactionMapper.toResponseDTO(transaction)
             ResponseEntity.ok().body(transactionResponse)
         } catch (e: Exception) {

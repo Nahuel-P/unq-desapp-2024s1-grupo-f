@@ -38,11 +38,18 @@ class OrderServiceImpl : IOrderService {
     }
 
     override fun getActiveOrders(): List<Order> {
-        return orderRepository.findByIsActiveTrue()
+        try {
+            val activeOrders = orderRepository.findByIsActiveTrue()
+            if (activeOrders.isEmpty()) throw Exception("There are no active orders")
+            return updateUsdToArsRate(activeOrders)
+        } catch (e: Exception) {
+            throw Exception("${e.message}")
+        }
     }
 
     override fun getOrder(id: Long): Order {
-        return orderRepository.findById(id).orElseThrow { Exception("Order with id $id not found") }
+        val order = orderRepository.findById(id).orElseThrow { Exception("Order with id $id not found") }
+        return updateUsdToArsRate(order)
     }
 
     override fun update(order: Order): Order {
@@ -68,4 +75,17 @@ class OrderServiceImpl : IOrderService {
             cotizationService.getRateUsdToArs().venta!!
         }
     }
+
+    private fun updateUsdToArsRate(activeOrders: List<Order>): List<Order> {
+        activeOrders.forEach {
+            updateUsdToArsRate(it)
+        }
+        return activeOrders
+    }
+
+    private fun updateUsdToArsRate(order: Order): Order {
+        order.priceARS = calculateArsPrice(order.amount!!, order.price!!, order.type!!)
+        return update(order)
+    }
+
 }

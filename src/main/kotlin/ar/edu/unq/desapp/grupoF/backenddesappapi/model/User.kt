@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.model
 
 import jakarta.persistence.*
+import kotlin.math.max
 
 @Entity(name = "users")
 class User{
@@ -23,12 +24,12 @@ class User{
 
     var walletAddress: String? = null
 
-    var successfulTransaction: Int = 0
+    var transactions: Int = 0
 
     var score: Int = 0
 
     fun decreaseScore(): User {
-        score -= 20
+        score = max(0, score - 20)
         return this
     }
 
@@ -38,14 +39,15 @@ class User{
     }
 
     fun increaseTransactions(): User {
-        successfulTransaction++
+        transactions++
         return this
     }
 
-    fun reputation(): Int {
-        if (successfulTransaction == 0) {
-            return score
+    fun reputation(): String {
+        if (transactions == 0) {
+            return "No trades yet."
+        }else{
+            return (score/transactions).toString()
         }
-        return score / successfulTransaction
     }
 }

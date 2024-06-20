@@ -5,7 +5,7 @@ import java.time.LocalDateTime
 
 data class TransactionResponseDTO(
     var userResponseDto: UserResponseDTO,
-    var orderResponseDTO: OrderResponseDTO,
+    var orderResponseDTO: OrderCreateResponseDTO,
     var status: TransactionStatus,
     var entryTime: LocalDateTime
 )

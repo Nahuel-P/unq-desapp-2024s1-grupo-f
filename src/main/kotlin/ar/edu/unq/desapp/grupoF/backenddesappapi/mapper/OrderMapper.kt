@@ -6,6 +6,7 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.OrderBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.OrderRequestDTO
+import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.OrderCreateResponseDTO
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.OrderResponseDTO
 
 class OrderMapper {
@@ -21,14 +22,32 @@ class OrderMapper {
                 .withPriceARS(ars)
                 .build()
         }
-        fun toDTO(order: Order): OrderResponseDTO {
-            return OrderResponseDTO(
-                order.ownerUser?.id!!,
+
+        fun toCreateDTO(order: Order): OrderCreateResponseDTO {
+            return OrderCreateResponseDTO(
+                order.id!!,
                 order.cryptocurrency?.name!!,
                 order.amount!!,
                 order.price!!,
                 order.type!!,
-                order.priceARS!!
+                order.priceARS!!,
+                order.ownerUser?.id!!,
+                order.ownerUser?.firstName!! + " " + order.ownerUser?.lastName,
+            )
+        }
+
+        fun toDTO(order: Order): OrderResponseDTO {
+            return OrderResponseDTO(
+                order.id!!,
+                order.entryTime.toString(),
+                order.cryptocurrency?.name!!,
+                order.amount!!,
+                order.price!!,
+                order.type!!,
+                order.priceARS!!,
+                order.ownerUser?.id!!,
+                order.ownerUser?.firstName!! + " " + order.ownerUser?.lastName,
+                order.ownerUser?.reputation()!!
             )
         }
     }

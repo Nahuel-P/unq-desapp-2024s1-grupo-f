@@ -16,6 +16,7 @@ class UserMapper {
                 user.firstName!!,
                 user.lastName!!,
                 user.email!!,
+                user.reputation()
             )
         }
 

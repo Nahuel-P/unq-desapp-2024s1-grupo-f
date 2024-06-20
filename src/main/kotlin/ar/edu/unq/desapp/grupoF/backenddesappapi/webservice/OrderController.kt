@@ -1,7 +1,6 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.webservice
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.OrderMapper
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICryptoService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IOrderService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IUserService
@@ -30,7 +29,7 @@ class OrderController {
     fun createOrder(@RequestBody orderDTO: OrderRequestDTO): ResponseEntity<Any> {
         return try {
             var order = orderService.createOrder(orderDTO)
-            var orderResponse = OrderMapper.toDTO(order)
+            var orderResponse = OrderMapper.toCreateDTO(order)
             ResponseEntity.status(HttpStatus.OK).body(orderResponse)
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to e.message))
@@ -41,8 +40,9 @@ class OrderController {
     @GetMapping("/activeOrders")
     fun getActiveOrders(): ResponseEntity<Any> {
         return try {
-            val orders = orderService.getActiveOrders()
-            ResponseEntity.status(HttpStatus.OK).body(orders)
+            val activeOrders = orderService.getActiveOrders()
+            val orderResponse = activeOrders.map { OrderMapper.toDTO(it) }
+            ResponseEntity.status(HttpStatus.OK).body(orderResponse)
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to e.message))
         }

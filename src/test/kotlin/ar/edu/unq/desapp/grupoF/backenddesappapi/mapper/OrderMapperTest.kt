@@ -53,7 +53,7 @@ class OrderMapperTest {
         `when`(order.type).thenReturn(intentionType)
         `when`(order.priceARS).thenReturn(ars)
 
-        val dto = OrderMapper.toDTO(order)
+        val dto = OrderMapper.toCreateDTO(order)
 
         assertEquals(user.id, dto.userId)
         assertEquals(crypto.name, dto.cryptocurrency)

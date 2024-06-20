@@ -121,8 +121,14 @@ class TransactionServiceImpl: ITransactionService {
     }
 
     private fun isInProgress(transaction: Transaction) {
-        if (transaction.status == TransactionStatus.CONFIRMED) {
+        if (transaction.status == TransactionStatus.CONFIRMED)  {
             throw Exception("Transaction is already confirmed. Can't be canceled")
+        }
+        if (transaction.status == TransactionStatus.CANCELLED_BY_SYSTEM)  {
+            throw Exception("Transaction is already cancelled by system. Can't be canceled")
+        }
+        if (transaction.status == TransactionStatus.CANCELLED_BY_USER)  {
+            throw Exception("Transaction is already cancelled. Can't be canceled")
         }
     }
 
@@ -179,6 +185,7 @@ class TransactionServiceImpl: ITransactionService {
     }
 
     private fun decreseReputacionTo(userRequest: User) {
+        userRequest.increaseTransactions()
         userRequest.decreaseScore()
     }
 
