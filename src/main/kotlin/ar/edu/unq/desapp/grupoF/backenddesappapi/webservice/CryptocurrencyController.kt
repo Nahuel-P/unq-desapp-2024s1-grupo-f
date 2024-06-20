@@ -21,10 +21,10 @@ class CryptoCurrencyController {
     private lateinit var cryptoService: ICryptoService
 
     @Operation(summary = "Get all registered users")
-    @GetMapping("/prices")
-    fun getPrices(): ResponseEntity<Any> {
+    @GetMapping("/quotes")
+    fun getQuotes(): ResponseEntity<Any> {
         return try {
-            val prices = cryptoService.getPrices()
+            val prices = cryptoService.getQuotes()
             ResponseEntity.status(HttpStatus.OK).body(prices)
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to e.message))

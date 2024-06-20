@@ -22,7 +22,7 @@ class CryptoServiceImpl : ICryptoService {
     private val binanceClient = BinanceClient()
     private val logger = LoggerFactory.getLogger(CryptoServiceImpl::class.java)
 
-    override fun getPrices(): List<CryptocurrencyPriceDTO> = runBlocking {
+    override fun getQuotes(): List<CryptocurrencyPriceDTO> = runBlocking {
         val cryptocurrencies = cryptocurrencyRepository.findAll()
         val symbols = cryptocurrencies.map { it.name!! }.toMutableList()
 
@@ -39,11 +39,9 @@ class CryptoServiceImpl : ICryptoService {
     }
 
     override fun getLast24hsQuotes(symbol: CryptoSymbol): Any? {
-        return cryptocurrencyRepository.findByName(symbol)?.priceHistory?.filter {
-            it.priceTime.isAfter(LocalDateTime.now().minusDays(1)) && it.priceTime.isBefore(LocalDateTime.now())
-        }?.groupBy {
-            it.priceTime.truncatedTo(ChronoUnit.HOURS)
-        }?.values?.map { it.first() }
+        val cryptocurrency = cryptocurrencyRepository.findByName(symbol)
             ?: throw IllegalArgumentException("Cryptocurrency with symbol $symbol not found")
+
+        return cryptocurrency.getLast24hsQuotes()
     }
 }
