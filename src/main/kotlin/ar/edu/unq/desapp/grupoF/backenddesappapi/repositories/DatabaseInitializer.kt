@@ -68,13 +68,25 @@ class DatabaseInitializer(
         priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(dotusdt).withPrice(7.0).withPriceTime(LocalDateTime.now().minusHours(2)).build())
         priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(ethusdt).withPrice(3760.77).withPriceTime(LocalDateTime.now().minusHours(1)).build())
         priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(ethusdt).withPrice(3760.47).withPriceTime(LocalDateTime.now().minusHours(2)).build())
-        priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(btcusdt).withPrice(68574.40).withPriceTime(LocalDateTime.now().minusHours(1)).build())
-        priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(btcusdt).withPrice(68574.50).withPriceTime(LocalDateTime.now().minusHours(2)).build())
-        priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(btcusdt).withPrice(68574.30).withPriceTime(LocalDateTime.now().minusHours(3)).build())
         priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(bnbusdt).withPrice(586.4).withPriceTime(LocalDateTime.now().minusHours(1)).build())
         priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(bnbusdt).withPrice(536.4).withPriceTime(LocalDateTime.now().minusHours(2)).build())
         priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(cakeusdt).withPrice(3.18).withPriceTime(LocalDateTime.now().minusHours(1)).build())
         priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(cakeusdt).withPrice(2.88).withPriceTime(LocalDateTime.now().minusHours(2)).build())
+
+        var initialPrice = 64973.42
+        // Recorremos cada 10 minutos de las últimas 30 horas
+        for (i in 1..(30 * 6)) {
+            val priceTime = LocalDateTime.now().minusMinutes(10L * i)
+            val priceChange = -0.3 + Math.random() * (0.5 - (-0.3))
+            val price = initialPrice + priceChange
+
+            priceHistoryRepository.save(PriceHistoryBuilder()
+                .withSymbol(btcusdt)
+                .withPrice(price)
+                .withPriceTime(priceTime)
+                .build())
+            initialPrice = price
+        }
     }
 
     fun generateDataForOrders() {
