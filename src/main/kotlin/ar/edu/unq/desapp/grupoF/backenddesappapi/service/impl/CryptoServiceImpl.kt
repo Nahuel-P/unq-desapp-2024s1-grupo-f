@@ -21,13 +21,14 @@ class CryptoServiceImpl : ICryptoService {
     private val logger = LoggerFactory.getLogger(CryptoServiceImpl::class.java)
 
     override fun getPrices(): List<CryptocurrencyPriceDTO> = runBlocking {
-        cryptocurrencyRepository.findAll().map { cryptocurrency ->
-            async {
-                val price = binanceClient.getCryptoCurrencyPrice(cryptocurrency.name!!).price
-                logger.info("Price for symbol ${cryptocurrency.name}: $price")
-                CryptocurrencyPriceDTO(cryptocurrency.name, price!!)
-            }
-        }.map { it.await() }
+        val cryptocurrencies = cryptocurrencyRepository.findAll()
+        val symbols = cryptocurrencies.map { it.name!! }.toMutableList()
+
+        val prices = binanceClient.getAllCryptoCurrencyPrices(symbols)
+        prices.map { priceDTO ->
+            logger.info("Price for symbol ${priceDTO.symbol}: ${priceDTO.price}")
+            CryptocurrencyPriceDTO(priceDTO.symbol, priceDTO.price)
+        }
     }
 
     override fun getCrypto(symbol: CryptoSymbol): Cryptocurrency {
