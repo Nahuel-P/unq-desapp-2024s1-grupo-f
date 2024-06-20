@@ -57,9 +57,9 @@ class OrderServiceImpl : IOrderService {
     }
 
     private fun validatePriceMargin(price: Double, cryptocurrency: Cryptocurrency) {
-        if (cryptocurrency.isAboveMargin(5.0,price))
+        if (cryptocurrency.isAboveMarginPrice(5.0,price))
             throw Exception("Price out of margin range of 5% above the last price of the cryptocurrency")
-        if (cryptocurrency.isBelowMargin(5.0,price))
+        if (cryptocurrency.isBelowMarginPrice(5.0,price))
             throw Exception("Price out of margin range of 5% below the last price of the cryptocurrency")
     }
 

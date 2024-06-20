@@ -42,7 +42,7 @@ class OrderBuilder {
     }
 
     fun withPrice(price: Double): OrderBuilder {
-        this.price = validatePriceMargin(price)
+        this.price = price
         return this
     }
 
@@ -56,13 +56,13 @@ class OrderBuilder {
         return this
     }
 
-    private fun validatePriceMargin(price: Double): Double {
-        val lastPrice = this.cryptocurrency?.lastPrice()?.price
-        val margin = lastPrice?.times(0.05)
-//        if (lastPrice!! > price + margin!! || lastPrice < price - margin) {
-//            throw IllegalArgumentException("Price is out of margin range of 5% of the last price of the cryptocurrency")
-//        }
-        return price
-    }
+//    private fun validatePriceMargin(price: Double): Double {
+//        val lastPrice = this.cryptocurrency?.lastPrice()
+//        val margin = lastPrice?.times(0.05)
+////        if (lastPrice!! > price + margin!! || lastPrice < price - margin) {
+////            throw IllegalArgumentException("Price is out of margin range of 5% of the last price of the cryptocurrency")
+////        }
+//        return price
+//    }
 
 }

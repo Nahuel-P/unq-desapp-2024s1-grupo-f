@@ -11,6 +11,8 @@ import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
+import java.time.temporal.ChronoUnit
 
 @Service
 class CryptoServiceImpl : ICryptoService {
@@ -34,5 +36,14 @@ class CryptoServiceImpl : ICryptoService {
     override fun getCrypto(symbol: CryptoSymbol): Cryptocurrency {
         return cryptocurrencyRepository.findByName(symbol)
             ?: throw Exception("Cryptocurrency with symbol $symbol not found")
+    }
+
+    override fun getLast24hsQuotes(symbol: CryptoSymbol): Any? {
+        return cryptocurrencyRepository.findByName(symbol)?.priceHistory?.filter {
+            it.priceTime.isAfter(LocalDateTime.now().minusDays(1)) && it.priceTime.isBefore(LocalDateTime.now())
+        }?.groupBy {
+            it.priceTime.truncatedTo(ChronoUnit.HOURS)
+        }?.values?.map { it.first() }
+            ?: throw IllegalArgumentException("Cryptocurrency with symbol $symbol not found")
     }
 }
