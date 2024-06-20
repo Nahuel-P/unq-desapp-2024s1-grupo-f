@@ -47,11 +47,14 @@ class DatabaseInitializer(
 
 
     fun generateDataForCryptocurrency() {
-        CryptoSymbol.entries.forEach { symbol ->
-            var price = BinanceClient().getCryptoCurrencyPrice(symbol).price!!
-            val cryptocurrency = CryptocurrencyBuilder().withName(symbol).withPrice(price).build()
-            cryptocurrencyRepository.save(cryptocurrency)
-        }
+        val prices = BinanceClient().getAllCryptoCurrencyPrices(CryptoSymbol.entries.toMutableList())
+
+        cryptocurrencyRepository.saveAll(prices.map { priceDTO ->
+            CryptocurrencyBuilder()
+                .withName(priceDTO.symbol)
+                .withPrice(priceDTO.price!!)
+                .build()
+        })
     }
 
     fun generateDataForPriceHistory() {
