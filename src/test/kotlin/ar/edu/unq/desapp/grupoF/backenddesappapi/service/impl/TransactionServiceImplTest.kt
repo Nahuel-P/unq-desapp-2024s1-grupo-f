@@ -64,7 +64,7 @@ class TransactionServiceImplTest {
 
         `when`(userService.getUser(transactionDTO.idUserRequest)).thenReturn(user)
         `when`(orderService.getOrder(transactionDTO.orderId)).thenReturn(order)
-        `when`(order.isTransactable()).thenReturn(false)
+        `when`(order.isTransferable()).thenReturn(false)
 
         assertThrows(Exception::class.java) {
             service.create(transactionDTO)

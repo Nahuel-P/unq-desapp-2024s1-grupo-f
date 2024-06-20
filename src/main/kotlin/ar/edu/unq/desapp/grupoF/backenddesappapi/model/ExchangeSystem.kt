@@ -164,7 +164,7 @@ class ExchangeSystem {
     }
 
     private fun isTransactableOrder(order: Order) {
-        require(order.isTransactable()) { "Order is not transactable at the moment" }
+        require(order.isTransferable()) { "Order is not transactable at the moment" }
     }
 
 }

@@ -81,7 +81,7 @@ class OrderTest {
     @Test
     fun `order with valid data is transactable`() {
         val order = aOrder().build()
-        assertTrue(order.isTransactable())
+        assertTrue(order.isTransferable())
     }
 
     @Test
@@ -95,7 +95,7 @@ class OrderTest {
     fun `an inactive order is not transactable`() {
         val order = aOrder().build()
         order.disable()
-        assertFalse(order.isTransactable())
+        assertFalse(order.isTransferable())
     }
 
     @Test
@@ -115,7 +115,7 @@ class OrderTest {
     fun `a closed order is not transactable`() {
         val order = aOrder().build()
         order.close()
-        assertFalse(order.isTransactable())
+        assertFalse(order.isTransferable())
     }
 
     @Test

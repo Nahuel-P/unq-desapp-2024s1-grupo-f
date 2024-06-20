@@ -36,7 +36,7 @@ class Order {
     @Column(name = "is_active", nullable = false)
     var isActive: Boolean = true
 
-    fun isTransactable(): Boolean {
+    fun isTransferable(): Boolean {
         return (state == StateOrder.OPEN && isActive)
     }
 
@@ -64,5 +64,13 @@ class Order {
 
     fun isSellOrder(): Boolean {
         return type == IntentionType.SELL
+    }
+
+    fun isAboveMarketPrice(crypto: Cryptocurrency, order: Order): Boolean {
+        return crypto.price > order.price!!
+    }
+
+    fun isBelowMarketPrice(crypto: Cryptocurrency, order: Order): Boolean {
+        return crypto.price < order.price!!
     }
 }

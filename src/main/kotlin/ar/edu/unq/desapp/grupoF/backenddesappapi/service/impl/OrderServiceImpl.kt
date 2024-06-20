@@ -22,7 +22,7 @@ class OrderServiceImpl : IOrderService {
     private lateinit var userService: IUserService
     @Autowired
     private lateinit var cryptoService: ICryptoService
-    private var cotizationService: DolarApiClient = DolarApiClient()
+    private var rateService: DolarApiClient = DolarApiClient()
 
     override fun createOrder(orderDTO: OrderRequestDTO) : Order {
         try {
@@ -70,9 +70,9 @@ class OrderServiceImpl : IOrderService {
 
     private fun getUsdToArsRate(intentionType: IntentionType): Double {
         return if (intentionType == IntentionType.BUY) {
-            cotizationService.getRateUsdToArs().compra!!
+            rateService.getRateUsdToArs().compra!!
         } else {
-            cotizationService.getRateUsdToArs().venta!!
+            rateService.getRateUsdToArs().venta!!
         }
     }
 

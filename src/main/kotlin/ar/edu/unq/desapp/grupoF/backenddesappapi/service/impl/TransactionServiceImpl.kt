@@ -60,7 +60,7 @@ class TransactionServiceImpl: ITransactionService {
             val userRequest = userService.getUser(transactionDTO.idUserRequest)
             validateConfirm(transaction,userRequest)
             transaction.confirmed()
-            increseReputacionTo(transaction)
+            increaseReputation(transaction)
             return update(transaction)
         } catch ( e: Exception) {
             throw Exception("${e.message}")
@@ -73,7 +73,7 @@ class TransactionServiceImpl: ITransactionService {
             val userRequest = userService.getUser(transactionDTO.idUserRequest)
             validateCancel(transaction,userRequest)
             transaction.cancelByUser()
-            decreseReputacionTo(userRequest)
+            decreaseReputation(userRequest)
             return update(transaction)
         } catch ( e: Exception) {
             throw Exception("${e.message}")
@@ -94,9 +94,10 @@ class TransactionServiceImpl: ITransactionService {
     }
 
     private fun canProceedByMarketPrice(order: Order): Boolean {
-        val cypto = cryptoService.getCrypto(order.cryptocurrency!!.name!!)
-        return !cypto.isAboveMargin(5.0, order.price!!) && !cypto.isBelowMargin(5.0, order.price!!)
+        val crypto = cryptoService.getCrypto(order.cryptocurrency!!.name!!)
+        return if (order.isBuyOrder()) !order.isAboveMarketPrice(crypto, order) else !order.isBelowMarketPrice(crypto, order)
     }
+
     private fun validatePaid(transaction: Transaction, userRequest: User) {
         validateStatus(transaction, TransactionStatus.PENDING)
         validateUserAbleToPaid(transaction.buyer()!!, userRequest)
@@ -121,19 +122,16 @@ class TransactionServiceImpl: ITransactionService {
     }
 
     private fun isInProgress(transaction: Transaction) {
-        if (transaction.status == TransactionStatus.CONFIRMED)  {
-            throw Exception("Transaction is already confirmed. Can't be canceled")
-        }
-        if (transaction.status == TransactionStatus.CANCELLED_BY_SYSTEM)  {
-            throw Exception("Transaction is already cancelled by system. Can't be canceled")
-        }
-        if (transaction.status == TransactionStatus.CANCELLED_BY_USER)  {
-            throw Exception("Transaction is already cancelled. Can't be canceled")
+        when (transaction.status) {
+            TransactionStatus.CONFIRMED -> throw Exception("Transaction is already confirmed. Can't be canceled")
+            TransactionStatus.CANCELLED_BY_SYSTEM -> throw Exception("Transaction is already cancelled by system. Can't be canceled")
+            TransactionStatus.CANCELLED_BY_USER -> throw Exception("Transaction is already cancelled. Can't be canceled")
+            else -> {}
         }
     }
 
     private fun validateTeransactable(order: Order) {
-        if (!order.isTransactable()) {
+        if (!order.isTransferable()) {
             throw Exception("Transaction status is not able to be transfer.")
         }
     }
@@ -176,7 +174,7 @@ class TransactionServiceImpl: ITransactionService {
         }
     }
 
-    private fun increseReputacionTo(transaction: Transaction) {
+    private fun increaseReputation(transaction: Transaction) {
         val increment = transaction.scoreBasedOnTimeLapse()
         val buyer = transaction.buyer()!!
         val seller = transaction.seller()!!
@@ -184,7 +182,7 @@ class TransactionServiceImpl: ITransactionService {
         seller.increaseScore(increment).increaseTransactions()
     }
 
-    private fun decreseReputacionTo(userRequest: User) {
+    private fun decreaseReputation(userRequest: User) {
         userRequest.increaseTransactions()
         userRequest.decreaseScore()
     }
