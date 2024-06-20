@@ -12,6 +12,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDateTime
 
 @RestController
 @RequestMapping("/user")
@@ -46,7 +47,6 @@ class UserController{
         }
     }
 
-    @Operation(summary = "Get all data from an user by id")
     @GetMapping("{id}")
     fun getUserByID(@PathVariable id: Long): ResponseEntity<Any> {
         return try {
@@ -55,6 +55,20 @@ class UserController{
             ResponseEntity.status(HttpStatus.OK).body(userResponse)
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to e.message));
+        }
+    }
+
+    // En UserController.kt
+
+    @GetMapping("/operatedVolume/{userId}/{startDate}/{endDate}")
+    fun getOperatedVolume(@PathVariable userId: Long, @PathVariable startDate: String, @PathVariable endDate: String): ResponseEntity<Any> {
+        return try {
+            val startDateTime = LocalDateTime.parse(startDate)
+            val endDateTime = LocalDateTime.parse(endDate)
+            val report = userService.getOperatedVolumeBy(userId, startDateTime, endDateTime)
+            ResponseEntity.status(HttpStatus.OK).body(report)
+        } catch (e: Exception) {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to e.message))
         }
     }
 

@@ -3,6 +3,7 @@ package ar.edu.unq.desapp.grupoF.backenddesappapi.service
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Transaction
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.TransactionCreateDTO
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.TransactionRequestDTO
+import java.time.LocalDateTime
 
 interface ITransactionService {
     fun create(transactionDTO: TransactionCreateDTO): Transaction
@@ -10,5 +11,6 @@ interface ITransactionService {
     fun confirm(transactionDTO: TransactionRequestDTO): Transaction
     fun cancel(transactionDTO: TransactionRequestDTO): Transaction
     fun getTransaction(id: Long): Transaction
+    fun getTransactionBy(userId: Long, startDate: LocalDateTime, endDate: LocalDateTime): Any
 
 }

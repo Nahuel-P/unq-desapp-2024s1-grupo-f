@@ -14,6 +14,7 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.TransactionStatus
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICryptoService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.TransactionCreateDTO
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.TransactionRequestDTO
+import java.time.LocalDateTime
 
 @Service
 class TransactionServiceImpl: ITransactionService {
@@ -82,6 +83,10 @@ class TransactionServiceImpl: ITransactionService {
 
     override fun getTransaction(id: Long): Transaction {
         return transactionRepository.findById(id).orElseThrow { Exception("Transaction with id $id not found") }
+    }
+
+    override fun getTransactionBy(userId: Long, startDate: LocalDateTime, endDate: LocalDateTime): Any {
+        TODO("Not yet implemented")
     }
 
     private fun update(transaction: Transaction): Transaction {
