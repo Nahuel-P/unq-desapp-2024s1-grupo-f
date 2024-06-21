@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController
 @RestController
 @RequestMapping("/crypto")
 @Tag(name = "Crypto", description = "Endpoints for crypto information")
-class CryptoCurrencyController {
+class CryptocurrencyController {
 
     @Autowired
     private lateinit var cryptoService: ICryptoService

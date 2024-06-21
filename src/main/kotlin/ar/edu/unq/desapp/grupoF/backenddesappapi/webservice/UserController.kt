@@ -62,8 +62,6 @@ class UserController{
         }
     }
 
-    // En UserController.kt
-
     @GetMapping("/operatedVolume/{userId}/{startDate}/{endDate}")
     fun getOperatedVolume(@PathVariable userId: Long, @PathVariable startDate: String, @PathVariable endDate: String): ResponseEntity<Any> {
         return try {

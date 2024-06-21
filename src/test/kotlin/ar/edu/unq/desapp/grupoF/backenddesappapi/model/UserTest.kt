@@ -120,8 +120,9 @@ class UserTest {
     @Test
     fun `should decrease reputation by 20`() {
         val user = aUser().build()
+        user.increaseScore(30).increaseTransactions()
         user.decreaseScore()
-        assertEquals(-20, user.score)
+        assertEquals(10, user.score)
     }
 
     @Test
@@ -144,19 +145,18 @@ class UserTest {
     fun `should increase transactions by 1`() {
         val user = aUser().build()
         user.increaseTransactions()
-        assertEquals(1, user.successfulTransaction)
+        assertEquals(1, user.transactions)
     }
 
     @Test
-    fun `user reputation is 0 when no transactions`() {
+    fun `user reputation is 'No trades yet' when no transactions`() {
         val user = aUser().build()
-        assertEquals(0, user.reputation())
+        assertEquals("No trades yet.", user.reputation())
     }
-
     @Test
     fun `user reputation is 10 when 1 transaction and 10 score`() {
         val user = aUser().build()
         user.increaseScore(10).increaseTransactions()
-        assertEquals(10, user.reputation())
+        assertEquals(10.toString(), user.reputation())
     }
 }

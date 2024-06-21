@@ -6,7 +6,6 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.CryptocurrencyRepo
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICryptoService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.client.BinanceClient
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.CryptocurrencyPriceDTO
-import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired

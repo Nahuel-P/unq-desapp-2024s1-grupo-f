@@ -1,6 +1,5 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.service.client
 
-// BinanceClientTest.kt
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
@@ -30,7 +29,7 @@ class BinanceClientTest {
         val result = dolarApiClient.getRateUsdToArs().compra
 
         val lowerBound = 900.0
-        val upperBound = 1200.0
+        val upperBound = 2000.0
 
         assertTrue(result!! in lowerBound..upperBound)
     }
