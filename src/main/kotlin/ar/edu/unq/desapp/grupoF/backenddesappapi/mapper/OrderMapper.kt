@@ -8,10 +8,13 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.OrderRequestDTO
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.OrderCreateResponseDTO
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.OrderResponseDTO
+import org.slf4j.LoggerFactory
 
 class OrderMapper {
 
     companion object {
+        private val logger = LoggerFactory.getLogger(OrderMapper::class.java)
+
         fun toModel(dto: OrderRequestDTO, user: User, crypto: Cryptocurrency, intentionType: IntentionType, ars: Double): Order {
             return OrderBuilder()
                 .withOwnerUser(user)
@@ -24,6 +27,7 @@ class OrderMapper {
         }
 
         fun toCreateDTO(order: Order): OrderCreateResponseDTO {
+            logger.info("Order id: ${order.id}")
             return OrderCreateResponseDTO(
                 order.id!!,
                 order.cryptocurrency?.name!!,
