@@ -5,6 +5,7 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Cryptocurrency
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Order
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.OrderRepository
+import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICommonService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICryptoService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IOrderService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IUserService
@@ -14,21 +15,17 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class OrderServiceImpl : IOrderService {
+class OrderServiceImpl @Autowired constructor(
+    private val orderRepository: OrderRepository,
+    private val commonService: ICommonService,
+) : IOrderService {
 
-    @Autowired
-    private lateinit var orderRepository: OrderRepository
-    @Autowired
-    private lateinit var userService: IUserService
-    @Autowired
-    private lateinit var cryptoService: ICryptoService
-    private var rateService: DolarApiClient = DolarApiClient()
-
-    override fun createOrder(orderDTO: OrderRequestDTO) : Order {
+    private val rateService: DolarApiClient = DolarApiClient()
+    override fun createOrder(orderDTO: OrderRequestDTO): Order {
         try {
-            val cryptocurrency = cryptoService.getCrypto(orderDTO.cryptocurrency)
+            val cryptocurrency = commonService.getCrypto(orderDTO.cryptocurrency)
             validatePriceMargin(orderDTO.price, cryptocurrency)
-            val user = userService.getUser(orderDTO.userId)
+            val user = commonService.getUser(orderDTO.userId)
             val intentionType = orderDTO.type
             val arsPrice = calculateArsPrice(orderDTO.amount, orderDTO.price, intentionType)
             return OrderMapper.toModel(orderDTO, user, cryptocurrency, intentionType, arsPrice).also { orderRepository.save(it) }
@@ -57,10 +54,12 @@ class OrderServiceImpl : IOrderService {
     }
 
     private fun validatePriceMargin(price: Double, cryptocurrency: Cryptocurrency) {
-        if (cryptocurrency.isAboveMarginPrice(5.0,price))
+        if (cryptocurrency.isAboveMarginPrice(5.0, price)) {
             throw Exception("Price out of margin range of 5% above the last price of the cryptocurrency")
-        if (cryptocurrency.isBelowMarginPrice(5.0,price))
+        }
+        if (cryptocurrency.isBelowMarginPrice(5.0, price)) {
             throw Exception("Price out of margin range of 5% below the last price of the cryptocurrency")
+        }
     }
 
     private fun calculateArsPrice(amount: Double, price: Double, intentionType: IntentionType): Double {
@@ -87,5 +86,4 @@ class OrderServiceImpl : IOrderService {
         order.priceARS = calculateArsPrice(order.amount!!, order.price!!, order.type!!)
         return update(order)
     }
-
 }

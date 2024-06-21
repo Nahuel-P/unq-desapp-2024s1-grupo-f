@@ -19,11 +19,6 @@ import java.util.*
 class OrderController {
     @Autowired
     private lateinit var orderService: IOrderService
-    @Autowired
-    private lateinit var userService: IUserService
-    @Autowired
-    private lateinit var cryptoService: ICryptoService
-
     @Operation (summary = "Create a new order")
     @PostMapping("/create")
     fun createOrder(@RequestBody orderDTO: OrderRequestDTO): ResponseEntity<Any> {

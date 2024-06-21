@@ -5,6 +5,7 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.UserVolumeReport
 import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.TransactionRepository
 import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.UserRepository
+import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICommonService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IOrderService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ITransactionService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IUserService
@@ -16,13 +17,11 @@ import java.time.LocalDateTime
 
 
 @Service
-class UserServiceImpl : IUserService{
+class UserServiceImpl @Autowired constructor(
+    private val userRepository: UserRepository,
+    private val commonService: ICommonService
+) : IUserService {
 
-//    @Autowired
-//    private lateinit var transactionService: ITransactionService
-
-    @Autowired
-    private lateinit var userRepository: UserRepository
     override fun registerUser(userDTO: UserCreateDTO): User {
         if (userRepository.existsByEmail(userDTO.email!!)) {
             throw Exception("User with email ${userDTO.email} already exists")
@@ -35,49 +34,17 @@ class UserServiceImpl : IUserService{
         return userRepository.findAll()
     }
 
-    override fun getUser(id: Long): User {
-        return userRepository.findById(id).orElseThrow { Exception("User with id $id not found") }
-    }
+//    override fun getUser(id: Long): User {
+//        return commonService.getUser(id)
+//    }
 
     override fun update(user: User): User {
         return userRepository.save(user)
     }
 
-    // En UserServiceImpl.kt
-
     override fun getOperatedVolumeBy(userId: Long, startDate: LocalDateTime, endDate: LocalDateTime): UserVolumeReport {
-
-//        val user = userRepository.findById(userId).get()
-////        val transactions = transactionService.findAllByCounterPartyAndEntryTimeBetween(user, startDate, endDate)
-//        val transactions = transactionService.getTransactionBy(user.id!!, startDate, endDate)
-//
-//        val cryptoVolumes = transactions.map { transaction ->
-//            val order = transaction.order!!
-//            val crypto = order.cryptocurrency!!
-//            val currentPriceUsd = cryptoService.getCrypto(crypto.name!!).price
-//            val currentPriceArs = currentPriceUsd * dolarExchangeRate // replace with actual exchange rate
-//
-//            CryptoVolume(
-//                cryptoSymbol = crypto.name!!,
-//                quantity = order.amount!!,
-//                currentPriceUsd = currentPriceUsd,
-//                currentPriceArs = currentPriceArs,
-//                totalUsd = order.amount!! * currentPriceUsd,
-//                totalArs = order.amount!! * currentPriceArs
-//            )
-//        }
-//
-//        val totalUsd = cryptoVolumes.sumOf { it.totalUsd }
-//        val totalArs = cryptoVolumes.sumOf { it.totalArs }
-//
-//        return UserVolumeReport(
-//            requestDateTime = LocalDateTime.now(),
-//            totalUsd = totalUsd,
-//            totalArs = totalArs,
-//            cryptoVolumes = cryptoVolumes
-//        )
+        val user = commonService.getUser(userId)
+        val transactions = commonService.getTransaction(userId)  // Aquí deberías ajustar tu lógica para obtener las transacciones del usuario en un rango de fechas
         return UserVolumeReport()
     }
-
-
 }

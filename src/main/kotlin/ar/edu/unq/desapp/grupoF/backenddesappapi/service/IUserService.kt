@@ -8,7 +8,7 @@ import java.time.LocalDateTime
 interface IUserService {
     fun registerUser(userDTO: UserCreateDTO): User
     fun getUsers(): List<User>
-    fun getUser(id: Long): User
-    fun update(User: User): User
+//    fun getUser(id: Long): User
+    fun update(user: User): User
     fun getOperatedVolumeBy(userId: Long, startDateTime: LocalDateTime, endDateTime: LocalDateTime): Any?
 }

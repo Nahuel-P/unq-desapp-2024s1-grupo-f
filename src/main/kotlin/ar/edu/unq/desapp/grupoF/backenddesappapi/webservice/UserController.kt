@@ -1,6 +1,7 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.webservice
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.UserMapper
+import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICommonService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IUserService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserCreateDTO
 import io.swagger.v3.oas.annotations.Operation
@@ -12,6 +13,7 @@ import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.validation.annotation.Validated
 import org.springframework.web.bind.annotation.*
+import java.time.LocalDate
 import java.time.LocalDateTime
 
 @RestController
@@ -21,6 +23,8 @@ import java.time.LocalDateTime
 @Transactional
 class UserController{
 
+    @Autowired
+    private lateinit var commonService: ICommonService
     @Autowired
     private lateinit var userService: IUserService
     @Operation(summary = "Register a new user")
@@ -50,7 +54,7 @@ class UserController{
     @GetMapping("{id}")
     fun getUserByID(@PathVariable id: Long): ResponseEntity<Any> {
         return try {
-            val user = userService.getUser(id)
+            val user = commonService.getUser(id)
             val userResponse = UserMapper.userToDTO(user)
             ResponseEntity.status(HttpStatus.OK).body(userResponse)
         } catch (e: Exception) {
@@ -63,8 +67,8 @@ class UserController{
     @GetMapping("/operatedVolume/{userId}/{startDate}/{endDate}")
     fun getOperatedVolume(@PathVariable userId: Long, @PathVariable startDate: String, @PathVariable endDate: String): ResponseEntity<Any> {
         return try {
-            val startDateTime = LocalDateTime.parse(startDate)
-            val endDateTime = LocalDateTime.parse(endDate)
+            val startDateTime = LocalDate.parse(startDate).atStartOfDay()
+            val endDateTime = LocalDate.parse(endDate).atTime(23, 59, 59)
             val report = userService.getOperatedVolumeBy(userId, startDateTime, endDateTime)
             ResponseEntity.status(HttpStatus.OK).body(report)
         } catch (e: Exception) {

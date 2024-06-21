@@ -33,11 +33,6 @@ class CryptoServiceImpl : ICryptoService {
         }
     }
 
-    override fun getCrypto(symbol: CryptoSymbol): Cryptocurrency {
-        return cryptocurrencyRepository.findByName(symbol)
-            ?: throw Exception("Cryptocurrency with symbol $symbol not found")
-    }
-
     override fun getLast24hsQuotes(symbol: CryptoSymbol): Any? {
         val cryptocurrency = cryptocurrencyRepository.findByName(symbol)
             ?: throw IllegalArgumentException("Cryptocurrency with symbol $symbol not found")

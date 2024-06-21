@@ -5,33 +5,25 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Order
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Transaction
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.TransactionRepository
-import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IOrderService
-import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ITransactionService
-import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IUserService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.TransactionStatus
-import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICryptoService
+import ar.edu.unq.desapp.grupoF.backenddesappapi.service.*
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.TransactionCreateDTO
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.TransactionRequestDTO
 import java.time.LocalDateTime
 
 @Service
-class TransactionServiceImpl: ITransactionService {
-
-
-    @Autowired
-    private lateinit var transactionRepository: TransactionRepository
-    @Autowired
-    private lateinit var userService: IUserService
-    @Autowired
-    private lateinit var orderService: IOrderService
-    @Autowired
-    private lateinit var cryptoService: ICryptoService
+class TransactionServiceImpl @Autowired constructor(
+    private val transactionRepository: TransactionRepository,
+    private val commonService: ICommonService,
+    private val orderService: IOrderService,
+    private val cryptoService: ICryptoService
+) : ITransactionService {
 
     override fun create(transactionDTO: TransactionCreateDTO): Transaction {
         try {
-            val userRequest = userService.getUser(transactionDTO.idUserRequest)
+            val userRequest = commonService.getUser(transactionDTO.idUserRequest)
             val order = orderService.getOrder(transactionDTO.orderId)
             validateStartTransaction(order,userRequest)
             val transaction = TransactionMapper.toModel(transactionDTO, userRequest, order)
@@ -45,8 +37,8 @@ class TransactionServiceImpl: ITransactionService {
 
     override fun paid(transactionDTO: TransactionRequestDTO): Transaction {
         try {
-            val transaction = this.getTransaction(transactionDTO.idTransaction)
-            val userRequest = userService.getUser(transactionDTO.idUserRequest)
+            val transaction = commonService.getTransaction(transactionDTO.idTransaction)
+            val userRequest = commonService.getUser(transactionDTO.idUserRequest)
             validatePaid(transaction,userRequest)
             transaction.paid()
             return update(transaction)
@@ -57,8 +49,8 @@ class TransactionServiceImpl: ITransactionService {
 
     override fun confirm(transactionDTO: TransactionRequestDTO): Transaction {
         try {
-            val transaction = this.getTransaction(transactionDTO.idTransaction)
-            val userRequest = userService.getUser(transactionDTO.idUserRequest)
+            val transaction = commonService.getTransaction(transactionDTO.idTransaction)
+            val userRequest = commonService.getUser(transactionDTO.idUserRequest)
             validateConfirm(transaction,userRequest)
             transaction.confirmed()
             increaseReputation(transaction)
@@ -70,8 +62,8 @@ class TransactionServiceImpl: ITransactionService {
 
     override fun cancel(transactionDTO: TransactionRequestDTO): Transaction {
         try {
-            val transaction = this.getTransaction(transactionDTO.idTransaction)
-            val userRequest = userService.getUser(transactionDTO.idUserRequest)
+            val transaction = commonService.getTransaction(transactionDTO.idTransaction)
+            val userRequest = commonService.getUser(transactionDTO.idUserRequest)
             validateCancel(transaction,userRequest)
             transaction.cancelByUser()
             decreaseReputation(userRequest)
@@ -81,12 +73,8 @@ class TransactionServiceImpl: ITransactionService {
         }
     }
 
-    override fun getTransaction(id: Long): Transaction {
-        return transactionRepository.findById(id).orElseThrow { Exception("Transaction with id $id not found") }
-    }
-
-    override fun getTransactionBy(userId: Long, startDate: LocalDateTime, endDate: LocalDateTime): Any {
-        TODO("Not yet implemented")
+    override fun getTransactionBy(userId: Long, startDate: LocalDateTime, endDate: LocalDateTime): List<Transaction> {
+        return transactionRepository.findCompletedTransactionsByUserAndBetweenDates(userId, startDate, endDate)
     }
 
     private fun update(transaction: Transaction): Transaction {
@@ -99,7 +87,7 @@ class TransactionServiceImpl: ITransactionService {
     }
 
     private fun canProceedByMarketPrice(order: Order): Boolean {
-        val crypto = cryptoService.getCrypto(order.cryptocurrency!!.name!!)
+        val crypto = commonService.getCrypto(order.cryptocurrency!!.name!!)
         return if (order.isBuyOrder()) !order.isAboveMarketPrice(crypto, order) else !order.isBelowMarketPrice(crypto, order)
     }
 
