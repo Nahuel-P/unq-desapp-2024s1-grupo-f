@@ -64,6 +64,18 @@ class Transaction {
         }
     }
 
+    fun usdPrice(): Double {
+        return order!!.price!!
+    }
+
+    fun arsQuote(): Double {
+        return order!!.priceARS!!
+    }
+
+    fun nominalAmount(): Double {
+        return order!!.price!!
+    }
+
     fun buyer(): User? {
         return if (order!!.type == IntentionType.BUY) {
             order!!.ownerUser

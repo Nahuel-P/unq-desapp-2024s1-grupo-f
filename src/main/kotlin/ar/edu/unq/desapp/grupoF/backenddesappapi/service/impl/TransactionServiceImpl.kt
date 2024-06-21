@@ -18,7 +18,6 @@ class TransactionServiceImpl @Autowired constructor(
     private val transactionRepository: TransactionRepository,
     private val commonService: ICommonService,
     private val orderService: IOrderService,
-    private val cryptoService: ICryptoService
 ) : ITransactionService {
 
     override fun create(transactionDTO: TransactionCreateDTO): Transaction {
@@ -71,10 +70,6 @@ class TransactionServiceImpl @Autowired constructor(
         } catch ( e: Exception) {
             throw Exception("${e.message}")
         }
-    }
-
-    override fun getTransactionBy(userId: Long, startDate: LocalDateTime, endDate: LocalDateTime): List<Transaction> {
-        return transactionRepository.findCompletedTransactionsByUserAndBetweenDates(userId, startDate, endDate)
     }
 
     private fun update(transaction: Transaction): Transaction {

@@ -1,6 +1,10 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl
 
+import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.OrderMapper
 import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.UserMapper
+import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.UserVolumeReportMapper
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Active
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Transaction
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.UserVolumeReport
 import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.TransactionRepository
@@ -34,17 +38,27 @@ class UserServiceImpl @Autowired constructor(
         return userRepository.findAll()
     }
 
-//    override fun getUser(id: Long): User {
-//        return commonService.getUser(id)
-//    }
-
     override fun update(user: User): User {
         return userRepository.save(user)
     }
 
     override fun getOperatedVolumeBy(userId: Long, startDate: LocalDateTime, endDate: LocalDateTime): UserVolumeReport {
         val user = commonService.getUser(userId)
-        val transactions = commonService.getTransaction(userId)  // Aquí deberías ajustar tu lógica para obtener las transacciones del usuario en un rango de fechas
-        return UserVolumeReport()
+        val transactions = commonService.getTransactionBy(user.id!!,startDate,endDate)
+        return userVolume(transactions)
+    }
+
+    private fun userVolume(transactions: List<Transaction>): UserVolumeReport {
+        val userVolumeReport = UserVolumeReport()
+        var totalUSD = 0.0
+        var totalARG = 0.0
+//        var actives = mutableListOf<Active>()
+
+        transactions.forEach { transaction ->
+            totalUSD += transaction.usdPrice() * transaction.nominalAmount()
+            totalARG += transaction.arsQuote()
+        }
+        return UserVolumeReportMapper.toModel(totalUSD, totalARG)
+
     }
 }

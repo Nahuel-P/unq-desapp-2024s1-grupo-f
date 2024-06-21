@@ -10,6 +10,7 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.UserRepository
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICommonService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
+import java.time.LocalDateTime
 
 @Service
 class CommonServiceImpl @Autowired constructor(
@@ -28,6 +29,10 @@ class CommonServiceImpl @Autowired constructor(
 
     override fun getCrypto(symbol: CryptoSymbol): Cryptocurrency {
         return cryptocurrencyRepository.findByName(symbol) ?: throw Exception("Cryptocurrency with symbol $symbol not found")
+    }
+
+    override fun getTransactionBy(userId: Long, startDate: LocalDateTime, endDate: LocalDateTime): List<Transaction> {
+        return transactionRepository.findCompletedTransactionsByUserAndBetweenDates(userId, startDate, endDate)
     }
 
 }

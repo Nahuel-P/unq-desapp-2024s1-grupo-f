@@ -38,6 +38,7 @@ class OrderServiceImpl @Autowired constructor(
         try {
             val activeOrders = orderRepository.findByIsActiveTrue()
             if (activeOrders.isEmpty()) throw Exception("There are no active orders")
+            // mo me gusa este update, con el task qwe corre cada x minutos se va
             return updateUsdToArsRate(activeOrders)
         } catch (e: Exception) {
             throw Exception("${e.message}")

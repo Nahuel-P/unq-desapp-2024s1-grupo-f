@@ -20,9 +20,6 @@ class Cryptocurrency {
 
     var price: Double = 0.00
 
-//    @OneToMany(mappedBy = "cryptocurrency", cascade = [CascadeType.ALL], orphanRemoval = true, fetch = FetchType.EAGER)
-//    @OneToMany(fetch = FetchType.EAGER)
-
     @JsonManagedReference
     @OneToMany(mappedBy = "cryptocurrency", cascade = [CascadeType.ALL],fetch = FetchType.EAGER )
     var priceHistory: MutableList<PriceHistory> = mutableListOf()
