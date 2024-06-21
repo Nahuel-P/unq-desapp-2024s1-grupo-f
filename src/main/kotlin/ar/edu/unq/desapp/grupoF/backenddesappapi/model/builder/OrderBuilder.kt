@@ -4,7 +4,6 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Cryptocurrency
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Order
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
-import kotlin.math.pow
 
 class OrderBuilder {
     private var ownerUser: User? = null

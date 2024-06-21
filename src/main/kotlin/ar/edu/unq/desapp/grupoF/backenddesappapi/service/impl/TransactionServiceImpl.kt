@@ -11,7 +11,6 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.TransactionStatus
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.*
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.TransactionCreateDTO
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.TransactionRequestDTO
-import java.time.LocalDateTime
 
 @Service
 class TransactionServiceImpl @Autowired constructor(

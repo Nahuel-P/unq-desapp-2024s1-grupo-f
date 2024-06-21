@@ -1,20 +1,14 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl
 
-import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.OrderMapper
 import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.UserMapper
 import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.UserVolumeReportMapper
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Active
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Transaction
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.UserVolumeReport
-import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.TransactionRepository
 import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.UserRepository
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICommonService
-import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IOrderService
-import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ITransactionService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IUserService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserCreateDTO
-import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserResponseDTO
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 import java.time.LocalDateTime

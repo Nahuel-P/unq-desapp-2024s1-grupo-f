@@ -1,7 +1,5 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.repositories
 
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Cryptocurrency
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.PriceHistory
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.*
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType

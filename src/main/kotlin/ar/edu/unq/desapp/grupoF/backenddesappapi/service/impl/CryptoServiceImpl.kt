@@ -1,6 +1,5 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl
 
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Cryptocurrency
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.CryptocurrencyRepository
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICryptoService
@@ -10,8 +9,6 @@ import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
-import java.time.LocalDateTime
-import java.time.temporal.ChronoUnit
 
 @Service
 class CryptoServiceImpl : ICryptoService {

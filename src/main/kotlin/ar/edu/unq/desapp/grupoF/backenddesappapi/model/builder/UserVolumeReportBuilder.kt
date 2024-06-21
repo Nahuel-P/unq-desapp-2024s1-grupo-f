@@ -2,7 +2,6 @@ package ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Active
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.UserVolumeReport
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 
 class UserVolumeReportBuilder {
     private var totalUSD: Double = 0.0
