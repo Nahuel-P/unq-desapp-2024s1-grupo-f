@@ -6,8 +6,6 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.CryptocurrencyRepo
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICryptoService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.client.BinanceClient
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.CryptocurrencyPriceDTO
-import kotlinx.coroutines.async
-import kotlinx.coroutines.runBlocking
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
@@ -22,15 +20,9 @@ class CryptoServiceImpl : ICryptoService {
     private val binanceClient = BinanceClient()
     private val logger = LoggerFactory.getLogger(CryptoServiceImpl::class.java)
 
-    override fun getQuotes(): List<CryptocurrencyPriceDTO> = runBlocking {
-        val cryptocurrencies = cryptocurrencyRepository.findAll()
-        val symbols = cryptocurrencies.map { it.name!! }.toMutableList()
-
-        val prices = binanceClient.getAllCryptoCurrencyPrices(symbols)
-        prices.map { priceDTO ->
-            logger.info("Price for symbol ${priceDTO.symbol}: ${priceDTO.price}")
-            CryptocurrencyPriceDTO(priceDTO.symbol, priceDTO.price)
-        }
+    override fun getQuotes(): Array<CryptocurrencyPriceDTO> {
+        val symbols = cryptocurrencyRepository.findAll().map { it.name!! }.toMutableList()
+        return binanceClient.getAllCryptoCurrencyPrices(symbols)
     }
 
     override fun getCrypto(symbol: CryptoSymbol): Cryptocurrency {
