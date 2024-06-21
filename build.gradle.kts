@@ -1,6 +1,10 @@
 
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
+val hibernateValidatorVersion = "7.0.1.Final"
+val coroutinesCoreVersion = "1.5.2"
+val springdocVersion = "2.4.0"
+
 plugins {
 	war
 	id("org.springframework.boot") version "3.2.3"
@@ -49,9 +53,9 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-web")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
-	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.4.0")
-	implementation("org.hibernate.validator:hibernate-validator:7.0.1.Final")
-	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.5.2")
+	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:$springdocVersion")
+	implementation("org.hibernate.validator:hibernate-validator:$hibernateValidatorVersion")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesCoreVersion")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("com.h2database:h2")
 	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
