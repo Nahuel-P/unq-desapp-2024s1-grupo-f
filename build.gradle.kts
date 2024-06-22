@@ -56,6 +56,8 @@ dependencies {
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:$springdocVersion")
 	implementation("org.hibernate.validator:hibernate-validator:$hibernateValidatorVersion")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesCoreVersion")
+	implementation("org.springframework.boot:spring-boot-starter-actuator")
+	implementation("io.micrometer:micrometer-registry-prometheus")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("com.h2database:h2")
 	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
