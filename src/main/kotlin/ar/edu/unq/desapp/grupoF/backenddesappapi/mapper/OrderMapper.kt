@@ -5,15 +5,16 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Order
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.OrderBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
-import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.OrderRequestDTO
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.OrderCreateResponseDTO
+import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.OrderRequestDTO
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.OrderResponseDTO
-import org.slf4j.LoggerFactory
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 
 class OrderMapper {
 
     companion object {
-        private val logger = LoggerFactory.getLogger(OrderMapper::class.java)
+        private val logger: Logger = LogManager.getLogger(OrderMapper::class.java)
 
         fun toModel(dto: OrderRequestDTO, user: User, crypto: Cryptocurrency, intentionType: IntentionType, ars: Double): Order {
             return OrderBuilder()

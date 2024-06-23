@@ -13,7 +13,6 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserCreateDTO
 import com.fasterxml.jackson.databind.ObjectMapper
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
-import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
@@ -27,7 +26,6 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 @SpringBootTest
 @AutoConfigureMockMvc
 class OrderControllerTest {
-    val logger = LoggerFactory.getLogger(OrderMapper::class.java)
 
     @Autowired
     private lateinit var mockMvc: MockMvc
@@ -71,7 +69,6 @@ class OrderControllerTest {
         order.id = 1L
 
         Mockito.`when`(userService.registerUser(userDTO)).thenReturn(user)
-        Mockito.`when`(userService.getUser(user.id!!)).thenReturn(user)
         Mockito.`when`(orderService.createOrder(orderDTO)).thenReturn(order)
 
         mockMvc.perform(post("/order/create")

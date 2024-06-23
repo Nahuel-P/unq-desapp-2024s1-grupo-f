@@ -5,7 +5,8 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IOrderService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.OrderRequestDTO
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.tags.Tag
-import org.slf4j.LoggerFactory
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.*
 class OrderController {
     @Autowired
     private lateinit var orderService: IOrderService
-    private val logger = LoggerFactory.getLogger(OrderController::class.java)
+    private val logger: Logger = LogManager.getLogger(OrderController::class.java)
 
     @Operation (summary = "Create a new order")
     @PostMapping("/create")
