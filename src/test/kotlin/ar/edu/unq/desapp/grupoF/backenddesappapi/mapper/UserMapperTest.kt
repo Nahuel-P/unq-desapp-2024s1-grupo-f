@@ -15,6 +15,7 @@ class UserMapperTest {
         `when`(user.firstName).thenReturn("Michael")
         `when`(user.lastName).thenReturn("Scott")
         `when`(user.email).thenReturn("michael.scott32@test.com")
+        `when`(user.reputation()).thenReturn("0")
 
         val dto = UserMapper.userToDTO(user)
 
@@ -22,6 +23,7 @@ class UserMapperTest {
         assertEquals("Michael", dto.firstName)
         assertEquals("Scott", dto.lastName)
         assertEquals("michael.scott32@test.com", dto.email)
+        assertEquals("0", dto.reputation)
     }
 
     @Test
@@ -31,6 +33,9 @@ class UserMapperTest {
         `when`(dto.lastName).thenReturn("Scott")
         `when`(dto.email).thenReturn("michael.scott32@test.com")
         `when`(dto.password).thenReturn("Password1!")
+        `when`(dto.address).thenReturn("1725 Slough Avenue, Scranton")
+        `when`(dto.cvu).thenReturn("1234567890123456789012")
+        `when`(dto.walletAddress).thenReturn("12345678")
 
         val user = UserMapper.toModel(dto)
 
@@ -38,5 +43,8 @@ class UserMapperTest {
         assertEquals("Scott", user.lastName)
         assertEquals("michael.scott32@test.com", user.email)
         assertEquals("Password1!", user.password)
+        assertEquals("1725 Slough Avenue, Scranton", user.address)
+        assertEquals("1234567890123456789012", user.cvu)
+        assertEquals("12345678", user.walletAddress)
     }
 }
