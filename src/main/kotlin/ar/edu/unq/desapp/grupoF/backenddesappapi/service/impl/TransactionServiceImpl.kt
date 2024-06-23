@@ -4,13 +4,15 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.TransactionMapper
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Order
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Transaction
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
-import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.TransactionRepository
-import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.stereotype.Service
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.TransactionStatus
-import ar.edu.unq.desapp.grupoF.backenddesappapi.service.*
+import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.TransactionRepository
+import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICommonService
+import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IOrderService
+import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ITransactionService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.TransactionCreateDTO
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.TransactionRequestDTO
+import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.stereotype.Service
 
 @Service
 class TransactionServiceImpl @Autowired constructor(
@@ -113,7 +115,7 @@ class TransactionServiceImpl @Autowired constructor(
             TransactionStatus.CONFIRMED -> throw Exception("Transaction is already confirmed. Can't be canceled")
             TransactionStatus.CANCELLED_BY_SYSTEM -> throw Exception("Transaction is already cancelled by system. Can't be canceled")
             TransactionStatus.CANCELLED_BY_USER -> throw Exception("Transaction is already cancelled. Can't be canceled")
-            else -> {}
+            else -> Unit
         }
     }
 

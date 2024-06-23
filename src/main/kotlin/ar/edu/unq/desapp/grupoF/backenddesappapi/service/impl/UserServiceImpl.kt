@@ -43,9 +43,9 @@ class UserServiceImpl @Autowired constructor(
         return userRepository.save(user)
     }
 
-    override fun getOperatedVolumeBy(userId: Long, startDate: LocalDateTime, endDate: LocalDateTime): UserVolumeReport {
+    override fun getOperatedVolumeBy(userId: Long, startDateTime: LocalDateTime, endDateTime: LocalDateTime): UserVolumeReport {
         val user = commonService.getUser(userId)
-        val transactions = commonService.getTransactionBy(user.id!!,startDate,endDate)
+        val transactions = commonService.getTransactionBy(user.id!!,startDateTime,endDateTime)
         return userVolume(transactions)
     }
 

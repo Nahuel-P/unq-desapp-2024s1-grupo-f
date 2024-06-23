@@ -44,10 +44,10 @@ class User{
     }
 
     fun reputation(): String {
-        if (transactions == 0) {
-            return "No trades yet."
+        return if (transactions == 0) {
+            "No trades yet."
         }else{
-            return (score/transactions).toString()
+            (score/transactions).toString()
         }
     }
 }
