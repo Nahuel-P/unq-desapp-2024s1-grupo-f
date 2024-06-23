@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 val hibernateValidatorVersion = "7.0.1.Final"
 val coroutinesCoreVersion = "1.5.2"
 val springdocVersion = "2.4.0"
+val archUnitVersion = "0.21.0"
 
 plugins {
 	war
@@ -63,7 +64,7 @@ dependencies {
 	runtimeOnly("com.h2database:h2")
 	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	//	testImplementation("org.springframework.security:spring-security-test")
+	testImplementation("com.tngtech.archunit:archunit-junit5:$archUnitVersion")
 }
 
 tasks.withType<KotlinCompile> {
