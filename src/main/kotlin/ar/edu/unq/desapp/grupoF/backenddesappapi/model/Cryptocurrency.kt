@@ -33,18 +33,6 @@ class Cryptocurrency {
         return groupPriceHistoriesByHourAndSort(priceHistories)
     }
 
-    fun isAboveMarginPrice(marginPercentage: Double, userPrice: Double): Boolean {
-        val marginFactor = 1 + marginPercentage / 100
-        val upperBound = price * marginFactor
-        return userPrice > upperBound
-    }
-
-    fun isBelowMarginPrice(marginPercentage: Double, userPrice: Double): Boolean {
-        val marginFactor = 1 - marginPercentage / 100
-        val lowerBound = price * marginFactor
-        return userPrice < lowerBound
-    }
-
     private fun filterPriceHistoriesInLast24Hours(): List<PriceHistory> {
         val endDateTime = LocalDateTime.now()
         val startDateTime = endDateTime.minusDays(1)

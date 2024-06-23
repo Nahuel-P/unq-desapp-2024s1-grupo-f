@@ -18,7 +18,5 @@ class PriceHistory {
 
     var price: Double = 0.00
 
-
-
     var priceTime: LocalDateTime = LocalDateTime.now()
 }

@@ -73,4 +73,16 @@ class Order {
     fun isBelowMarketPrice(crypto: Cryptocurrency, order: Order): Boolean {
         return crypto.price < order.price!!
     }
+
+    fun isAboveMarginPrice(marginPercentage: Double): Boolean {
+        val marginFactor = 1 + marginPercentage / 100
+        val upperBound = cryptocurrency!!.lastPrice()!! * marginFactor
+        return this.price!! >= upperBound
+    }
+
+    fun isBelowMarginPrice(marginPercentage: Double): Boolean {
+        val marginFactor = 1 - marginPercentage / 100
+        val lowerBound = cryptocurrency!!.lastPrice()!! * marginFactor
+        return this.price!! <= lowerBound
+    }
 }

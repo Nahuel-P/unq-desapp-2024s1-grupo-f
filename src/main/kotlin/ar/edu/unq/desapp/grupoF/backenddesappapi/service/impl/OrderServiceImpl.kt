@@ -1,7 +1,6 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.OrderMapper
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Cryptocurrency
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Order
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.OrderRepository
@@ -22,11 +21,13 @@ class OrderServiceImpl @Autowired constructor(
     override fun createOrder(orderDTO: OrderRequestDTO): Order {
         try {
             val cryptocurrency = commonService.getCrypto(orderDTO.cryptocurrency)
-            validatePriceMargin(orderDTO.price, cryptocurrency)
+
             val user = commonService.getUser(orderDTO.userId)
             val intentionType = orderDTO.type
             val arsPrice = calculateArsPrice(orderDTO.amount, orderDTO.price, intentionType)
-            return OrderMapper.toModel(orderDTO, user, cryptocurrency, intentionType, arsPrice).also { orderRepository.save(it) }
+            val newOrder = OrderMapper.toModel(orderDTO, user, cryptocurrency, intentionType, arsPrice)
+            validatePriceMargin(newOrder)
+            return orderRepository.save(newOrder)
         } catch (e: Exception) {
             throw Exception("${e.message}")
         }
@@ -52,11 +53,12 @@ class OrderServiceImpl @Autowired constructor(
         return orderRepository.save(order)
     }
 
-    private fun validatePriceMargin(price: Double, cryptocurrency: Cryptocurrency) {
-        if (cryptocurrency.isAboveMarginPrice(5.0, price)) {
+    private fun validatePriceMargin(order: Order) {
+        val cryptocurrency = order.cryptocurrency
+        if (order.isAboveMarginPrice(5.0)) {
             throw Exception("Price out of margin range of 5% above the last price of the cryptocurrency")
         }
-        if (cryptocurrency.isBelowMarginPrice(5.0, price)) {
+        if (order.isBelowMarginPrice(5.0)) {
             throw Exception("Price out of margin range of 5% below the last price of the cryptocurrency")
         }
     }

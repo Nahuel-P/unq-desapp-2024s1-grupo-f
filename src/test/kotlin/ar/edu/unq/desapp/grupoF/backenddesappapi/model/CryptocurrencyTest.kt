@@ -53,32 +53,4 @@ class CryptocurrencyTest {
         assertFalse(last24hsQuotes.contains(oldPrice))
     }
 
-    @Test
-    fun `isAboveMarginPrice returns true when user price is above margin`() {
-        val cryptocurrency = aCryptocurrency().build()
-        cryptocurrency.price = 100.0
-        assertTrue(cryptocurrency.isAboveMarginPrice(10.0, 111.0))
-    }
-
-    @Test
-    fun `isAboveMarginPrice returns false when user price is below margin`() {
-        val cryptocurrency = aCryptocurrency().build()
-        cryptocurrency.price = 100.0
-        assertFalse(cryptocurrency.isAboveMarginPrice(10.0, 109.0))
-    }
-
-    @Test
-    fun `isBelowMarginPrice returns true when user price is below margin`() {
-        val cryptocurrency = aCryptocurrency().build()
-        cryptocurrency.price = 100.0
-        assertTrue(cryptocurrency.isBelowMarginPrice(10.0, 89.0))
-    }
-
-    @Test
-    fun `isBelowMarginPrice returns false when user price is above margin`() {
-        val cryptocurrency = aCryptocurrency().build()
-        cryptocurrency.price = 100.0
-        assertFalse(cryptocurrency.isBelowMarginPrice(10.0, 91.0))
-    }
-
 }
