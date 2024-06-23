@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.UserMapper
 import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.UserVolumeReportMapper
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Active
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Transaction
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.UserVolumeReport
@@ -51,15 +52,11 @@ class UserServiceImpl @Autowired constructor(
 
     private fun userVolume(transactions: List<Transaction>): UserVolumeReport {
         val userVolumeReport = UserVolumeReport()
-        var totalUSD = 0.0
-        var totalARG = 0.0
-//        var actives = mutableListOf<Active>()
 
         transactions.forEach { transaction ->
-            totalUSD += transaction.usdPrice() * transaction.nominalAmount()
-            totalARG += transaction.arsQuote()
+            userVolumeReport.addToVolumeReport(transaction)
         }
-        return UserVolumeReportMapper.toModel(totalUSD, totalARG)
 
+        return userVolumeReport
     }
 }
