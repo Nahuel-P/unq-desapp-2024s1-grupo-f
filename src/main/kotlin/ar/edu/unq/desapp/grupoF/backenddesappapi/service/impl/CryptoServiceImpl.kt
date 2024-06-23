@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl
 
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.PriceHistory
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.CryptocurrencyRepository
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICryptoService
@@ -29,7 +30,7 @@ class CryptoServiceImpl : ICryptoService {
         }
     }
 
-    override fun getLast24hsQuotes(symbol: CryptoSymbol): Any? {
+    override fun getLast24hsQuotes(symbol: CryptoSymbol): List<PriceHistory> {
         val cryptocurrency = cryptocurrencyRepository.findByName(symbol)
             ?: throw IllegalArgumentException("Cryptocurrency with symbol $symbol not found")
 
