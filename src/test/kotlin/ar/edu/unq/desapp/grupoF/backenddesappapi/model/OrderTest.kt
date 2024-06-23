@@ -1,7 +1,6 @@
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.OrderBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import ar.edu.unq.desapp.grupoF.backenddesappapi.utils.aBTCUSDT
-import ar.edu.unq.desapp.grupoF.backenddesappapi.utils.aBuyOrder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.utils.aUser
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -150,5 +149,41 @@ class OrderTest {
         val order = OrderBuilder().withPrice(95.1).withCryptocurrency(aBTCUSDT().withPrice(100.0).build()).build()
         assertFalse(order.isBelowMarginPrice(5.0))
     }
+
+    @Test
+    fun `return true when market price is above order price`() {
+        val crypto = aBTCUSDT().withPrice(110.0).build()
+        val order = OrderBuilder().withPrice(100.0).build()
+        assertTrue(order.isAboveMarketPrice(crypto, order))
+    }
+
+    @Test
+    fun `return false when market price is not above order price`() {
+        val crypto = aBTCUSDT().withPrice(100.0).build()
+        val order = OrderBuilder().withPrice(100.0).build()
+        assertFalse(order.isAboveMarketPrice(crypto, order))
+    }
+
+    @Test
+    fun `return true when market price is below order price`() {
+        val crypto = aBTCUSDT().withPrice(90.0).build()
+        val order = OrderBuilder().withPrice(100.0).build()
+        assertTrue(order.isBelowMarketPrice(crypto, order))
+    }
+
+    @Test
+    fun `return false when market price is not below order price`() {
+        val crypto = aBTCUSDT().withPrice(100.0).build()
+        val order = OrderBuilder().withPrice(100.0).build()
+        assertFalse(order.isBelowMarketPrice(crypto, order))
+    }
+
+    @Test
+    fun `return true when order is finished`() {
+        val order = OrderBuilder().build()
+        order.close()
+        assertTrue(order.isFinished())
+    }
+
 }
 

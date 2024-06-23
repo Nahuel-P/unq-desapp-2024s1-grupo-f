@@ -1,6 +1,5 @@
-
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.PriceHistory
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.CryptocurrencyBuilder
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.PriceHistoryBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
@@ -32,25 +31,35 @@ class CryptocurrencyTest {
         cryptocurrency.price = 100.0
         assertEquals(100.0, cryptocurrency.lastPrice())
     }
+
     @Test
-    fun `getLast24hsQuotes returns only last 24 hours quotes`() {
+    fun `should return last price when called lastPrice`() {
+        val cryptocurrency = aCryptocurrency().withPrice(100.0).build()
+        assertEquals(100.0, cryptocurrency.lastPrice())
+    }
+
+    @Test
+    fun `should return only last 24 hours quotes when called getLast24hsQuotes`() {
         val cryptocurrency = aCryptocurrency().build()
-        val oldPrice = PriceHistory().apply {
-            this.cryptocurrency = cryptocurrency
-            this.price = 100.0
-            this.priceTime = LocalDateTime.now().minusDays(2)
-        }
-        val recentPrice = PriceHistory().apply {
-            this.cryptocurrency = cryptocurrency
-            this.price = 200.0
-            this.priceTime = LocalDateTime.now()
-        }
+        val oldPrice = PriceHistoryBuilder().withCryptocurrency(cryptocurrency).withPrice(100.0).withPriceTime(LocalDateTime.now().minusDays(2)).build()
+        val recentPrice = PriceHistoryBuilder().withCryptocurrency(cryptocurrency).withPrice(200.0).withPriceTime(LocalDateTime.now()).build()
         cryptocurrency.priceHistory = mutableListOf(oldPrice, recentPrice)
 
         val last24hsQuotes = cryptocurrency.getLast24hsQuotes()
 
         assertTrue(last24hsQuotes.contains(recentPrice))
         assertFalse(last24hsQuotes.contains(oldPrice))
+    }
+
+    @Test
+    fun `should return empty list when no quotes in last 24 hours`() {
+        val cryptocurrency = aCryptocurrency().build()
+        val oldPrice = PriceHistoryBuilder().withCryptocurrency(cryptocurrency).withPrice(100.0).withPriceTime(LocalDateTime.now().minusDays(2)).build()
+        cryptocurrency.priceHistory = mutableListOf(oldPrice)
+
+        val last24hsQuotes = cryptocurrency.getLast24hsQuotes()
+
+        assertTrue(last24hsQuotes.isEmpty())
     }
 
 }

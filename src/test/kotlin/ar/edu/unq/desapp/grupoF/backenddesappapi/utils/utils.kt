@@ -24,16 +24,30 @@ fun anotherUser(): UserBuilder {
 
 fun aBTCUSDT(): CryptocurrencyBuilder {
     return CryptocurrencyBuilder()
-        .withName(CryptoSymbol.BTCUSDT)
+        .withName(CryptoSymbol.BTCUSDT).withPrice(50000.0)
+
 }
 
 fun aBuyOrder(): OrderBuilder {
     return OrderBuilder()
         .withOwnerUser(aUser().build())
         .withCryptocurrency(aBTCUSDT().build())
-        .withAmount(10.0)
+        .withAmount(0.5)
         .withPrice(50000.0)
         .withType(IntentionType.BUY)
+        .withPriceARS(50000.0 * 10 * 31)
+
+}
+
+fun aSellOrder(): OrderBuilder {
+    return OrderBuilder()
+        .withOwnerUser(aUser().build())
+        .withCryptocurrency(aBTCUSDT().build())
+        .withAmount(0.5)
+        .withPrice(50000.0)
+        .withType(IntentionType.SELL)
+        .withPriceARS(50000.0 * 10 * 30)
+
 }
 
 //fun aCryptocurrencySet(): MutableSet<Cryptocurrency> {

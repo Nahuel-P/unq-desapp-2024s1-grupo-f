@@ -63,14 +63,14 @@ class DatabaseInitializer(
         val bnbusdt = cryptocurrencyRepository.findByName(CryptoSymbol.BNBUSDT)
         val cakeusdt = cryptocurrencyRepository.findByName(CryptoSymbol.CAKEUSDT)
 
-        priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(dotusdt).withPrice(6.89900000).withPriceTime(LocalDateTime.now().minusHours(1)).build())
-        priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(dotusdt).withPrice(7.0).withPriceTime(LocalDateTime.now().minusHours(2)).build())
-        priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(ethusdt).withPrice(3760.77).withPriceTime(LocalDateTime.now().minusHours(1)).build())
-        priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(ethusdt).withPrice(3760.47).withPriceTime(LocalDateTime.now().minusHours(2)).build())
-        priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(bnbusdt).withPrice(586.4).withPriceTime(LocalDateTime.now().minusHours(1)).build())
-        priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(bnbusdt).withPrice(536.4).withPriceTime(LocalDateTime.now().minusHours(2)).build())
-        priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(cakeusdt).withPrice(3.18).withPriceTime(LocalDateTime.now().minusHours(1)).build())
-        priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(cakeusdt).withPrice(2.88).withPriceTime(LocalDateTime.now().minusHours(2)).build())
+        priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(dotusdt).withPrice(6.89900000).withPriceTime(LocalDateTime.now().minusHours(1)).build())
+        priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(dotusdt).withPrice(7.0).withPriceTime(LocalDateTime.now().minusHours(2)).build())
+        priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(ethusdt).withPrice(3760.77).withPriceTime(LocalDateTime.now().minusHours(1)).build())
+        priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(ethusdt).withPrice(3760.47).withPriceTime(LocalDateTime.now().minusHours(2)).build())
+        priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(bnbusdt).withPrice(586.4).withPriceTime(LocalDateTime.now().minusHours(1)).build())
+        priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(bnbusdt).withPrice(536.4).withPriceTime(LocalDateTime.now().minusHours(2)).build())
+        priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(cakeusdt).withPrice(3.18).withPriceTime(LocalDateTime.now().minusHours(1)).build())
+        priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(cakeusdt).withPrice(2.88).withPriceTime(LocalDateTime.now().minusHours(2)).build())
 
         var initialPrice = 64973.42
         val secureRandom = SecureRandom()
@@ -81,7 +81,7 @@ class DatabaseInitializer(
             val price = initialPrice + priceChange
 
             priceHistoryRepository.save(PriceHistoryBuilder()
-                .withSymbol(btcusdt)
+                .withCryptocurrency(btcusdt)
                 .withPrice(price)
                 .withPriceTime(priceTime)
                 .build())

@@ -17,7 +17,7 @@ class PriceHistoryBuilder {
         return priceHistory
     }
 
-    fun withSymbol(symbol: Cryptocurrency?): PriceHistoryBuilder {
+    fun withCryptocurrency(symbol: Cryptocurrency?): PriceHistoryBuilder {
         this.crypto = symbol
         return this
     }
