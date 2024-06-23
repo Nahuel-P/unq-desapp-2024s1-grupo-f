@@ -1,3 +1,4 @@
+
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.PriceHistory
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.CryptocurrencyBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
@@ -9,10 +10,9 @@ import java.time.LocalDateTime
 
 class CryptocurrencyTest {
 
-    fun aCryptocurrency(): CryptocurrencyBuilder {
+    private fun aCryptocurrency(): CryptocurrencyBuilder {
         return CryptocurrencyBuilder()
             .withName(CryptoSymbol.BTCUSDT)
-            .withCreated(LocalDateTime.now())
     }
 
     @Test
@@ -26,52 +26,59 @@ class CryptocurrencyTest {
             aCryptocurrency().withName(null).build()
         }
     }
-
     @Test
-    fun `lastPrice returns the most recent price history`() {
+    fun `lastPrice returns current price`() {
         val cryptocurrency = aCryptocurrency().build()
-        val oldPrice = PriceHistory(cryptocurrency, 100.0).apply {
-            this.priceTime = LocalDateTime.now().minusDays(1)
-        }
-        val recentPrice = PriceHistory(cryptocurrency, 200.0).apply {
-            this.priceTime = LocalDateTime.now()
-        }
-
-        cryptocurrency.priceHistory = mutableListOf(oldPrice, recentPrice)
-
-        assertFalse(cryptocurrency.priceHistory.isEmpty())
-        assertEquals(recentPrice, cryptocurrency.lastPrice())
+        cryptocurrency.price = 100.0
+        assertEquals(100.0, cryptocurrency.lastPrice())
     }
-
     @Test
-    fun `pricesOver24hs returns only the prices from the last 24 hours`() {
+    fun `getLast24hsQuotes returns only last 24 hours quotes`() {
         val cryptocurrency = aCryptocurrency().build()
-        val oldPrice = PriceHistory(cryptocurrency, 100.0).apply {
+        val oldPrice = PriceHistory().apply {
+            this.cryptocurrency = cryptocurrency
+            this.price = 100.0
             this.priceTime = LocalDateTime.now().minusDays(2)
         }
-        val recentPrice = PriceHistory(cryptocurrency, 200.0).apply {
+        val recentPrice = PriceHistory().apply {
+            this.cryptocurrency = cryptocurrency
+            this.price = 200.0
             this.priceTime = LocalDateTime.now()
         }
-
         cryptocurrency.priceHistory = mutableListOf(oldPrice, recentPrice)
 
-        val pricesOver24hs = cryptocurrency.pricesOver24hs()
+        val last24hsQuotes = cryptocurrency.getLast24hsQuotes()
 
-        assertTrue(pricesOver24hs.contains(recentPrice))
-        assertFalse(pricesOver24hs.contains(oldPrice))
+        assertTrue(last24hsQuotes.contains(recentPrice))
+        assertFalse(last24hsQuotes.contains(oldPrice))
     }
 
     @Test
-    fun `pricesOver24hs returns an empty list when there are no prices from the last 24 hours`() {
+    fun `isAboveMarginPrice returns true when user price is above margin`() {
         val cryptocurrency = aCryptocurrency().build()
-        val oldPrice = PriceHistory(cryptocurrency, 100.0).apply {
-            this.priceTime = LocalDateTime.now().minusDays(2)
-        }
-
-        cryptocurrency.priceHistory = mutableListOf(oldPrice)
-
-        val pricesOver24hs = cryptocurrency.pricesOver24hs()
-
-        assertTrue(pricesOver24hs.isEmpty())
+        cryptocurrency.price = 100.0
+        assertTrue(cryptocurrency.isAboveMarginPrice(10.0, 111.0))
     }
+
+    @Test
+    fun `isAboveMarginPrice returns false when user price is below margin`() {
+        val cryptocurrency = aCryptocurrency().build()
+        cryptocurrency.price = 100.0
+        assertFalse(cryptocurrency.isAboveMarginPrice(10.0, 109.0))
+    }
+
+    @Test
+    fun `isBelowMarginPrice returns true when user price is below margin`() {
+        val cryptocurrency = aCryptocurrency().build()
+        cryptocurrency.price = 100.0
+        assertTrue(cryptocurrency.isBelowMarginPrice(10.0, 89.0))
+    }
+
+    @Test
+    fun `isBelowMarginPrice returns false when user price is above margin`() {
+        val cryptocurrency = aCryptocurrency().build()
+        cryptocurrency.price = 100.0
+        assertFalse(cryptocurrency.isBelowMarginPrice(10.0, 91.0))
+    }
+
 }
