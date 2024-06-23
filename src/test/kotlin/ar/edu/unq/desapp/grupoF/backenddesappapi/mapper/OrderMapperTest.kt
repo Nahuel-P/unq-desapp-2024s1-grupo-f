@@ -44,22 +44,25 @@ class OrderMapperTest {
         val intentionType = IntentionType.BUY
         val ars = 100.0
 
-        `when`(user.id).thenReturn(1L)
-        `when`(crypto.name).thenReturn(cryptoName)
-        `when`(order.ownerUser).thenReturn(user)
+        `when`(order.id).thenReturn(1L)
         `when`(order.cryptocurrency).thenReturn(crypto)
         `when`(order.amount).thenReturn(amount)
         `when`(order.price).thenReturn(price)
         `when`(order.type).thenReturn(intentionType)
         `when`(order.priceARS).thenReturn(ars)
-
+        `when`(crypto.name).thenReturn(cryptoName)
+        `when`(user.id).thenReturn(1L)
+        `when`(user.firstName).thenReturn("Michael")
+        `when`(user.lastName).thenReturn("Scott")
+        `when`(order.ownerUser).thenReturn(user)
         val dto = OrderMapper.toCreateDTO(order)
 
-        assertEquals(user.id, dto.userId)
+        assertEquals(user.id, dto.ownerId)
         assertEquals(crypto.name, dto.cryptocurrency)
         assertEquals(amount, dto.amount)
         assertEquals(price, dto.price)
         assertEquals(intentionType, dto.type)
         assertEquals(ars, dto.arsPrice)
+        assertEquals("Michael Scott", dto.ownerName)
     }
 }
