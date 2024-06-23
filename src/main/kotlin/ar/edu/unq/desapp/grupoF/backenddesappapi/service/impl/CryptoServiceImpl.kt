@@ -10,6 +10,7 @@ import kotlinx.coroutines.runBlocking
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 
 @Service
@@ -20,6 +21,7 @@ class CryptoServiceImpl : ICryptoService {
     private val binanceClient = BinanceClient()
     private val logger : Logger = LogManager.getLogger(CryptoServiceImpl::class.java)
 
+    @Scheduled(fixedRate = 600000)
     override fun getQuotes(): List<CryptocurrencyPriceDTO> = runBlocking {
         val cryptocurrencies = cryptocurrencyRepository.findAll()
         val symbols = cryptocurrencies.map { it.name!! }.toMutableList()
