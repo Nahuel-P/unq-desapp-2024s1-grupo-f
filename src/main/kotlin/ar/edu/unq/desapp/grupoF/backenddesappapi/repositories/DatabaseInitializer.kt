@@ -6,6 +6,7 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.client.BinanceClient
 import org.springframework.boot.CommandLineRunner
 import org.springframework.stereotype.Component
+import java.security.SecureRandom
 import java.time.LocalDateTime
 
 @Component
@@ -72,10 +73,11 @@ class DatabaseInitializer(
         priceHistoryRepository.save(PriceHistoryBuilder().withSymbol(cakeusdt).withPrice(2.88).withPriceTime(LocalDateTime.now().minusHours(2)).build())
 
         var initialPrice = 64973.42
+        val secureRandom = SecureRandom()
         // Recorremos cada 10 minutos de las últimas 30 horas
         for (i in 1..(30 * 6)) {
             val priceTime = LocalDateTime.now().minusMinutes(10L * i)
-            val priceChange = -0.3 + Math.random() * (0.5 - (-0.3))
+            val priceChange = -0.3 + secureRandom.nextDouble() * (0.5 - (-0.3))
             val price = initialPrice + priceChange
 
             priceHistoryRepository.save(PriceHistoryBuilder()

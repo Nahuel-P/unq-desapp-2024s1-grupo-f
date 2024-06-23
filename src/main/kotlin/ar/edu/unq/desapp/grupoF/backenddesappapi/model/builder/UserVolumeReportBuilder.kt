@@ -26,8 +26,8 @@ class UserVolumeReportBuilder {
         return this
     }
 
-    fun withActiveList(activeList: MutableList<Active>): UserVolumeReportBuilder {
-        this.activeList = activeList
+    fun withActiveList(activeList: List<Active>): UserVolumeReportBuilder {
+        this.activeList = activeList.toMutableList()
         return this
     }
 
