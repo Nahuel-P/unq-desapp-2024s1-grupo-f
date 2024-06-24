@@ -10,5 +10,9 @@ class CryptocurrencyMapper {
         fun toDTO(cryptocurrency: Cryptocurrency): CryptocurrencyPriceDTO {
             return CryptocurrencyPriceDTO(cryptocurrency.name!!, cryptocurrency.price)
         }
+
+        fun toDTO(cryptocurrencies: List<Cryptocurrency>): List<CryptocurrencyPriceDTO> {
+            return cryptocurrencies.map { CryptocurrencyPriceDTO(it.name!!, it.price) }
+        }
     }
 }

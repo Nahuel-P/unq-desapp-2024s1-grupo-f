@@ -28,14 +28,15 @@ class CryptoServiceImpl : ICryptoService {
     private val logger : Logger = LogManager.getLogger(CryptoServiceImpl::class.java)
 
     override fun getQuotes(): List<Cryptocurrency> {
-        val cryptocurrencies = cryptocurrencyRepository.findAll()
-        val symbols = cryptocurrencies.map { it.name!! }.toMutableList()
-        val prices = binanceClient.getAllCryptoCurrencyPrices(symbols)
-        prices.forEach { priceDTO ->
-            val crypto = cryptocurrencies.find { it.name == priceDTO.symbol }
-            crypto?.price = priceDTO.price!!
-        }
-        return cryptocurrencies
+//        val cryptocurrencies = cryptocurrencyRepository.findAll()
+//        val symbols = getSymbols()
+//        val cryptoPricesDTO = binanceClient.getAllCryptoCurrencyPrices(symbols)
+//        cryptoPricesDTO.forEach { priceDTO ->
+//            val crypto = cryptocurrencies.find { it.name == priceDTO.symbol }
+//            crypto?.price = priceDTO.price!!
+//        }
+//        return cryptocurrencies
+        return cryptocurrencyRepository.findAll()
     }
 
     override fun getLast24hsQuotes(symbol: CryptoSymbol): List<PriceHistory> {
@@ -61,6 +62,10 @@ class CryptoServiceImpl : ICryptoService {
             prices.add(PriceHistoryBuilder().withPrice(crypto.price!!).withCryptocurrency(crypto).build())
         }
         return prices
+    }
+
+    private fun getSymbols(): MutableList<CryptoSymbol> {
+        return cryptocurrencyRepository.findAll().map { it.name!! }.toMutableList()
     }
 
 

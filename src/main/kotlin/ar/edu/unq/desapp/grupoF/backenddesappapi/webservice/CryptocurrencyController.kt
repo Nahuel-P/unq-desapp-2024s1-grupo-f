@@ -1,5 +1,8 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.webservice
 
+import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.CryptocurrencyMapper
+import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.PriceHistoryMapper
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.PriceHistory
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICryptoService
 import io.swagger.v3.oas.annotations.Operation
@@ -26,8 +29,9 @@ class CryptocurrencyController {
     @GetMapping("/quotes")
     fun getQuotes(): ResponseEntity<Any> {
         return try {
-            val prices = cryptoService.getQuotes()
-            ResponseEntity.status(HttpStatus.OK).body(prices)
+            val cryptos = cryptoService.getQuotes()
+            val quotesResponse = CryptocurrencyMapper.toDTO(cryptos)
+            ResponseEntity.status(HttpStatus.OK).body(quotesResponse)
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to e.message))
         }
@@ -37,6 +41,8 @@ class CryptocurrencyController {
     fun getLast24hsQuotes(@PathVariable symbol: CryptoSymbol): ResponseEntity<Any> {
         return try {
             val lastQuotes = cryptoService.getLast24hsQuotes(symbol)
+//            val historyQuotesResponse = PriceHistoryMapper.toDTO(lastQuotes)
+//            ResponseEntity.status(HttpStatus.OK).body(historyQuotesResponse)
             ResponseEntity.status(HttpStatus.OK).body(lastQuotes)
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to e.message))
