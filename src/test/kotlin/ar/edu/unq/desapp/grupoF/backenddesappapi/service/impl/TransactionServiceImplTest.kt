@@ -1,5 +1,4 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl
-import ar.edu.unq.desapp.grupoF.backenddesappapi.BackendDesappApiApplication
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Order
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Transaction
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
@@ -17,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 
-@SpringBootTest(classes = [BackendDesappApiApplication::class])
+@SpringBootTest
 class TransactionServiceImplTest {
 
     @Autowired
@@ -99,9 +98,9 @@ class TransactionServiceImplTest {
         val buyer = mock(User::class.java)
         val seller = mock(User::class.java)
         val transaction = mock(Transaction::class.java)
-        buyer.id = 1L
-        seller.id = 2L
 
+        `when`(buyer.id).thenReturn(1L)
+        `when`(seller.id).thenReturn(2L)
         `when`(commonService.getUser(transactionDTO.idUserRequest)).thenReturn(buyer)
         `when`(transaction.buyer()).thenReturn(buyer)
         `when`(transaction.seller()).thenReturn(seller)
