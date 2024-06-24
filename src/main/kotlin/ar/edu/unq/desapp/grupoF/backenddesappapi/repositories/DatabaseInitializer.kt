@@ -1,9 +1,11 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.repositories
 
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.*
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.OrderBuilder
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.PriceHistoryBuilder
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.TransactionBuilder
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
-import ar.edu.unq.desapp.grupoF.backenddesappapi.service.client.BinanceClient
 import org.springframework.boot.CommandLineRunner
 import org.springframework.stereotype.Component
 import java.security.SecureRandom
@@ -20,7 +22,7 @@ class DatabaseInitializer(
 
     override fun run(vararg args: String?) {
         generateDataForUsers()
-        generateDataForCryptocurrency()
+//        generateDataForCryptocurrency()
         generateDataForPriceHistory()
         generateDataForOrders()
         generateDataForTransactions()
@@ -45,16 +47,16 @@ class DatabaseInitializer(
     }
 
 
-    fun generateDataForCryptocurrency() {
-        val prices = BinanceClient().getAllCryptoCurrencyPrices(CryptoSymbol.entries.toMutableList())
-
-        cryptocurrencyRepository.saveAll(prices.map { priceDTO ->
-            CryptocurrencyBuilder()
-                .withName(priceDTO.symbol)
-                .withPrice(priceDTO.price!!)
-                .build()
-        })
-    }
+//    fun generateDataForCryptocurrency() {
+//        val prices = BinanceClient().getAllCryptoCurrencyPrices(CryptoSymbol.entries.toMutableList())
+//
+//        cryptocurrencyRepository.saveAll(prices.map { priceDTO ->
+//            CryptocurrencyBuilder()
+//                .withName(priceDTO.symbol)
+//                .withPrice(priceDTO.price!!)
+//                .build()
+//        })
+//    }
 
     fun generateDataForPriceHistory() {
         val dotusdt = cryptocurrencyRepository.findByName(CryptoSymbol.DOTUSDT)
