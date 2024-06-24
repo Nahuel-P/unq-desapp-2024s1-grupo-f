@@ -20,13 +20,8 @@ class BinanceClient : IBinanceClientService{
     }
 
     override fun getAllCryptoCurrencyPrices(symbols: MutableList<CryptoSymbol>): Array<CryptocurrencyPriceDTO> {
-        var symbolsListStr = "["
-        symbols.map { s -> symbolsListStr += "\"${s}\"," }
-        symbolsListStr = symbolsListStr.substring(0, symbolsListStr.length -1)
-        symbolsListStr += "]"
-
+        val symbolsListStr = symbols.joinToString(prefix = "[", postfix = "]", separator = ",") { "\"$it\"" }
         val url = "$baseURL/ticker/price?symbols=$symbolsListStr"
-        val response: Array<CryptocurrencyPriceDTO> = restTemplate.getForObject(url, Array<CryptocurrencyPriceDTO>::class.java)!!
-        return response
+        return restTemplate.getForObject(url, Array<CryptocurrencyPriceDTO>::class.java)!!
     }
 }
