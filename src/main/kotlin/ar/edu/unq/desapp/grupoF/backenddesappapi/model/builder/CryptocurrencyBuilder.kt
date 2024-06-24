@@ -8,14 +8,11 @@ class CryptocurrencyBuilder {
 
     private var name: CryptoSymbol? = null
     private var price: Double = 0.00
-    private var priceHistory: MutableList<PriceHistory> = mutableListOf()
-
 
     fun build(): Cryptocurrency {
         val cryptocurrency = Cryptocurrency()
         cryptocurrency.name = this.name
         cryptocurrency.price = this.price
-        cryptocurrency.priceHistory = this.priceHistory
         return cryptocurrency
     }
 
@@ -26,12 +23,6 @@ class CryptocurrencyBuilder {
 
     fun withPrice(price: Double): CryptocurrencyBuilder {
         this.price = validatePrice(price)
-        return this
-    }
-
-    fun withPriceHistory(priceHistory: MutableList<PriceHistory>?): CryptocurrencyBuilder {
-        requireNotNull(priceHistory) { "Name cannot be null" }
-        this.priceHistory = priceHistory
         return this
     }
 

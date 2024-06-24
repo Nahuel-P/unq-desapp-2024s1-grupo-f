@@ -6,9 +6,10 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.StateOrder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.TransactionStatus
 import ar.edu.unq.desapp.grupoF.backenddesappapi.utils.*
-import org.junit.jupiter.api.Assertions.assertDoesNotThrow
-import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import java.time.LocalDateTime
 
 
 class TransactionTest {
@@ -52,6 +53,14 @@ class TransactionTest {
         transaction.paid()
         val status = transaction.status
         assertEquals(TransactionStatus.PAID, status)
+    }
+
+    @Test
+    fun `should set status to PAID and paidTime when paid is called`() {
+        val transaction = Transaction()
+        transaction.paid()
+        assertEquals(TransactionStatus.PAID, transaction.status)
+        assertNotNull(transaction.paidTime)
     }
 
     @Test
@@ -116,6 +125,27 @@ class TransactionTest {
         val order = aBuyOrder().withType(IntentionType.SELL).withOwnerUser(seller).build()
         val transaction = TransactionBuilder().withOrder(order).withCounterParty(buyer).build()
         assertEquals(buyer, transaction.buyer())
+    }
+
+
+    @Test
+    fun `should throw exception when scoreBasedOnTimeLapse is called before transaction end`() {
+        val transaction = Transaction()
+        assertThrows<Exception> { transaction.scoreBasedOnTimeLapse() }
+    }
+
+    @Test
+    fun `should return correct elapsed minutes since creation`() {
+        val transaction = Transaction()
+        transaction.entryTime = LocalDateTime.now().minusMinutes(10)
+        assertEquals(10.0, transaction.elapsedMinutesCreation())
+    }
+
+    @Test
+    fun `should return correct elapsed minutes since paid`() {
+        val transaction = Transaction()
+        transaction.paidTime = LocalDateTime.now().minusMinutes(5)
+        assertEquals(5.0, transaction.elapsedMinutesPaid())
     }
 
 }

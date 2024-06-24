@@ -25,6 +25,14 @@ class CryptocurrencyTest {
             aCryptocurrency().withName(null).build()
         }
     }
+
+    @Test
+    fun `throw exception for negative price`() {
+        assertThrows<IllegalArgumentException> {
+            aCryptocurrency().withPrice(-1.0).build()
+        }
+    }
+
     @Test
     fun `lastPrice returns current price`() {
         val cryptocurrency = aCryptocurrency().build()
