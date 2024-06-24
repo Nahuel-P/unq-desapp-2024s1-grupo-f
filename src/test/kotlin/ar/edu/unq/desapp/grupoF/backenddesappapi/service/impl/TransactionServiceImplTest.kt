@@ -96,10 +96,15 @@ class TransactionServiceImplTest {
     @Test
     fun `cancel should throw an exception when transaction status is CONFIRMED`() {
         val transactionDTO = mock(TransactionRequestDTO::class.java)
-        val user = mock(User::class.java)
+        val buyer = mock(User::class.java)
+        val seller = mock(User::class.java)
         val transaction = mock(Transaction::class.java)
+        buyer.id = 1L
+        seller.id = 2L
 
-        `when`(commonService.getUser(transactionDTO.idUserRequest)).thenReturn(user)
+        `when`(commonService.getUser(transactionDTO.idUserRequest)).thenReturn(buyer)
+        `when`(transaction.buyer()).thenReturn(buyer)
+        `when`(transaction.seller()).thenReturn(seller)
         `when`(commonService.getTransaction(transactionDTO.idTransaction)).thenReturn(transaction)
         `when`(transaction.status).thenReturn(TransactionStatus.CONFIRMED)
 
