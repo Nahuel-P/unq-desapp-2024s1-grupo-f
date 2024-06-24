@@ -46,9 +46,13 @@ class TransactionServiceImpl @Autowired constructor(
     override fun paid(transactionDTO: TransactionRequestDTO): Transaction {
         try {
             val transaction = commonService.getTransaction(transactionDTO.idTransaction)
+            logger.info("Tengo transaction")
             val userRequest = commonService.getUser(transactionDTO.idUserRequest)
+            logger.info("Tengo user")
             validatePaid(transaction,userRequest)
+            logger.info("Validé pago")
             transaction.paid()
+            logger.info("Pagué")
             return update(transaction)
         } catch ( e: Exception) {
             throw Exception("${e.message}")
