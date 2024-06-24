@@ -51,12 +51,12 @@ class CryptocurrencyTest {
         val cryptocurrency = aCryptocurrency().build()
         val oldPrice = PriceHistoryBuilder().withCryptocurrency(cryptocurrency).withPrice(100.0).withPriceTime(LocalDateTime.now().minusDays(2)).build()
         val recentPrice = PriceHistoryBuilder().withCryptocurrency(cryptocurrency).withPrice(200.0).withPriceTime(LocalDateTime.now()).build()
-        cryptocurrency.priceHistory = mutableListOf(oldPrice, recentPrice)
-
+        val futurePrice = PriceHistoryBuilder().withCryptocurrency(cryptocurrency).withPrice(200.0).withPriceTime(LocalDateTime.now().plusDays(2)).build()
+        cryptocurrency.priceHistory = mutableListOf(oldPrice, recentPrice, futurePrice)
         val last24hsQuotes = cryptocurrency.getLast24hsQuotes()
-
-        assertTrue(last24hsQuotes.contains(recentPrice))
         assertFalse(last24hsQuotes.contains(oldPrice))
+        assertTrue(last24hsQuotes.contains(recentPrice))
+        assertFalse(last24hsQuotes.contains(futurePrice))
     }
 
     @Test
@@ -64,10 +64,10 @@ class CryptocurrencyTest {
         val cryptocurrency = aCryptocurrency().build()
         val oldPrice = PriceHistoryBuilder().withCryptocurrency(cryptocurrency).withPrice(100.0).withPriceTime(LocalDateTime.now().minusDays(2)).build()
         cryptocurrency.priceHistory = mutableListOf(oldPrice)
-
         val last24hsQuotes = cryptocurrency.getLast24hsQuotes()
-
         assertTrue(last24hsQuotes.isEmpty())
     }
+
+
 
 }
