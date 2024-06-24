@@ -168,12 +168,9 @@ class TransactionTest {
 
     @Test
     fun `should return correct nominal amount`() {
-        val order = Order()
-        order.price = 100.0
-        val transaction = Transaction()
-        transaction.order = order
+        val transaction = TransactionBuilder().withOrder(buyOrder).build()
 
-        assertEquals(100.0, transaction.nominalAmount())
+        assertEquals(0.5, transaction.nominalAmount())
     }
 
     @Test
