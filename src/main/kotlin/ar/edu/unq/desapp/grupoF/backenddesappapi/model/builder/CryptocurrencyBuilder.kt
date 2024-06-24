@@ -1,7 +1,6 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Cryptocurrency
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.PriceHistory
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 
 class CryptocurrencyBuilder {
@@ -32,8 +31,7 @@ class CryptocurrencyBuilder {
     }
 
     private fun validatePrice(price: Double?): Double {
-        requireNotNull(price) { "Price cannot be null" }
-        require(price >= 0) { "Price cannot be negative" }
+        require(price!! >= 0) { "Price cannot be negative" }
         return price
     }
 

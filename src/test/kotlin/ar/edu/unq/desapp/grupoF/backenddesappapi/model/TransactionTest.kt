@@ -1,6 +1,5 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.model
 
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.OrderBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.TransactionBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.StateOrder
@@ -17,8 +16,6 @@ class TransactionTest {
     private var buyer = aUser().build()
     private var seller = anotherUser().build()
     private var buyOrder = aBuyOrder().build()
-    private var sellOrder = aSellOrder().build()
-
     @Test
     fun `should create a purchase transaction when it has valid data`() {
         assertDoesNotThrow { TransactionBuilder().build() }
@@ -31,6 +28,7 @@ class TransactionTest {
             TransactionBuilder()
                 .withOrder(order)
                 .withCounterParty(buyer)
+                .withEntryTime(LocalDateTime.now().minusHours(1))
                 .build()
         }
     }
@@ -146,6 +144,63 @@ class TransactionTest {
         val transaction = Transaction()
         transaction.paidTime = LocalDateTime.now().minusMinutes(5)
         assertEquals(5.0, transaction.elapsedMinutesPaid())
+    }
+
+    @Test
+    fun `should return correct USD price`() {
+        val order = Order()
+        order.price = 100.0
+        val transaction = Transaction()
+        transaction.order = order
+
+        assertEquals(100.0, transaction.usdPrice())
+    }
+
+    @Test
+    fun `should return correct ARS quote`() {
+        val order = Order()
+        order.priceARS = 10000.0
+        val transaction = Transaction()
+        transaction.order = order
+
+        assertEquals(10000.0, transaction.arsQuote())
+    }
+
+    @Test
+    fun `should return correct nominal amount`() {
+        val order = Order()
+        order.price = 100.0
+        val transaction = Transaction()
+        transaction.order = order
+
+        assertEquals(100.0, transaction.nominalAmount())
+    }
+
+    @Test
+    fun `should throw NullPointerException when order is null`() {
+        val transaction = Transaction()
+
+        assertThrows<NullPointerException> { transaction.usdPrice() }
+        assertThrows<NullPointerException> { transaction.arsQuote() }
+        assertThrows<NullPointerException> { transaction.nominalAmount() }
+    }
+
+    @Test
+    fun `should return 10 when transaction ends within 31 minutes`() {
+        val transaction = Transaction()
+        transaction.entryTime = LocalDateTime.now().minusMinutes(30)
+        transaction.endTime = LocalDateTime.now()
+
+        assertEquals(10, transaction.scoreBasedOnTimeLapse())
+    }
+
+    @Test
+    fun `should return 5 when transaction ends after 31 minutes`() {
+        val transaction = Transaction()
+        transaction.entryTime = LocalDateTime.now().minusMinutes(32)
+        transaction.endTime = LocalDateTime.now()
+
+        assertEquals(5, transaction.scoreBasedOnTimeLapse())
     }
 
 }
