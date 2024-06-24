@@ -2,6 +2,7 @@ package ar.edu.unq.desapp.grupoF.backenddesappapi.webservice
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.UserMapper
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IAuthService
+import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.LoginRequestDTO
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserCreateDTO
 import io.swagger.v3.oas.annotations.Operation
 import jakarta.validation.Valid
@@ -27,5 +28,12 @@ class AuthController {
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to e.message))
         }
+    }
+
+    @PostMapping("/login")
+    fun login(@RequestBody loginDTO: LoginRequestDTO): ResponseEntity<String> {
+//        metricsRegistry.loginAttemptsCounter.increment() //Counts login attempts.
+        val result = authService.login(loginDTO)
+        return ResponseEntity.ok(result)
     }
 }
