@@ -1,15 +1,17 @@
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.BackendDesappApiApplication
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Order
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Transaction
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
-import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.TransactionRepository
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.TransactionStatus
+import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICommonService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IOrderService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IUserService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl.TransactionServiceImpl
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.TransactionCreateDTO
+import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.TransactionRequestDTO
 import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
@@ -17,14 +19,13 @@ import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 
 @SpringBootTest(classes = [BackendDesappApiApplication::class])
-@EnabledIfEnvironmentVariable(named = "SPRING_PROFILES_ACTIVE", matches = "dev")
 class TransactionServiceImplTest {
 
     @Autowired
     private lateinit var service: TransactionServiceImpl
 
     @MockBean
-    private lateinit var transactionRepository: TransactionRepository
+    private lateinit var commonService: ICommonService
 
     @MockBean
     private lateinit var userService: IUserService
@@ -32,32 +33,8 @@ class TransactionServiceImplTest {
     @MockBean
     private lateinit var orderService: IOrderService
 
-//    @Test
-//    fun `open should create and save a new transaction`() {
-//        val transactionDTO = mock(TransactionCreateDTO::class.java)
-//        val user = mock(User::class.java)
-//        val anotherUser = mock(User::class.java)
-//        val transaction = mock(Transaction::class.java)
-//
-//        val order = OrderBuilder().withOwnerUser(user).withAmount(1.0).withPrice(1.0).withType(IntentionType.BUY).withPriceARS(1000.0).build()
-//        `when`(user.id).thenReturn(1L)
-//        `when`(anotherUser.id).thenReturn(2L)
-//        `when`(transactionDTO.idUserRequest).thenReturn(2L)
-//        `when`(transactionDTO.orderId).thenReturn(1L)
-//        `when`(userService.getUser(transactionDTO.idUserRequest)).thenReturn(anotherUser)
-//        `when`(orderService.getOrder(transactionDTO.orderId)).thenReturn(order)
-//        `when`(transactionRepository.save(any(Transaction::class.java))).thenReturn(transaction)
-//
-//        assertNotEquals(order.ownerUser, anotherUser)
-//
-//        val result = service.create(transactionDTO)
-//
-//        assertEquals(transaction, result)
-//        verify(orderService).update(order)
-//    }
-
     @Test
-    fun `open should throw an exception when order is not transactable`() {
+    fun `create should throw an exception when order is not transactable`() {
         val transactionDTO = mock(TransactionCreateDTO::class.java)
         val user = mock(User::class.java)
         val order = mock(Order::class.java)
@@ -68,6 +45,67 @@ class TransactionServiceImplTest {
 
         assertThrows(Exception::class.java) {
             service.create(transactionDTO)
+        }
+    }
+
+    @Test
+    fun `create should throw an exception when user is the owner of the order`() {
+        val transactionDTO = mock(TransactionCreateDTO::class.java)
+        val user = mock(User::class.java)
+        val order = mock(Order::class.java)
+
+        `when`(userService.getUser(transactionDTO.idUserRequest)).thenReturn(user)
+        `when`(orderService.getOrder(transactionDTO.orderId)).thenReturn(order)
+        `when`(order.isTransferable()).thenReturn(true)
+        `when`(order.ownerUser).thenReturn(user)
+
+        assertThrows(Exception::class.java) {
+            service.create(transactionDTO)
+        }
+    }
+
+    @Test
+    fun `paid should throw an exception when transaction status is not PENDING`() {
+        val transactionDTO = mock(TransactionRequestDTO::class.java)
+        val user = mock(User::class.java)
+        val transaction = mock(Transaction::class.java)
+
+        `when`(commonService.getUser(transactionDTO.idUserRequest)).thenReturn(user)
+        `when`(commonService.getTransaction(transactionDTO.idTransaction)).thenReturn(transaction)
+        `when`(transaction.status).thenReturn(TransactionStatus.CONFIRMED)
+
+        assertThrows(Exception::class.java) {
+            service.paid(transactionDTO)
+        }
+    }
+
+    @Test
+    fun `confirm should throw an exception when transaction status is not PAID`() {
+        val transactionDTO = mock(TransactionRequestDTO::class.java)
+        val user = mock(User::class.java)
+        val transaction = mock(Transaction::class.java)
+
+        `when`(commonService.getUser(transactionDTO.idUserRequest)).thenReturn(user)
+        `when`(commonService.getTransaction(transactionDTO.idTransaction)).thenReturn(transaction)
+        `when`(transaction.status).thenReturn(TransactionStatus.PENDING)
+
+        assertThrows(Exception::class.java) {
+            service.confirm(transactionDTO)
+        }
+    }
+
+    @Test
+    fun `cancel should throw an exception when transaction status is CONFIRMED`() {
+        val transactionDTO = mock(TransactionRequestDTO::class.java)
+        val user = mock(User::class.java)
+        val transaction = mock(Transaction::class.java)
+
+        `when`(commonService.getUser(transactionDTO.idUserRequest)).thenReturn(user)
+        `when`(commonService.getTransaction(transactionDTO.idTransaction)).thenReturn(transaction)
+        `when`(transaction.status).thenReturn(TransactionStatus.CONFIRMED)
+
+        assertThrows(Exception::class.java) {
+            service.cancel(transactionDTO)
         }
     }
 
