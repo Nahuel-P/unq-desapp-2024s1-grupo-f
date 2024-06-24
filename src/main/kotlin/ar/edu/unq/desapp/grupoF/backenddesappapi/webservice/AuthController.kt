@@ -31,9 +31,12 @@ class AuthController {
     }
 
     @PostMapping("/login")
-    fun login(@RequestBody loginDTO: LoginRequestDTO): ResponseEntity<String> {
-//        metricsRegistry.loginAttemptsCounter.increment() //Counts login attempts.
-        val result = authService.login(loginDTO)
-        return ResponseEntity.ok(result)
+    fun login(@RequestBody loginDTO: LoginRequestDTO): ResponseEntity<Any> {
+        return try {
+            val tokenAuth = authService.login(loginDTO)
+            ResponseEntity.status(HttpStatus.OK).body(mapOf("token_auth" to tokenAuth))
+        } catch (e: Exception) {
+            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to e.message))
+        }
     }
 }

@@ -54,7 +54,6 @@ class UserServiceImpl @Autowired constructor(
         transactions.forEach { transaction ->
             userVolumeReport.addToVolumeReport(transaction)
         }
-
         return userVolumeReport
     }
 }

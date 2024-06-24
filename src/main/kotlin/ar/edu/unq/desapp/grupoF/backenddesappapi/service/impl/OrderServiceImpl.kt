@@ -38,8 +38,6 @@ class OrderServiceImpl @Autowired constructor(
         try {
             val activeOrders = orderRepository.findByIsActiveTrue()
             if (activeOrders.isEmpty()) throw Exception("There are no active orders")
-            // mo me gusa este update, con el task qwe corre cada x minutos se va
-//            return updateUsdToArsRate(activeOrders)
             return activeOrders
         } catch (e: Exception) {
             throw Exception("${e.message}")
@@ -48,7 +46,6 @@ class OrderServiceImpl @Autowired constructor(
 
     override fun getOrder(id: Long): Order {
         return orderRepository.findById(id).orElseThrow { Exception("Order with id $id not found") }
-//        return updateUsdToArsRate(order)
     }
 
     override fun update(order: Order): Order {
@@ -92,9 +89,4 @@ class OrderServiceImpl @Autowired constructor(
             rateService.getRateUsdToArs().venta!!
         }
     }
-
-//    private fun updateUsdToArsRate(order: Order): Order {
-//        order.priceARS = calculateArsPrice(order.amount!!, order.price!!, order.type!!)
-//        return update(order)
-//    }
 }

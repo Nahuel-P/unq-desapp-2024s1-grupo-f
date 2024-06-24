@@ -26,17 +26,6 @@ class UserController{
     private lateinit var commonService: ICommonService
     @Autowired
     private lateinit var userService: IUserService
-//    @Operation(summary = "Register a new user")
-//    @PostMapping("/register")
-//    fun registerUser(@Valid @RequestBody userCreateRequest: UserCreateDTO): ResponseEntity<Any> {
-//        return try {
-//            val user = userService.registerUser(userCreateRequest)
-//            val userResponse = UserMapper.userToDTO(user)
-//            ResponseEntity.status(HttpStatus.OK).body(userResponse)
-//        } catch (e: Exception) {
-//            ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to e.message))
-//        }
-//    }
 
     @Operation(summary = "Get all registered users")
     @GetMapping("/users")
