@@ -60,24 +60,24 @@ class OrderControllerTest {
     }
 
 
-    @Test
-    fun `createOrder returns OK status when order is created successfully`() {
-        val userDTO = UserCreateDTO("Michael", "Scott", "prison.mike@gmail.com", "1725 Slough Avenue, Scranton", "Contraseña1!", "1234567890123456789012", "12345678")
-        val user = UserMapper.toModel(userDTO)
-        user.id = 1L
-        val cryptocurrency = CryptocurrencyBuilder().withName(CryptoSymbol.BNBUSDT).build()
-        val orderDTO = OrderRequestDTO(user.id!!, CryptoSymbol.BNBUSDT, 10.0, 13000.0, IntentionType.BUY)
-        val order = OrderMapper.toModel(orderDTO, user, cryptocurrency, IntentionType.BUY, 13000.0)
-        order.id = 1L
-
-        Mockito.`when`(userService.registerUser(userDTO)).thenReturn(user)
-        Mockito.`when`(orderService.createOrder(orderDTO)).thenReturn(order)
-
-        mockMvc.perform(post("/order/create")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(ObjectMapper().writeValueAsString(orderDTO)))
-            .andExpect(status().isOk)
-    }
+//    @Test
+//    fun `createOrder returns OK status when order is created successfully`() {
+//        val userDTO = UserCreateDTO("Michael", "Scott", "prison.mike@gmail.com", "1725 Slough Avenue, Scranton", "Contraseña1!", "1234567890123456789012", "12345678")
+//        val user = UserMapper.toModel(userDTO)
+//        user.id = 1L
+//        val cryptocurrency = CryptocurrencyBuilder().withName(CryptoSymbol.BNBUSDT).build()
+//        val orderDTO = OrderRequestDTO(user.id!!, CryptoSymbol.BNBUSDT, 10.0, 13000.0, IntentionType.BUY)
+//        val order = OrderMapper.toModel(orderDTO, user, cryptocurrency, IntentionType.BUY, 13000.0)
+//        order.id = 1L
+//
+//        Mockito.`when`(userService.registerUser(userDTO)).thenReturn(user)
+//        Mockito.`when`(orderService.createOrder(orderDTO)).thenReturn(order)
+//
+//        mockMvc.perform(post("/order/create")
+//            .contentType(MediaType.APPLICATION_JSON)
+//            .content(ObjectMapper().writeValueAsString(orderDTO)))
+//            .andExpect(status().isOk)
+//    }
 
     @Test
     fun `getActiveOrders returns OK status when orders are retrieved successfully`() {

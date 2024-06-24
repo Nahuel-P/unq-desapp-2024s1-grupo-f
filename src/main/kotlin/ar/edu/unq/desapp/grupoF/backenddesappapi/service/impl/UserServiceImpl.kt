@@ -22,13 +22,13 @@ class UserServiceImpl @Autowired constructor(
 ) : IUserService {
 
     val logger: Logger = LogManager.getLogger(UserMapper::class.java)
-    override fun registerUser(userDTO: UserCreateDTO): User {
-        if (userRepository.existsByEmail(userDTO.email!!)) {
-            throw Exception("User with email ${userDTO.email} already exists")
-        }
-        val user = UserMapper.toModel(userDTO)
-        return userRepository.save(user)
-    }
+//    override fun registerUser(userDTO: UserCreateDTO): User {
+//        if (userRepository.existsByEmail(userDTO.email!!)) {
+//            throw Exception("User with email ${userDTO.email} already exists")
+//        }
+//        val user = UserMapper.toModel(userDTO)
+//        return userRepository.save(user)
+//    }
 
     override fun getUsers(): List<User> {
         return userRepository.findAll()
