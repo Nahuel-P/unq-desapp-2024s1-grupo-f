@@ -5,6 +5,7 @@ val hibernateValidatorVersion = "7.0.1.Final"
 val coroutinesCoreVersion = "1.5.2"
 val springdocVersion = "2.4.0"
 val archUnitVersion = "0.21.0"
+val jsonWebTokenVersion = "0.12.5"
 
 plugins {
 	war
@@ -52,11 +53,14 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("org.springframework.boot:spring-boot-starter-security")
 	implementation("org.springframework.boot:spring-boot-starter-web")
+	implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 	implementation("com.fasterxml.jackson.module:jackson-module-kotlin")
 	implementation("org.jetbrains.kotlin:kotlin-reflect")
 	implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:$springdocVersion")
 	implementation("org.hibernate.validator:hibernate-validator:$hibernateValidatorVersion")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:$coroutinesCoreVersion")
+	implementation("io.jsonwebtoken:jjwt-api:${jsonWebTokenVersion}")
+	implementation("io.jsonwebtoken:jjwt-root:${jsonWebTokenVersion}")
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("io.micrometer:micrometer-registry-prometheus")
 	implementation("org.springframework.boot:spring-boot-starter-cache")
@@ -65,6 +69,8 @@ dependencies {
 	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("com.tngtech.archunit:archunit-junit5:$archUnitVersion")
+	runtimeOnly("io.jsonwebtoken:jjwt-jackson:${jsonWebTokenVersion}")
+	runtimeOnly("io.jsonwebtoken:jjwt-impl:${jsonWebTokenVersion}")
 }
 
 tasks.withType<KotlinCompile> {
