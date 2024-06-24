@@ -1,10 +1,7 @@
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.UserVolumeReport
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import ar.edu.unq.desapp.grupoF.backenddesappapi.utils.aTransaction
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
-import java.time.LocalDateTime
-
 
 class UserVolumeReportTest {
 
