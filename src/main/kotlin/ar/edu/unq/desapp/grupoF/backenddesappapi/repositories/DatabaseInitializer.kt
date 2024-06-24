@@ -1,9 +1,6 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.repositories
 
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.OrderBuilder
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.PriceHistoryBuilder
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.TransactionBuilder
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.*
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import org.springframework.boot.CommandLineRunner
@@ -22,7 +19,7 @@ class DatabaseInitializer(
 
     override fun run(vararg args: String?) {
         generateDataForUsers()
-//        generateDataForCryptocurrency()
+        generateDataForCryptocurrency()
         generateDataForPriceHistory()
         generateDataForOrders()
         generateDataForTransactions()
@@ -57,6 +54,18 @@ class DatabaseInitializer(
 //                .build()
 //        })
 //    }
+fun generateDataForCryptocurrency() {
+    val random = java.util.Random()
+    val mockCryptocurrencies = CryptoSymbol.values().map { symbol ->
+        CryptocurrencyBuilder()
+            .withName(symbol)
+            .withPrice(1000.0 + random.nextDouble() * 40000.0)
+            .build()
+    }
+
+    cryptocurrencyRepository.saveAll(mockCryptocurrencies)
+}
+
 
     fun generateDataForPriceHistory() {
         val dotusdt = cryptocurrencyRepository.findByName(CryptoSymbol.DOTUSDT)
