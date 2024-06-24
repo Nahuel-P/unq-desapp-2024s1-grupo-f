@@ -11,6 +11,8 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IOrderService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ITransactionService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.TransactionCreateDTO
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.TransactionRequestDTO
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
@@ -20,16 +22,22 @@ class TransactionServiceImpl @Autowired constructor(
     private val commonService: ICommonService,
     private val orderService: IOrderService,
 ) : ITransactionService {
-
+    private val logger : Logger = LogManager.getLogger(TransactionServiceImpl::class.java)
     override fun create(transactionDTO: TransactionCreateDTO): Transaction {
         try {
             val userRequest = commonService.getUser(transactionDTO.idUserRequest)
+            logger.info("Tengo user")
             val order = orderService.getOrder(transactionDTO.orderId)
+            logger.info("Tengo order")
             validateStartTransaction(order,userRequest)
+            logger.info("Validé order")
             val transaction = TransactionMapper.toModel(transactionDTO, userRequest, order)
             order.disable()
+            logger.info("Mapeé order")
             if (!canProceedByMarketPrice(order)) { transaction.cancelBySystem() }
+            logger.info("Llegó hasta acá")
             return transactionRepository.save(transaction)
+
         } catch (e: Exception) {
             throw Exception("${e.message}")
         }
