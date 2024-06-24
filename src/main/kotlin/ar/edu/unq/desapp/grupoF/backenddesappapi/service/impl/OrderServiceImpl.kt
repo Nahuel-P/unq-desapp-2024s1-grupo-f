@@ -9,6 +9,7 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IOrderService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.client.DolarApiClient
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.OrderRequestDTO
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.scheduling.annotation.Scheduled
 import org.springframework.stereotype.Service
 
 @Service
@@ -46,22 +47,37 @@ class OrderServiceImpl @Autowired constructor(
     }
 
     override fun getOrder(id: Long): Order {
-        val order = orderRepository.findById(id).orElseThrow { Exception("Order with id $id not found") }
-        return updateUsdToArsRate(order)
+        return orderRepository.findById(id).orElseThrow { Exception("Order with id $id not found") }
+//        return updateUsdToArsRate(order)
     }
 
     override fun update(order: Order): Order {
         return orderRepository.save(order)
     }
 
+    @Scheduled(fixedRate = 600000)
+    override fun updateArsRate(): List<Order> {
+        val activeOrders = orderRepository.findByIsActiveTrue()
+        val arsRateBuy = getUsdToArsRate(IntentionType.BUY)
+        val arsRateSell = getUsdToArsRate(IntentionType.SELL)
+        return updateUsdToArsRate(activeOrders, arsRateBuy, arsRateSell)
+    }
+
     private fun validatePriceMargin(order: Order) {
-        val cryptocurrency = order.cryptocurrency
         if (order.isAboveMarginPrice(5.0)) {
             throw Exception("Price out of margin range of 5% above the last price of the cryptocurrency")
         }
         if (order.isBelowMarginPrice(5.0)) {
             throw Exception("Price out of margin range of 5% below the last price of the cryptocurrency")
         }
+    }
+
+    private fun updateUsdToArsRate(activeOrders: List<Order>, arsRateBuy: Double, arsRateSell: Double): List<Order> {
+        activeOrders.forEach {
+            it.calculateArsPrice(arsRateBuy, arsRateSell)
+            update(it)
+        }
+        return activeOrders
     }
 
     private fun calculateArsPrice(amount: Double, price: Double, intentionType: IntentionType): Double {
@@ -77,15 +93,8 @@ class OrderServiceImpl @Autowired constructor(
         }
     }
 
-    private fun updateUsdToArsRate(activeOrders: List<Order>): List<Order> {
-        activeOrders.forEach {
-            updateUsdToArsRate(it)
-        }
-        return activeOrders
-    }
-
-    private fun updateUsdToArsRate(order: Order): Order {
-        order.priceARS = calculateArsPrice(order.amount!!, order.price!!, order.type!!)
-        return update(order)
-    }
+//    private fun updateUsdToArsRate(order: Order): Order {
+//        order.priceARS = calculateArsPrice(order.amount!!, order.price!!, order.type!!)
+//        return update(order)
+//    }
 }

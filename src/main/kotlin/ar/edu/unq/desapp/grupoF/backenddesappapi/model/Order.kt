@@ -85,4 +85,12 @@ class Order {
         val lowerBound = cryptocurrency!!.lastPrice()!! * marginFactor
         return this.price!! <= lowerBound
     }
+
+    fun calculateArsPrice(arsRateBuy: Double, arsRateSell: Double) {
+        this.priceARS = if (this.isBuyOrder()) {
+            (this.amount!! * this.price!!) * arsRateBuy
+        } else {
+            (this.amount!! * this.price!!) * arsRateSell
+        }
+    }
 }

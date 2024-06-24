@@ -8,4 +8,5 @@ interface IOrderService {
     fun getActiveOrders(): List<Order>
     fun getOrder(id: Long): Order
     fun update(order: Order): Order
+    fun updateArsRate(): List<Order>
 }
