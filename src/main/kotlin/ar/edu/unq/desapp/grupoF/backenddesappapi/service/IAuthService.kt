@@ -5,7 +5,7 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.LoginRequestDTO
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserCreateDTO
 
 interface IAuthService {
-    fun registerUser(user: User): User
+    fun registerUser(userDto: UserCreateDTO): User
     fun login(loginDTO: LoginRequestDTO): String?
 
 }

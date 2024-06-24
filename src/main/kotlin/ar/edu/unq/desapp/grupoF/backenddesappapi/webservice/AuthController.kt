@@ -22,8 +22,8 @@ class AuthController {
     @PostMapping("/register")
     fun registerUser(@Valid @RequestBody userCreateRequest: UserCreateDTO): ResponseEntity<Any> {
         return try {
-            val user = UserMapper.toModel(userCreateRequest)
-            val userResponse = authService.registerUser(user)
+            val newUser = authService.registerUser(userCreateRequest)
+            val userResponse = UserMapper.toDTO(newUser)
             ResponseEntity.status(HttpStatus.OK).body(userResponse)
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to e.message))

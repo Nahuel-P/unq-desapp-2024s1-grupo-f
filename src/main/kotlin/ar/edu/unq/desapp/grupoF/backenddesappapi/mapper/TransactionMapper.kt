@@ -15,7 +15,7 @@ class TransactionMapper {
 
         fun toResponseDTO(transaction: Transaction): TransactionResponseDTO {
             return TransactionResponseDTO(
-                UserMapper.userToDTO(transaction.counterParty!!),
+                UserMapper.toDTO(transaction.counterParty!!),
                 OrderMapper.toCreateDTO(transaction.order!!),
                 transaction.status!!,
                 transaction.entryTime

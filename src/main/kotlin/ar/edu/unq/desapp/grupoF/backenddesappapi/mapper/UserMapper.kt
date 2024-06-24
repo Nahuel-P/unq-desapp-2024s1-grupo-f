@@ -7,7 +7,7 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserResponseDTO
 
 class UserMapper {
     companion object {
-        fun userToDTO(user: User): UserResponseDTO {
+        fun toDTO(user: User): UserResponseDTO {
             return UserResponseDTO(
                 user.id!!,
                 user.firstName!!,

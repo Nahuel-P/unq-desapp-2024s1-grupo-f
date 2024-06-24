@@ -55,8 +55,22 @@ class OrderMapper {
                 order.ownerUser?.reputation()!!
             )
         }
+
+        fun toDTO(orders: List<Order>): List<OrderResponseDTO> {
+            return orders.map {
+                OrderResponseDTO(
+                    it.id!!,
+                    it.entryTime.toString(),
+                    it.cryptocurrency?.name!!,
+                    it.amount!!,
+                    it.price!!,
+                    it.type!!,
+                    it.priceARS!!,
+                    it.ownerUser?.id!!,
+                    it.ownerUser?.firstName!! + " " + it.ownerUser?.lastName,
+                    it.ownerUser?.reputation()!!
+                )
+            }
+        }
     }
-
-
-
 }

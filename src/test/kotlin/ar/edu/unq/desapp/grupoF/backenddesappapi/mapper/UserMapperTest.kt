@@ -17,7 +17,7 @@ class UserMapperTest {
         `when`(user.email).thenReturn("michael.scott32@test.com")
         `when`(user.reputation()).thenReturn("0")
 
-        val dto = UserMapper.userToDTO(user)
+        val dto = UserMapper.toDTO(user)
 
         assertEquals(1L, dto.id)
         assertEquals("Michael", dto.firstName)

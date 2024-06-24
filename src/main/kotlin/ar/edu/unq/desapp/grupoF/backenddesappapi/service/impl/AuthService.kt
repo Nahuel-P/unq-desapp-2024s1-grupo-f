@@ -1,9 +1,11 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl
 
+import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.UserMapper
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.UserRepository
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IAuthService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.LoginRequestDTO
+import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserCreateDTO
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -25,7 +27,8 @@ class AuthService : IAuthService {
     @Autowired
     lateinit var authenticationManager: AuthenticationManager
 
-    override fun registerUser(user: User): User {
+    override fun registerUser(userDto: UserCreateDTO): User {
+        val user = UserMapper.toModel(userDto)
         if (userRepository.existsByEmail(user.email!!)) {
             throw Exception("User with email ${user.email} already exists")
         }

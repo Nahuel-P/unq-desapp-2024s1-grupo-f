@@ -38,7 +38,8 @@ class OrderController {
     fun getActiveOrders(): ResponseEntity<Any> {
         return try {
             val orders = orderService.getActiveOrders()
-            ResponseEntity.status(HttpStatus.OK).body(orders)
+            val orderResponse = OrderMapper.toDTO(orders)
+            ResponseEntity.status(HttpStatus.OK).body(orderResponse)
         } catch (e: Exception) {
             logger.error("Error retrieving active orders", e)
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to (e.message ?: "Unknown error")))
