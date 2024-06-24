@@ -73,7 +73,7 @@ class Transaction {
     }
 
     fun nominalAmount(): Double {
-        return order!!.price!!
+        return order!!.amount!!
     }
 
     fun buyer(): User? {
