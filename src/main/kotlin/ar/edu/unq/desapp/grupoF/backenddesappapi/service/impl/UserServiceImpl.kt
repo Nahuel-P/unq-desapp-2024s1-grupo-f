@@ -1,8 +1,6 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.UserMapper
-import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.UserVolumeReportMapper
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Active
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Transaction
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.UserVolumeReport

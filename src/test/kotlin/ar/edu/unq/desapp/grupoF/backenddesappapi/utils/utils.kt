@@ -3,6 +3,7 @@ package ar.edu.unq.desapp.grupoF.backenddesappapi.utils
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.PriceHistory
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.CryptocurrencyBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.OrderBuilder
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.TransactionBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
@@ -39,27 +40,10 @@ fun aBuyOrder(): OrderBuilder {
 
 }
 
-fun aSellOrder(): OrderBuilder {
-    return OrderBuilder()
-        .withOwnerUser(aUser().build())
-        .withCryptocurrency(aBTCUSDT().build())
-        .withAmount(0.5)
-        .withPrice(50000.0)
-        .withType(IntentionType.SELL)
-        .withPriceARS(50000.0 * 10 * 30)
-
+fun aTransaction(): TransactionBuilder {
+    return TransactionBuilder()
+        .withOrder(aBuyOrder().build())
+        .withCounterParty(anotherUser().build())
 }
 
-//fun aCryptocurrencySet(): MutableSet<Cryptocurrency> {
-//    return mutableSetOf(btcusdt())
-//}
 
-//fun btcusdt(): Cryptocurrency {
-//    return CryptocurrencyBuilder().withName(CryptoSymbol.BTCUSDT).withPriceHistory(btcusdtHistory()).build()
-//}
-
-//fun btcusdtHistory(): MutableList<PriceHistory> {
-//    val cryptocurrency = CryptocurrencyBuilder().withName(CryptoSymbol.BTCUSDT).build()
-//    val priceHistory = PriceHistory(cryptocurrency, 50000.0)
-//    return mutableListOf(priceHistory)
-//}
