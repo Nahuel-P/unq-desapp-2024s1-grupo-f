@@ -1,5 +1,4 @@
-
-import ar.edu.unq.desapp.grupoF.backenddesappapi.BackendDesappApiApplication
+package ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Order
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Transaction
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
@@ -7,7 +6,6 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.TransactionStatus
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICommonService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IOrderService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IUserService
-import ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl.TransactionServiceImpl
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.TransactionCreateDTO
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.TransactionRequestDTO
 import org.junit.jupiter.api.Assertions.assertThrows
@@ -18,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 
-@SpringBootTest(classes = [BackendDesappApiApplication::class])
+@SpringBootTest
 class TransactionServiceImplTest {
 
     @Autowired
@@ -97,10 +95,15 @@ class TransactionServiceImplTest {
     @Test
     fun `cancel should throw an exception when transaction status is CONFIRMED`() {
         val transactionDTO = mock(TransactionRequestDTO::class.java)
-        val user = mock(User::class.java)
+        val buyer = mock(User::class.java)
+        val seller = mock(User::class.java)
         val transaction = mock(Transaction::class.java)
 
-        `when`(commonService.getUser(transactionDTO.idUserRequest)).thenReturn(user)
+        `when`(buyer.id).thenReturn(1L)
+        `when`(seller.id).thenReturn(2L)
+        `when`(commonService.getUser(transactionDTO.idUserRequest)).thenReturn(buyer)
+        `when`(transaction.buyer()).thenReturn(buyer)
+        `when`(transaction.seller()).thenReturn(seller)
         `when`(commonService.getTransaction(transactionDTO.idTransaction)).thenReturn(transaction)
         `when`(transaction.status).thenReturn(TransactionStatus.CONFIRMED)
 
