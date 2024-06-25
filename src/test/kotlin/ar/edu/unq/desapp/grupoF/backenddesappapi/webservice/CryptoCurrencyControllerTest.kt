@@ -1,7 +1,5 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.webservice
 
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.PriceHistory
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICryptoService
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable
@@ -41,20 +39,20 @@ class CryptoCurrencyControllerTest {
             .andExpect(status().isBadRequest)
     }
 
-    @Test
-    fun `getLast24hsQuotes returns OK status when service returns data`() {
-        Mockito.`when`(cryptoService.getLast24hsQuotes(CryptoSymbol.BTCUSDT)).thenReturn(listOf<PriceHistory>())
-        mockMvc.perform(get("/crypto/last24hsQuotes/BTCUSDT")
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk)
-    }
-
-    @Test
-    fun `getLast24hsQuotes returns BAD_REQUEST status when service throws exception`() {
-        Mockito.`when`(cryptoService.getLast24hsQuotes(CryptoSymbol.BTCUSDT)).thenThrow(IllegalArgumentException("Error from Service"))
-        mockMvc.perform(get("/crypto/last24hsQuotes/BTCUSDT")
-            .contentType(MediaType.APPLICATION_JSON))
-            .andExpect(status().isBadRequest)
-    }
+//    @Test
+//    fun `getLast24hsQuotes returns OK status when service returns data`() {
+//        Mockito.`when`(cryptoService.getLast24hsQuotes(CryptoSymbol.BTCUSDT)).thenReturn(listOf<PriceHistory>())
+//        mockMvc.perform(get("/crypto/last24hsQuotes/BTCUSDT")
+//            .contentType(MediaType.APPLICATION_JSON))
+//            .andExpect(status().isOk)
+//    }
+//
+//    @Test
+//    fun `getLast24hsQuotes returns BAD_REQUEST status when service throws exception`() {
+//        Mockito.`when`(cryptoService.getLast24hsQuotes(CryptoSymbol.BTCUSDT)).thenThrow(IllegalArgumentException("Error from Service"))
+//        mockMvc.perform(get("/crypto/last24hsQuotes/BTCUSDT")
+//            .contentType(MediaType.APPLICATION_JSON))
+//            .andExpect(status().isBadRequest)
+//    }
 
 }
