@@ -5,5 +5,5 @@ data class BuyerResponseDTO (
     var firstName: String,
     var lastName: String,
     var email: String,
-    var wellet: String
+    var wallet: String
 )

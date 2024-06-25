@@ -42,29 +42,69 @@ class DatabaseInitializer(
                 .withAddress("31 Spooner Street").withCvu("0000002100000000023456").withWalletAddress("9I0J1K2L").build()
         )
     }
+    fun generateDataForCryptocurrency() {
+        val cryptocurrencies = listOf(
+            CryptocurrencyBuilder()
+                .withName(CryptoSymbol.BTCUSDT)
+                .withPrice(61152.17000000)
+                .build(),
+            CryptocurrencyBuilder()
+                .withName(CryptoSymbol.ETHUSDT)
+                .withPrice(3375.34000000)
+                .build(),
+            CryptocurrencyBuilder()
+                .withName(CryptoSymbol.BNBUSDT)
+                .withPrice(573.00000000)
+                .build(),
+            CryptocurrencyBuilder()
+                .withName(CryptoSymbol.NEOUSDT)
+                .withPrice(11.30000000)
+                .build(),
+            CryptocurrencyBuilder()
+                .withName(CryptoSymbol.ADAUSDT)
+                .withPrice(0.38920000)
+                .build(),
+            CryptocurrencyBuilder()
+                .withName(CryptoSymbol.TRXUSDT)
+                .withPrice(0.12072000)
+                .build(),
+            CryptocurrencyBuilder()
+                .withName(CryptoSymbol.MATICUSDT)
+                .withPrice(0.56750000)
+                .build(),
+            CryptocurrencyBuilder()
+                .withName(CryptoSymbol.ATOMUSDT)
+                .withPrice(6.97900000)
+                .build(),
+            CryptocurrencyBuilder()
+                .withName(CryptoSymbol.DOTUSDT)
+                .withPrice(5.80800000)
+                .build(),
+            CryptocurrencyBuilder()
+                .withName(CryptoSymbol.AAVEUSDT)
+                .withPrice(91.21000000)
+                .build(),
+            CryptocurrencyBuilder()
+                .withName(CryptoSymbol.AUDIOUSDT)
+                .withPrice(0.15390000)
+                .build(),
+            CryptocurrencyBuilder()
+                .withName(CryptoSymbol.AXSUSDT)
+                .withPrice(6.15300000)
+                .build(),
+            CryptocurrencyBuilder()
+                .withName(CryptoSymbol.CAKEUSDT)
+                .withPrice(2.15000000)
+                .build(),
+            CryptocurrencyBuilder()
+                .withName(CryptoSymbol.ALICEUSDT)
+                .withPrice(1.12600000)
+                .build()
+        )
 
-
-//    fun generateDataForCryptocurrency() {
-//        val prices = BinanceClient().getAllCryptoCurrencyPrices(CryptoSymbol.entries.toMutableList())
-//
-//        cryptocurrencyRepository.saveAll(prices.map { priceDTO ->
-//            CryptocurrencyBuilder()
-//                .withName(priceDTO.symbol)
-//                .withPrice(priceDTO.price!!)
-//                .build()
-//        })
-//    }
-fun generateDataForCryptocurrency() {
-    val secureRandom = SecureRandom()
-    val mockCryptocurrencies = CryptoSymbol.values().map { symbol ->
-        CryptocurrencyBuilder()
-            .withName(symbol)
-            .withPrice(1000.0 + secureRandom.nextDouble() * 40000.0)
-            .build()
+        cryptocurrencyRepository.saveAll(cryptocurrencies)
     }
 
-    cryptocurrencyRepository.saveAll(mockCryptocurrencies)
-}
 
 
     fun generateDataForPriceHistory() {
