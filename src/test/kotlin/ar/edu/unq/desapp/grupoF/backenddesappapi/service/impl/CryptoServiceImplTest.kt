@@ -33,8 +33,7 @@ class CryptoServiceImplTest {
         val cryptocurrency = mock(Cryptocurrency::class.java)
         val cryptocurrencies = listOf(cryptocurrency)
 
-        val symbols = mutableListOf(CryptoSymbol.BTCUSDT)
-        `when`(binanceClient.getAllCryptoCurrencyPrices(symbols)).thenReturn(cryptoPricesDTO)
+        `when`(binanceClient.getAllCryptoCurrencyPrices(anyList())).thenReturn(cryptoPricesDTO)
         `when`(cryptocurrencyRepository.findAll()).thenReturn(cryptocurrencies)
         `when`(cryptocurrency.lastPrice).thenReturn(50000.0)
         `when`(cryptocurrency.name).thenReturn(CryptoSymbol.BTCUSDT)
@@ -44,6 +43,4 @@ class CryptoServiceImplTest {
         assertEquals(50000.0, cryptocurrencies[0].lastPrice)
         verify(cryptocurrencyRepository).saveAll(cryptocurrencies)
     }
-
-
 }
