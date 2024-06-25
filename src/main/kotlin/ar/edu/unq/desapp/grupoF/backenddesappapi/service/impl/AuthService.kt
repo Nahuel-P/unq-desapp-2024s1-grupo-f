@@ -22,7 +22,7 @@ class AuthService : IAuthService {
     lateinit var passwordEncoder: PasswordEncoder
 
     @Autowired
-    lateinit var tokenService: TokenService
+    lateinit var tokenService: TokenServiceImpl
 
     @Autowired
     lateinit var authenticationManager: AuthenticationManager
