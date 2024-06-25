@@ -8,7 +8,7 @@ import org.springframework.scheduling.annotation.EnableScheduling
 @SpringBootApplication
 @EnableScheduling
 @EnableCaching
-class BackendDesappApiApplication
+class BackendDesappApiApplication 
 
 fun main(args: Array<String>) {
     runApplication<BackendDesappApiApplication>(*args)
