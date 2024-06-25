@@ -36,12 +36,14 @@ class UserControllerTest {
     private lateinit var commonService: ICommonService
 
 
-
     @Test
     fun `getUsers returns OK status when service returns data`() {
-        val user1 = UserBuilder().withFirstName("Micahel").withLastName("Scott").withEmail("prisonmike@gmail.com").build()
+        val user1 =
+            UserBuilder().withFirstName("Micahel").withLastName("Scott").withEmail("prisonmike@gmail.com").build()
         user1.id = 1L
-        val user2 = UserBuilder().withFirstName("Dwight").withLastName("Schrute").withEmail("battlestargalatica@gmail.com").build()
+        val user2 =
+            UserBuilder().withFirstName("Dwight").withLastName("Schrute").withEmail("battlestargalatica@gmail.com")
+                .build()
         user2.id = 2L
 
         `when`(userService.getUsers()).thenReturn(listOf(user1, user2))
@@ -66,8 +68,9 @@ class UserControllerTest {
 
     @Test
     fun `getUserByID returns OK status when service returns data`() {
-        val user = UserBuilder().withFirstName("Michael").withLastName("Scott").withEmail("prisonmike@gmail.com").build()
-        user.id=1L
+        val user =
+            UserBuilder().withFirstName("Michael").withLastName("Scott").withEmail("prisonmike@gmail.com").build()
+        user.id = 1L
 
         `when`(commonService.getUser(1L)).thenReturn(user)
 
@@ -98,7 +101,13 @@ class UserControllerTest {
         `when`(userVolumeReport.totalUSD).thenReturn(1000.0)
 
 
-        `when`(userService.getOperatedVolumeBy(1L, LocalDate.parse(startDate).atStartOfDay(), LocalDate.parse(endDate).atTime(23, 59, 59))).thenReturn(userVolumeReport)
+        `when`(
+            userService.getOperatedVolumeBy(
+                1L,
+                LocalDate.parse(startDate).atStartOfDay(),
+                LocalDate.parse(endDate).atTime(23, 59, 59)
+            )
+        ).thenReturn(userVolumeReport)
 
         mockMvc.perform(
             get("/user/operatedVolume/1/$startDate/$endDate")
@@ -112,7 +121,13 @@ class UserControllerTest {
         val startDate = "2024-01-01"
         val endDate = "2024-12-31"
 
-        `when`(userService.getOperatedVolumeBy(1L, LocalDate.parse(startDate).atStartOfDay(), LocalDate.parse(endDate).atTime(23, 59, 59))).thenThrow(RuntimeException("Error from Service"))
+        `when`(
+            userService.getOperatedVolumeBy(
+                1L,
+                LocalDate.parse(startDate).atStartOfDay(),
+                LocalDate.parse(endDate).atTime(23, 59, 59)
+            )
+        ).thenThrow(RuntimeException("Error from Service"))
 
         mockMvc.perform(
             get("/user/operatedVolume/1/$startDate/$endDate")

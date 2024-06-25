@@ -25,7 +25,7 @@ class MockBinanceClientServiceTest {
         val results = service.getAllCryptoCurrencyPrices(symbols)
 
         val btcPrice = results.find { it.symbol == CryptoSymbol.BTCUSDT }
-        val ethPrice = results.find { it.symbol == CryptoSymbol.ETHUSDT}
+        val ethPrice = results.find { it.symbol == CryptoSymbol.ETHUSDT }
 
         assertEquals(CryptoSymbol.BTCUSDT, btcPrice?.symbol)
         assertEquals(50000.0, btcPrice?.price)

@@ -24,14 +24,13 @@ class CryptoServiceImpl : ICryptoService {
     private lateinit var priceHistoryRepository: PriceHistoryRepository
 
     private var binanceClient = BinanceClient()
-    
-    private val logger : Logger = LogManager.getLogger(CryptoServiceImpl::class.java)
+
+    private val logger: Logger = LogManager.getLogger(CryptoServiceImpl::class.java)
 
     override fun getQuotes(): List<Cryptocurrency> {
         return cryptocurrencyRepository.findAll()
     }
 
-//    @Scheduled(fixedRate = 60000)
     @Scheduled(fixedRate = 600000)
     @CacheEvict(value = ["quotes"], allEntries = true)
 

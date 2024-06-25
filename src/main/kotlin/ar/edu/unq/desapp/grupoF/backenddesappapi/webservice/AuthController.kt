@@ -18,6 +18,7 @@ class AuthController {
 
     @Autowired
     lateinit var authService: IAuthService
+
     @Operation(summary = "Register a new user")
     @PostMapping("/register")
     fun registerUser(@Valid @RequestBody userCreateRequest: UserCreateDTO): ResponseEntity<Any> {

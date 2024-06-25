@@ -1,4 +1,5 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.webservice
+
 import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.UserMapper
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IAuthService
@@ -7,18 +8,21 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserCreateDTO
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
 import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.http.MediaType
+import org.springframework.test.context.junit.jupiter.SpringExtension
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ExtendWith(SpringExtension::class)
 class AuthControllerTest {
 
     @Autowired
@@ -32,13 +36,22 @@ class AuthControllerTest {
 
     @Test
     fun `registerUser returns BAD_REQUEST status when registration fails`() {
-        val userCreateRequest = UserCreateDTO("michael", "scott", "prisonmike@test.com", "1725 Slough Avenue, Scranton", "Password!1", "1234567890123456789012", "12345678")
+        val userCreateRequest = UserCreateDTO(
+            "michael",
+            "scott",
+            "prisonmike@test.com",
+            "1725 Slough Avenue, Scranton",
+            "Password!1",
+            "1234567890123456789012",
+            "12345678"
+        )
 
         `when`(authService.registerUser(userCreateRequest)).thenThrow(RuntimeException("Registration failed"))
 
         mockMvc.perform(
             MockMvcRequestBuilders.post("/register")
-            .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+        )
             .andExpect(MockMvcResultMatchers.status().isBadRequest)
     }
 
@@ -63,7 +76,8 @@ class AuthControllerTest {
         mockMvc.perform(
             MockMvcRequestBuilders.post("/login")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(loginRequestJson))
+                .content(loginRequestJson)
+        )
             .andExpect(MockMvcResultMatchers.status().isOk)
     }
 
@@ -75,8 +89,9 @@ class AuthControllerTest {
 
         mockMvc.perform(
             MockMvcRequestBuilders.post("/login")
-            .contentType(MediaType.APPLICATION_JSON))
+                .contentType(MediaType.APPLICATION_JSON)
+        )
             .andExpect(MockMvcResultMatchers.status().isBadRequest)
     }
-    
+
 }

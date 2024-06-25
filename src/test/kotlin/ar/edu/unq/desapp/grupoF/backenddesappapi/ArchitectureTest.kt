@@ -10,16 +10,19 @@ class ArchitectureTest {
 
     @Test
     fun `project should not use singletons`() {
-        val importedClasses: JavaClasses = ClassFileImporter().importPackages("ar.edu.unq.desapp.grupoF.backenddesappapi")
+        val importedClasses: JavaClasses =
+            ClassFileImporter().importPackages("ar.edu.unq.desapp.grupoF.backenddesappapi")
 
         val rule: ArchRule = noClasses()
             .should().beAnnotatedWith("javax.inject.Singleton")
 
         rule.check(importedClasses)
     }
+
     @Test
     fun `every file that ends with Repository should have the Repository annotation`() {
-        val importedClasses: JavaClasses = ClassFileImporter().importPackages("ar.edu.unq.desapp.grupoF.backenddesappapi")
+        val importedClasses: JavaClasses =
+            ClassFileImporter().importPackages("ar.edu.unq.desapp.grupoF.backenddesappapi")
 
         val rule: ArchRule = classes()
             .that().haveSimpleNameEndingWith("Repository")

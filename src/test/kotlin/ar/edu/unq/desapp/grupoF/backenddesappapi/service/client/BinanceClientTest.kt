@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest
 class BinanceClientTest {
 
     private var binanceClient = BinanceClient()
+
     @Test
     fun `returns correct cryptocurrency price when valid symbol is provided`() {
         val symbol = CryptoSymbol.BTCUSDT
@@ -47,6 +48,6 @@ class BinanceClientTest {
         val upperBoundETH = 4000.0
 
         assertTrue(results.find { it.symbol == CryptoSymbol.BTCUSDT }?.price!! in (lowerBoundBTC..upperBoundBTC))
-        assertTrue(results.find { it.symbol == CryptoSymbol.ETHUSDT}?.price!! in lowerBoundETH..upperBoundETH)
+        assertTrue(results.find { it.symbol == CryptoSymbol.ETHUSDT }?.price!! in lowerBoundETH..upperBoundETH)
     }
 }

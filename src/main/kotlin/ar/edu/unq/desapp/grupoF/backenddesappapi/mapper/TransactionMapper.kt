@@ -4,8 +4,8 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Order
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Transaction
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.TransactionBuilder
-import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.*
-import java.time.LocalDateTime
+import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.TransactionCreateDTO
+import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.TransactionResponseDTO
 
 class TransactionMapper {
     companion object {

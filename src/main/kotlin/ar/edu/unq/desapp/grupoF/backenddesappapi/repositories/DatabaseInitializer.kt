@@ -28,20 +28,27 @@ class DatabaseInitializer(
     fun generateDataForUsers() {
         userRepository.save(
             UserBuilder()
-                .withFirstName("Homero").withLastName("Simpson").withEmail("hom.jsi@gmail.com").withPassword("Password1!")
-                .withAddress("Evergreen Terrace 742").withCvu("0000003100000000046721").withWalletAddress("1A2B3C4D").build()
+                .withFirstName("Homero").withLastName("Simpson").withEmail("hom.jsi@gmail.com")
+                .withPassword("Password1!")
+                .withAddress("Evergreen Terrace 742").withCvu("0000003100000000046721").withWalletAddress("1A2B3C4D")
+                .build()
         )
         userRepository.save(
             UserBuilder()
-                .withFirstName("Eric").withLastName("Cartman").withEmail("realcoon@hotmail.com").withPassword("Coon@2024")
-                .withAddress("E. Bonanza St. 28201").withCvu("0000007900000000078392").withWalletAddress("5E6F7G8H").build()
+                .withFirstName("Eric").withLastName("Cartman").withEmail("realcoon@hotmail.com")
+                .withPassword("Coon@2024")
+                .withAddress("E. Bonanza St. 28201").withCvu("0000007900000000078392").withWalletAddress("5E6F7G8H")
+                .build()
         )
         userRepository.save(
             UserBuilder()
-                .withFirstName("Peter").withLastName("Griffin").withEmail("petergriffin@quahog.com").withPassword("Hello#123")
-                .withAddress("31 Spooner Street").withCvu("0000002100000000023456").withWalletAddress("9I0J1K2L").build()
+                .withFirstName("Peter").withLastName("Griffin").withEmail("petergriffin@quahog.com")
+                .withPassword("Hello#123")
+                .withAddress("31 Spooner Street").withCvu("0000002100000000023456").withWalletAddress("9I0J1K2L")
+                .build()
         )
     }
+
     fun generateDataForCryptocurrency() {
         val cryptocurrencies = listOf(
             CryptocurrencyBuilder()
@@ -106,7 +113,6 @@ class DatabaseInitializer(
     }
 
 
-
     fun generateDataForPriceHistory() {
         val dotusdt = cryptocurrencyRepository.findByName(CryptoSymbol.DOTUSDT)?.name
         val ethusdt = cryptocurrencyRepository.findByName(CryptoSymbol.ETHUSDT)?.name
@@ -115,14 +121,38 @@ class DatabaseInitializer(
         val cakeusdt = cryptocurrencyRepository.findByName(CryptoSymbol.CAKEUSDT)?.name
 
         if (dotusdt != null && ethusdt != null && btcusdt != null && bnbusdt != null && cakeusdt != null) {
-            priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(dotusdt).withPrice(6.89900000).withPriceTime(LocalDateTime.now().minusHours(1)).build())
-            priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(dotusdt).withPrice(7.0).withPriceTime(LocalDateTime.now().minusHours(2)).build())
-            priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(ethusdt).withPrice(3760.77).withPriceTime(LocalDateTime.now().minusHours(1)).build())
-            priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(ethusdt).withPrice(3760.47).withPriceTime(LocalDateTime.now().minusHours(2)).build())
-            priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(bnbusdt).withPrice(586.4).withPriceTime(LocalDateTime.now().minusHours(1)).build())
-            priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(bnbusdt).withPrice(536.4).withPriceTime(LocalDateTime.now().minusHours(2)).build())
-            priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(cakeusdt).withPrice(3.18).withPriceTime(LocalDateTime.now().minusHours(1)).build())
-            priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(cakeusdt).withPrice(2.88).withPriceTime(LocalDateTime.now().minusHours(2)).build())
+            priceHistoryRepository.save(
+                PriceHistoryBuilder().withCryptocurrency(dotusdt).withPrice(6.89900000)
+                    .withPriceTime(LocalDateTime.now().minusHours(1)).build()
+            )
+            priceHistoryRepository.save(
+                PriceHistoryBuilder().withCryptocurrency(dotusdt).withPrice(7.0)
+                    .withPriceTime(LocalDateTime.now().minusHours(2)).build()
+            )
+            priceHistoryRepository.save(
+                PriceHistoryBuilder().withCryptocurrency(ethusdt).withPrice(3760.77)
+                    .withPriceTime(LocalDateTime.now().minusHours(1)).build()
+            )
+            priceHistoryRepository.save(
+                PriceHistoryBuilder().withCryptocurrency(ethusdt).withPrice(3760.47)
+                    .withPriceTime(LocalDateTime.now().minusHours(2)).build()
+            )
+            priceHistoryRepository.save(
+                PriceHistoryBuilder().withCryptocurrency(bnbusdt).withPrice(586.4)
+                    .withPriceTime(LocalDateTime.now().minusHours(1)).build()
+            )
+            priceHistoryRepository.save(
+                PriceHistoryBuilder().withCryptocurrency(bnbusdt).withPrice(536.4)
+                    .withPriceTime(LocalDateTime.now().minusHours(2)).build()
+            )
+            priceHistoryRepository.save(
+                PriceHistoryBuilder().withCryptocurrency(cakeusdt).withPrice(3.18)
+                    .withPriceTime(LocalDateTime.now().minusHours(1)).build()
+            )
+            priceHistoryRepository.save(
+                PriceHistoryBuilder().withCryptocurrency(cakeusdt).withPrice(2.88)
+                    .withPriceTime(LocalDateTime.now().minusHours(2)).build()
+            )
 
             var initialPrice = 64973.42
             val secureRandom = SecureRandom()
@@ -131,11 +161,13 @@ class DatabaseInitializer(
                 val priceChange = -0.3 + secureRandom.nextDouble() * (0.5 - (-0.3))
                 val price = initialPrice + priceChange
 
-                priceHistoryRepository.save(PriceHistoryBuilder()
-                    .withCryptocurrency(btcusdt)
-                    .withPrice(price)
-                    .withPriceTime(priceTime)
-                    .build())
+                priceHistoryRepository.save(
+                    PriceHistoryBuilder()
+                        .withCryptocurrency(btcusdt)
+                        .withPrice(price)
+                        .withPriceTime(priceTime)
+                        .build()
+                )
                 initialPrice = price
             }
         }
@@ -156,7 +188,7 @@ class DatabaseInitializer(
                     .withAmount(0.02)
                     .withPrice(68315.99)
                     .withType(IntentionType.BUY)
-                    .withPriceARS((0.02*68315.99)*1270.0).build()
+                    .withPriceARS((0.02 * 68315.99) * 1270.0).build()
             )
         }
 
@@ -168,7 +200,7 @@ class DatabaseInitializer(
                     .withAmount(1.0)
                     .withPrice(68314.0)
                     .withType(IntentionType.BUY)
-                    .withPriceARS((1.0*68315.99)*1270.0).build()
+                    .withPriceARS((1.0 * 68315.99) * 1270.0).build()
             )
         }
 
@@ -180,7 +212,7 @@ class DatabaseInitializer(
                     .withAmount(1.0)
                     .withPrice(595.10)
                     .withType(IntentionType.SELL)
-                    .withPriceARS((1.0*595.10)*1270.0).build()
+                    .withPriceARS((1.0 * 595.10) * 1270.0).build()
             )
         }
 
@@ -192,7 +224,7 @@ class DatabaseInitializer(
                     .withAmount(2.0)
                     .withPrice(5.54)
                     .withType(IntentionType.SELL)
-                    .withPriceARS((2.0*5.54)*1270.0).build()
+                    .withPriceARS((2.0 * 5.54) * 1270.0).build()
             )
         }
     }
@@ -205,7 +237,8 @@ class DatabaseInitializer(
         val order2 = orderRepository.findById(2L).orElse(null)
 
         if (user1 != null && user2 != null && order1 != null && order2 != null) {
-            val transaction1 = TransactionBuilder().withOrder(order1).withCounterParty(user2).withEntryTime(LocalDateTime.now().minusHours(2)).build()
+            val transaction1 = TransactionBuilder().withOrder(order1).withCounterParty(user2)
+                .withEntryTime(LocalDateTime.now().minusHours(2)).build()
             transaction1.order!!.disable()
             val transaction2 = TransactionBuilder().withOrder(order2).withCounterParty(user1).build()
             transaction2.order!!.disable()

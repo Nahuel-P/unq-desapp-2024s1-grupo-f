@@ -44,6 +44,7 @@ class UserServiceImplTest {
 
         assertEquals(users, result)
     }
+
     @Test
     fun `getUser returns user by id`() {
         val user = UserBuilder().build()
@@ -78,7 +79,8 @@ class UserServiceImplTest {
         user.id = 1L
         val transactions = listOf(TransactionBuilder().build(), TransactionBuilder().build())
         Mockito.`when`(commonService.getUser(1L)).thenReturn(user)
-        Mockito.`when`(commonService.getTransactionBy(user.id!!, LocalDateTime.now(), LocalDateTime.now())).thenReturn(transactions)
+        Mockito.`when`(commonService.getTransactionBy(user.id!!, LocalDateTime.now(), LocalDateTime.now()))
+            .thenReturn(transactions)
 
         val result = userService.getOperatedVolumeBy(1L, LocalDateTime.now(), LocalDateTime.now())
 

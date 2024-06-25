@@ -28,7 +28,8 @@ class CommonServiceImpl @Autowired constructor(
     }
 
     override fun getCrypto(symbol: CryptoSymbol): Cryptocurrency {
-        return cryptocurrencyRepository.findByName(symbol) ?: throw Exception("Cryptocurrency with symbol $symbol not found")
+        return cryptocurrencyRepository.findByName(symbol)
+            ?: throw Exception("Cryptocurrency with symbol $symbol not found")
     }
 
     override fun getTransactionBy(userId: Long, startDate: LocalDateTime, endDate: LocalDateTime): List<Transaction> {

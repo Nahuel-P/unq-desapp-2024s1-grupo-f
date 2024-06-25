@@ -14,6 +14,9 @@ class MockBinanceClientService : IBinanceClientService {
     }
 
     override fun getAllCryptoCurrencyPrices(symbols: MutableList<CryptoSymbol>): Array<CryptocurrencyPriceDTO> {
-        return arrayOf(CryptocurrencyPriceDTO(CryptoSymbol.BTCUSDT, 50000.0), CryptocurrencyPriceDTO(CryptoSymbol.ETHUSDT, 4000.0))
+        return arrayOf(
+            CryptocurrencyPriceDTO(CryptoSymbol.BTCUSDT, 50000.0),
+            CryptocurrencyPriceDTO(CryptoSymbol.ETHUSDT, 4000.0)
+        )
     }
 }

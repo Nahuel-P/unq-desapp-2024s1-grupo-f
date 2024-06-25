@@ -4,7 +4,7 @@ import jakarta.persistence.*
 import kotlin.math.max
 
 @Entity(name = "users")
-class User{
+class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
@@ -46,8 +46,8 @@ class User{
     fun reputation(): String {
         return if (transactions == 0) {
             "No trades yet."
-        }else{
-            (score/transactions).toString()
+        } else {
+            (score / transactions).toString()
         }
     }
 }

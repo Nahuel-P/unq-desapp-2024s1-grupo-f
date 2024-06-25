@@ -16,7 +16,7 @@ class UserMapper {
                 user.reputation()
             )
         }
-        
+
         fun toModel(userDTO: UserCreateDTO): User {
             return UserBuilder()
                 .withFirstName(userDTO.firstName!!)

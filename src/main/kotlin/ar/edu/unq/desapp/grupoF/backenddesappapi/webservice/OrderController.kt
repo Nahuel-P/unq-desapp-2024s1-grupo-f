@@ -20,7 +20,7 @@ class OrderController {
     private lateinit var orderService: IOrderService
     private val logger: Logger = LogManager.getLogger(OrderController::class.java)
 
-    @Operation (summary = "Create a new order")
+    @Operation(summary = "Create a new order")
     @PostMapping("/create")
     fun createOrder(@RequestBody orderDTO: OrderRequestDTO): ResponseEntity<Any> {
         return try {
@@ -33,7 +33,7 @@ class OrderController {
         }
     }
 
-    @Operation (summary = "Get all active orders")
+    @Operation(summary = "Get all active orders")
     @GetMapping("/activeOrders")
     fun getActiveOrders(): ResponseEntity<Any> {
         return try {

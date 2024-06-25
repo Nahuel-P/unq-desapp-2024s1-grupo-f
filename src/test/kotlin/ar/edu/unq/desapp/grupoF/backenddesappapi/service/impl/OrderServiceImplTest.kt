@@ -98,6 +98,7 @@ class OrderServiceImplTest {
         assertEquals(order, result)
         verify(orderRepository).save(order)
     }
+
     @Test
     fun `createOrder throws exception when price is above margin`() {
         val orderDTO = OrderRequestDTO(1L, CryptoSymbol.BTCUSDT, 1.0, 10.5, IntentionType.BUY)

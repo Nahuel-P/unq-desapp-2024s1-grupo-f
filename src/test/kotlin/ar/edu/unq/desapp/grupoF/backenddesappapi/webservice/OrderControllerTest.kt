@@ -1,4 +1,5 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.webservice
+
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.CryptocurrencyBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.OrderBuilder
@@ -45,22 +46,26 @@ class OrderControllerTest {
         val user = UserBuilder().withFirstName("michael").withLastName("Scott").build()
         user.id = 1L
         val order = OrderBuilder()
-                        .withOwnerUser(user)
-                        .withCryptocurrency(CryptocurrencyBuilder()
-                                            .withName(CryptoSymbol.BTCUSDT)
-                                            .withPrice(50000.0).build())
-                        .withPrice(5000.0)
-                        .withType(IntentionType.BUY)
-                        .withPriceARS(5000.0)
-                        .withAmount(1.0)
-                        .build()
+            .withOwnerUser(user)
+            .withCryptocurrency(
+                CryptocurrencyBuilder()
+                    .withName(CryptoSymbol.BTCUSDT)
+                    .withPrice(50000.0).build()
+            )
+            .withPrice(5000.0)
+            .withType(IntentionType.BUY)
+            .withPriceARS(5000.0)
+            .withAmount(1.0)
+            .build()
         order.id = 1L
 
         `when`(orderService.createOrder(orderDTO)).thenReturn(order)
 
-        mockMvc.perform(post("/order/create")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(orderDTO)))
+        mockMvc.perform(
+            post("/order/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(orderDTO))
+        )
             .andExpect(status().isOk)
     }
 
@@ -70,9 +75,11 @@ class OrderControllerTest {
 
         `when`(orderService.createOrder(orderDTO)).thenThrow(RuntimeException("Test exception"))
 
-        mockMvc.perform(post("/order/create")
-            .contentType(MediaType.APPLICATION_JSON)
-            .content(objectMapper.writeValueAsString(orderDTO)))
+        mockMvc.perform(
+            post("/order/create")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(orderDTO))
+        )
             .andExpect(status().isBadRequest)
     }
 
@@ -86,9 +93,11 @@ class OrderControllerTest {
 
         val order = OrderBuilder()
             .withOwnerUser(user)
-            .withCryptocurrency(CryptocurrencyBuilder()
-                .withName(CryptoSymbol.BTCUSDT)
-                .withPrice(50000.0).build())
+            .withCryptocurrency(
+                CryptocurrencyBuilder()
+                    .withName(CryptoSymbol.BTCUSDT)
+                    .withPrice(50000.0).build()
+            )
             .withPrice(5000.0)
             .withType(IntentionType.BUY)
             .withPriceARS(5000.0)
@@ -100,8 +109,10 @@ class OrderControllerTest {
 
         `when`(orderService.getActiveOrders()).thenReturn(orders)
 
-        mockMvc.perform(get("/order/activeOrders")
-            .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(
+            get("/order/activeOrders")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
             .andExpect(status().isOk)
     }
 
@@ -109,8 +120,10 @@ class OrderControllerTest {
     fun `getActiveOrders returns BAD_REQUEST status when order retrieval fails`() {
         `when`(orderService.getActiveOrders()).thenThrow(RuntimeException("Test exception"))
 
-        mockMvc.perform(get("/order/activeOrders")
-            .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(
+            get("/order/activeOrders")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
             .andExpect(status().isBadRequest)
     }
 

@@ -16,15 +16,11 @@ class OrderMapper {
     companion object {
         private val logger: Logger = LogManager.getLogger(OrderMapper::class.java)
 
-        fun toModel(dto: OrderRequestDTO, user: User, crypto: Cryptocurrency, intentionType: IntentionType, ars: Double): Order {
-            return OrderBuilder()
-                .withOwnerUser(user)
-                .withCryptocurrency(crypto)
-                .withAmount(dto.amount)
-                .withPrice(dto.price)
-                .withType(intentionType)
-                .withPriceARS(ars)
-                .build()
+        fun toModel(
+            dto: OrderRequestDTO, user: User, crypto: Cryptocurrency, intentionType: IntentionType, ars: Double
+        ): Order {
+            return OrderBuilder().withOwnerUser(user).withCryptocurrency(crypto).withAmount(dto.amount)
+                .withPrice(dto.price).withType(intentionType).withPriceARS(ars).build()
         }
 
         fun toCreateDTO(order: Order): OrderCreateResponseDTO {

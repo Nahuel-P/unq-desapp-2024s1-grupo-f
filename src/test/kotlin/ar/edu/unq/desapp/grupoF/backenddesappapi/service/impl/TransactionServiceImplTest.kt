@@ -1,4 +1,5 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl
+
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Cryptocurrency
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Order
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Transaction
@@ -151,6 +152,7 @@ class TransactionServiceImplTest {
 
         verify(transactionRepository, times(1)).save(any(Transaction::class.java))
     }
+
     @Test
     fun `paid should update transaction status to PAID when transaction status is PENDING`() {
         val transactionDTO = mock(TransactionRequestDTO::class.java)
@@ -171,6 +173,7 @@ class TransactionServiceImplTest {
         verify(transactionRepository, times(1)).save(transaction)
         assertEquals(TransactionStatus.PAID, transaction.status)
     }
+
     @Test
     fun `cancel should update transaction status to CANCELLED when transaction status is PENDING`() {
         val transactionDTO = mock(TransactionRequestDTO::class.java)

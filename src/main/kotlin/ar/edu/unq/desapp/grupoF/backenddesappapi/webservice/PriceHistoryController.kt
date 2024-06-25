@@ -2,7 +2,6 @@ package ar.edu.unq.desapp.grupoF.backenddesappapi.webservice
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.PriceHistoryMapper
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
-import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICryptoService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IPriceHistoryService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus

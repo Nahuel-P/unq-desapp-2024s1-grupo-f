@@ -22,20 +22,17 @@ class TransactionServiceImpl @Autowired constructor(
     private val commonService: ICommonService,
     private val orderService: IOrderService,
 ) : ITransactionService {
-    private val logger : Logger = LogManager.getLogger(TransactionServiceImpl::class.java)
+    private val logger: Logger = LogManager.getLogger(TransactionServiceImpl::class.java)
     override fun create(transactionDTO: TransactionCreateDTO): Transaction {
         try {
             val userRequest = commonService.getUser(transactionDTO.idUserRequest)
-            logger.info("Tengo user")
             val order = orderService.getOrder(transactionDTO.orderId)
-            logger.info("Tengo order")
-            validateStartTransaction(order,userRequest)
-            logger.info("Validé order")
+            validateStartTransaction(order, userRequest)
             val transaction = TransactionMapper.toModel(transactionDTO, userRequest, order)
             order.disable()
-            logger.info("Mapeé order")
-            if (!canProceedByMarketPrice(order)) { transaction.cancelBySystem() }
-            logger.info("Llegó hasta acá")
+            if (!canProceedByMarketPrice(order)) {
+                transaction.cancelBySystem()
+            }
             return transactionRepository.save(transaction)
 
         } catch (e: Exception) {
@@ -49,12 +46,12 @@ class TransactionServiceImpl @Autowired constructor(
             logger.info("Tengo transaction")
             val userRequest = commonService.getUser(transactionDTO.idUserRequest)
             logger.info("Tengo user")
-            validatePaid(transaction,userRequest)
+            validatePaid(transaction, userRequest)
             logger.info("Validé pago")
             transaction.paid()
             logger.info("Pagué")
             return update(transaction)
-        } catch ( e: Exception) {
+        } catch (e: Exception) {
             throw Exception("${e.message}")
         }
     }
@@ -63,11 +60,11 @@ class TransactionServiceImpl @Autowired constructor(
         try {
             val transaction = commonService.getTransaction(transactionDTO.idTransaction)
             val userRequest = commonService.getUser(transactionDTO.idUserRequest)
-            validateConfirm(transaction,userRequest)
+            validateConfirm(transaction, userRequest)
             transaction.confirmed()
             increaseReputation(transaction)
             return update(transaction)
-        } catch ( e: Exception) {
+        } catch (e: Exception) {
             throw Exception("${e.message}")
         }
     }
@@ -76,11 +73,11 @@ class TransactionServiceImpl @Autowired constructor(
         try {
             val transaction = commonService.getTransaction(transactionDTO.idTransaction)
             val userRequest = commonService.getUser(transactionDTO.idUserRequest)
-            validateCancel(transaction,userRequest)
+            validateCancel(transaction, userRequest)
             transaction.cancelByUser()
             decreaseReputation(userRequest)
             return update(transaction)
-        } catch ( e: Exception) {
+        } catch (e: Exception) {
             throw Exception("${e.message}")
         }
     }
@@ -96,7 +93,10 @@ class TransactionServiceImpl @Autowired constructor(
 
     private fun canProceedByMarketPrice(order: Order): Boolean {
         val crypto = commonService.getCrypto(order.cryptocurrency!!.name!!)
-        return if (order.isBuyOrder()) !order.isAboveMarketPrice(crypto, order) else !order.isBelowMarketPrice(crypto, order)
+        return if (order.isBuyOrder()) !order.isAboveMarketPrice(crypto, order) else !order.isBelowMarketPrice(
+            crypto,
+            order
+        )
     }
 
     private fun validatePaid(transaction: Transaction, userRequest: User) {
@@ -107,13 +107,13 @@ class TransactionServiceImpl @Autowired constructor(
 
     private fun validateConfirm(transaction: Transaction, userRequest: User) {
         validateStatus(transaction, TransactionStatus.PAID)
-        validateUserAbleToConfirm(userRequest,transaction.seller()!!)
+        validateUserAbleToConfirm(userRequest, transaction.seller()!!)
         validateElapseTimePaid(transaction)
     }
 
     private fun validateCancel(transaction: Transaction, userRequest: User) {
         isInProgress(transaction)
-        validateUserAbleToCancel(userRequest,transaction.buyer()!!,transaction.seller()!!)
+        validateUserAbleToCancel(userRequest, transaction.buyer()!!, transaction.seller()!!)
     }
 
     private fun validateStatus(transaction: Transaction, status: TransactionStatus) {
@@ -149,7 +149,7 @@ class TransactionServiceImpl @Autowired constructor(
         }
     }
 
-    private fun validateUserAbleToConfirm( userRequest: User, sellerUser: User) {
+    private fun validateUserAbleToConfirm(userRequest: User, sellerUser: User) {
         if (userRequest.id != sellerUser.id) {
             throw Exception("User ${userRequest.id} can't confirm because he is not the seller")
         }
@@ -162,14 +162,14 @@ class TransactionServiceImpl @Autowired constructor(
     }
 
     private fun validateElapseTimeCreation(transaction: Transaction) {
-        if (transaction.elapsedMinutesCreation() >= 60 ) {
+        if (transaction.elapsedMinutesCreation() >= 60) {
             transaction.cancelBySystem()
             throw Exception("The transaction was created more than an hour ago and the buyer has not paid it. The system will cancel it.")
         }
     }
 
     private fun validateElapseTimePaid(transaction: Transaction) {
-        if (transaction.elapsedMinutesPaid() >= 60 ) {
+        if (transaction.elapsedMinutesPaid() >= 60) {
             transaction.cancelBySystem()
             throw Exception("The transaction was paid more than an hour ago and the buyer has not paid it. The system will cancel it.")
         }

@@ -20,19 +20,32 @@ class SecurityConfig {
 
     @Autowired
     lateinit var userDetailsService: UserDetailsService
+
     @Autowired
     lateinit var jwtAuthenticationFilter: JwtAuthenticationFilter
+
     @Bean
     fun securityFilterChain(httpSecurity: HttpSecurity): SecurityFilterChain {
         return httpSecurity
             .csrf { it.disable() }
-            .headers { header -> header.frameOptions { it.disable() }}
+            .headers { header -> header.frameOptions { it.disable() } }
             .authorizeHttpRequests {
 
-                it.requestMatchers("/login/**", "/register/**", "/swagger-ui/**", "/api-docs/**", "/binance/**","/dolarapi/**", "/h2-console/**", "/actuator/**", "/v3/api-docs/**").permitAll() }            .authorizeHttpRequests { it.anyRequest().authenticated() }
+                it.requestMatchers(
+                    "/login/**",
+                    "/register/**",
+                    "/swagger-ui/**",
+                    "/api-docs/**",
+                    "/binance/**",
+                    "/dolarapi/**",
+                    "/h2-console/**",
+                    "/actuator/**",
+                    "/v3/api-docs/**"
+                ).permitAll()
+            }.authorizeHttpRequests { it.anyRequest().authenticated() }
 
             .userDetailsService(userDetailsService)
-            .sessionManagement{
+            .sessionManagement {
                 it.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             }
 

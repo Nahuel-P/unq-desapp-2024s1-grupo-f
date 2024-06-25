@@ -19,11 +19,13 @@ class TransactionController() {
 
     @Autowired
     private lateinit var transactionService: ITransactionService
+
     @PostMapping("/create")
-    fun create(@RequestBody transactionDTO: TransactionCreateDTO) : ResponseEntity<Any> {
+    fun create(@RequestBody transactionDTO: TransactionCreateDTO): ResponseEntity<Any> {
         return try {
             val transaction = transactionService.create(transactionDTO)
-            val transactionResponse = TransactionMapper.toResponseDTO(transaction,"Transaction created, waiting for payment by buyer")
+            val transactionResponse =
+                TransactionMapper.toResponseDTO(transaction, "Transaction created, waiting for payment by buyer")
             ResponseEntity.ok().body(transactionResponse)
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to e.message))
@@ -31,10 +33,11 @@ class TransactionController() {
     }
 
     @PutMapping("/paid")
-    fun paid(@RequestBody transactionDTO: TransactionRequestDTO) : ResponseEntity<Any>{
+    fun paid(@RequestBody transactionDTO: TransactionRequestDTO): ResponseEntity<Any> {
         return try {
             val transaction = transactionService.paid(transactionDTO)
-            val transactionResponse = TransactionMapper.toResponseDTO(transaction,"Transaction paid, waiting for confirmation by seller")
+            val transactionResponse =
+                TransactionMapper.toResponseDTO(transaction, "Transaction paid, waiting for confirmation by seller")
             ResponseEntity.ok().body(transactionResponse)
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to e.message))
@@ -42,10 +45,10 @@ class TransactionController() {
     }
 
     @PutMapping("/confirm")
-    fun confirm(@RequestBody transactionDTO: TransactionRequestDTO) : ResponseEntity<Any>{
+    fun confirm(@RequestBody transactionDTO: TransactionRequestDTO): ResponseEntity<Any> {
         return try {
             val transaction = transactionService.confirm(transactionDTO)
-            val transactionResponse = TransactionMapper.toResponseDTO(transaction,"Transaction confirmed by seller!")
+            val transactionResponse = TransactionMapper.toResponseDTO(transaction, "Transaction confirmed by seller!")
             ResponseEntity.ok().body(transactionResponse)
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to e.message))
@@ -53,10 +56,13 @@ class TransactionController() {
     }
 
     @PutMapping("/cancel")
-    fun cancel(@RequestBody transactionDTO: TransactionRequestDTO) : ResponseEntity<Any>{
+    fun cancel(@RequestBody transactionDTO: TransactionRequestDTO): ResponseEntity<Any> {
         return try {
             val transaction = transactionService.cancel(transactionDTO)
-            val transactionResponse = TransactionMapper.toResponseDTO(transaction,"Transaction cancelled by user: "+transactionDTO.idUserRequest)
+            val transactionResponse = TransactionMapper.toResponseDTO(
+                transaction,
+                "Transaction cancelled by user: " + transactionDTO.idUserRequest
+            )
             ResponseEntity.ok().body(transactionResponse)
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to e.message))
