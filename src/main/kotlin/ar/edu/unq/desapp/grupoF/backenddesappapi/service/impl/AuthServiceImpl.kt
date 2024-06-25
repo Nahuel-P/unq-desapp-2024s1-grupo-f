@@ -13,7 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.stereotype.Service
 
 @Service
-class AuthService : IAuthService {
+class AuthServiceImpl : IAuthService {
 
     @Autowired
     private lateinit var userRepository: UserRepository
