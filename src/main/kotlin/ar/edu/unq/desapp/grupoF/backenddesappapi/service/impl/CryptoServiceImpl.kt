@@ -8,7 +8,6 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.CryptocurrencyRepo
 import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.PriceHistoryRepository
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICryptoService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.client.BinanceClient
-import ar.edu.unq.desapp.grupoF.backenddesappapi.service.client.IBinanceClientService
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
@@ -24,8 +23,9 @@ class CryptoServiceImpl : ICryptoService {
     @Autowired
     private lateinit var priceHistoryRepository: PriceHistoryRepository
 
-    private var binanceClient: IBinanceClientService = BinanceClient()
-
+    @Autowired
+    private lateinit var binanceClient: BinanceClient
+    
     private val logger : Logger = LogManager.getLogger(CryptoServiceImpl::class.java)
 
     override fun getQuotes(): List<Cryptocurrency> {

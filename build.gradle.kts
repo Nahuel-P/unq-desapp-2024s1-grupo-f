@@ -64,6 +64,7 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("io.micrometer:micrometer-registry-prometheus")
 	implementation("org.springframework.boot:spring-boot-starter-cache")
+	testImplementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310")
 	runtimeOnly("com.h2database:h2")
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:${jsonWebTokenVersion}")
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:${jsonWebTokenVersion}")

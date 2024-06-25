@@ -4,15 +4,17 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.condition.EnabledIfEnvironmentVariable
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 
 @SpringBootTest
 @EnabledIfEnvironmentVariable(named = "SPRING_PROFILES_ACTIVE", matches = "dev")
 class BinanceClientTest {
 
+    @Autowired
+    private lateinit var binanceClient: BinanceClient
     @Test
     fun `returns correct cryptocurrency price when valid symbol is provided`() {
-        val binanceClient = BinanceClient()
         val symbol = CryptoSymbol.BTCUSDT
 
         val result = binanceClient.getCryptoCurrencyPrice(symbol)
@@ -36,7 +38,6 @@ class BinanceClientTest {
 
     @Test
     fun `returns correct cryptocurrency price when valid symbol is provided22`() {
-        val binanceClient = BinanceClient()
         val symbols = mutableListOf(CryptoSymbol.BTCUSDT, CryptoSymbol.ETHUSDT)
 
         val results = binanceClient.getAllCryptoCurrencyPrices(symbols)

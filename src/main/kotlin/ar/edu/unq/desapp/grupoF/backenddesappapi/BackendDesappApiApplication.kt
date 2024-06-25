@@ -7,7 +7,7 @@ import org.springframework.context.annotation.ComponentScan
 import org.springframework.scheduling.annotation.EnableScheduling
 
 @SpringBootApplication
-@ComponentScan(basePackages = ["ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl", "ar.edu.unq.desapp.grupoF.backenddesappapi.webservice", "ar.edu.unq.desapp.grupoF.backenddesappapi.repositories", "ar.edu.unq.desapp.grupoF.backenddesappapi.exception", "ar.edu.unq.desapp.grupoF.backenddesappapi.security", "ar.edu.unq.desapp.grupoF.backenddesappapi.service.client"])
+@ComponentScan(basePackages = ["ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl", "ar.edu.unq.desapp.grupoF.backenddesappapi.webservice", "ar.edu.unq.desapp.grupoF.backenddesappapi.repositories", "ar.edu.unq.desapp.grupoF.backenddesappapi.exception", "ar.edu.unq.desapp.grupoF.backenddesappapi.security", "ar.edu.unq.desapp.grupoF.backenddesappapi.service.client", "ar.edu.unq.desapp.grupoF.backenddesappapi.config"])
 @EnableScheduling
 @EnableCaching
 class BackendDesappApiApplication
