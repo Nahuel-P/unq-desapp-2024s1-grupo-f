@@ -26,22 +26,10 @@ class CryptoServiceImpl : ICryptoService {
     private val logger : Logger = LogManager.getLogger(CryptoServiceImpl::class.java)
 
     override fun getQuotes(): List<Cryptocurrency> {
-//        val cryptocurrencies = cryptocurrencyRepository.findAll()
-//        val symbols = getSymbols()
-//        val cryptoPricesDTO = binanceClient.getAllCryptoCurrencyPrices(symbols)
-//        cryptoPricesDTO.forEach { priceDTO ->
-//            val crypto = cryptocurrencies.find { it.name == priceDTO.symbol }
-//            crypto?.price = priceDTO.price!!
-//        }
-//        return cryptocurrencies
         return cryptocurrencyRepository.findAll()
     }
 
 
-
-/*
-    @Scheduled(fixedRate = 600000)
-*/
     @Scheduled(fixedRate = 60000)
     override fun updateQuotes() {
         val oldPrices = getSystemQuotes()
