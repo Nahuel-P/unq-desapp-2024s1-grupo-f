@@ -3,7 +3,6 @@ package ar.edu.unq.desapp.grupoF.backenddesappapi.webservice
 import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.PriceHistoryMapper
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IPriceHistoryService
-import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.OrderResponseDTO
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.PriceHistoryResponseDTO
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
