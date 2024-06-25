@@ -3,7 +3,13 @@ package ar.edu.unq.desapp.grupoF.backenddesappapi.webservice
 import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.OrderMapper
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IOrderService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.OrderRequestDTO
+import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.OrderResponseDTO
+import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserResponseDTO
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.ArraySchema
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
@@ -20,7 +26,10 @@ class OrderController {
     private lateinit var orderService: IOrderService
     private val logger: Logger = LogManager.getLogger(OrderController::class.java)
 
-    @Operation (summary = "Create a new order")
+    @Operation(summary = "Create a new order", responses = [
+        ApiResponse(responseCode = "200", description = "Order created", content = [Content(mediaType = "application/json",
+            schema = Schema(implementation = OrderResponseDTO::class))]),
+        ApiResponse(responseCode = "400", description = "Bad Request", content = [Content()])])
     @PostMapping("/create")
     fun createOrder(@RequestBody orderDTO: OrderRequestDTO): ResponseEntity<Any> {
         return try {
@@ -33,7 +42,14 @@ class OrderController {
         }
     }
 
-    @Operation (summary = "Get all active orders")
+    @Operation(summary = "Get all active orders", responses = [
+        ApiResponse(responseCode = "200", description = "List of all active orders", content = [
+            Content(mediaType = "application/json",
+                array = ArraySchema(schema = Schema(implementation = OrderResponseDTO::class))
+            )
+        ]),
+        ApiResponse(responseCode = "400", description = "Bad Request", content = [Content()])
+    ])
     @GetMapping("/activeOrders")
     fun getActiveOrders(): ResponseEntity<Any> {
         return try {
