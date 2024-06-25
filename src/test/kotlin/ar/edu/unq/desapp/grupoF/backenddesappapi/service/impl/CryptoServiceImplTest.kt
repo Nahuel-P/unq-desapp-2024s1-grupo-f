@@ -21,9 +21,6 @@ class CryptoServiceImplTest {
     @MockBean
     private lateinit var cryptocurrencyRepository: CryptocurrencyRepository
 
-    @MockBean
-    private lateinit var priceHistoryRepository: PriceHistoryRepository
-
     @Autowired
     private lateinit var cryptoService: CryptoServiceImpl
 
