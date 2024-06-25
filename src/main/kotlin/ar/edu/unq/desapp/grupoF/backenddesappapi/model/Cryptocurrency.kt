@@ -19,12 +19,6 @@ class Cryptocurrency {
 
     var lastPrice: Double = 0.00
 
-//    @JsonManagedReference
-//    @OneToMany(mappedBy = "cryptocurrency", cascade = [CascadeType.ALL],fetch = FetchType.EAGER )
-//    @OneToMany
-//    @OneToMany(mappedBy = "cryptocurrency", cascade = [CascadeType.ALL],fetch = FetchType.EAGER )
-//    var priceHistory: MutableList<PriceHistory> = mutableListOf()
-
     fun lastPrice(): Double? {
         return lastPrice
     }
