@@ -7,7 +7,6 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.UserVolumeReport
 import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.UserRepository
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICommonService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IUserService
-import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserCreateDTO
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
@@ -22,13 +21,6 @@ class UserServiceImpl @Autowired constructor(
 ) : IUserService {
 
     val logger: Logger = LogManager.getLogger(UserMapper::class.java)
-//    override fun registerUser(userDTO: UserCreateDTO): User {
-//        if (userRepository.existsByEmail(userDTO.email!!)) {
-//            throw Exception("User with email ${userDTO.email} already exists")
-//        }
-//        val user = UserMapper.toModel(userDTO)
-//        return userRepository.save(user)
-//    }
 
     override fun getUsers(): List<User> {
         return userRepository.findAll()
