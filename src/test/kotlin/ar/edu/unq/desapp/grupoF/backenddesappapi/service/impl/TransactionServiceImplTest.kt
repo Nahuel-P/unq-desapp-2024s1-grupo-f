@@ -217,35 +217,6 @@ class TransactionServiceImplTest {
         assertEquals(TransactionStatus.CANCELLED_BY_USER, transaction.status)
     }
 
-
-//    @Test
-//    fun `confirm should update transaction status to CONFIRMED when transaction status is PAID`() {
-//        val transactionDTO = mock(TransactionRequestDTO::class.java)
-//        val user = mock(User::class.java)
-//
-//        val transaction = TransactionBuilder()
-//            .withOrder(Order())
-//            .withCounterParty(user)
-//            .withEntryTime(LocalDateTime.now())
-//            .build()
-//
-//        doReturn(user).`when`(user).increaseScore(20)
-//        doReturn(user).`when`(user).increaseTransactions()
-//        `when`(commonService.getUser(transactionDTO.idUserRequest)).thenReturn(user)
-//        `when`(commonService.getTransaction(transactionDTO.idTransaction)).thenReturn(transaction)
-//        `when`(transactionRepository.save(any(Transaction::class.java))).thenAnswer { it.arguments[0] }
-//        service.paid(transactionDTO)
-//
-//        `when`(commonService.getUser(transactionDTO.idUserRequest)).thenReturn(user)
-//        `when`(commonService.getTransaction(transactionDTO.idTransaction)).thenReturn(transaction)
-//        `when`(transactionRepository.save(any(Transaction::class.java))).thenAnswer { it.arguments[0] }
-//
-//        service.confirm(transactionDTO)
-//
-//        verify(transactionRepository, times(2)).save(transaction)
-//        assertEquals(TransactionStatus.CONFIRMED, transaction.status)
-//    }
-
     @Test
     fun `confirm should throw exception when transaction status is not PAID`() {
         val transactionDTO = mock(TransactionRequestDTO::class.java)
@@ -266,4 +237,35 @@ class TransactionServiceImplTest {
 
         assertEquals("Transaction status is not PAID", exception.message)
     }
+
+    @Test
+    fun `confirm updates transaction status to CONFIRMED when transaction status is PAID`() {
+        val transactionDTO = mock(TransactionRequestDTO::class.java)
+        val user = mock(User::class.java)
+
+        val transaction = TransactionBuilder()
+            .withOrder(Order())
+            .withCounterParty(user)
+            .withEntryTime(LocalDateTime.now())
+            .build()
+
+        `when`(commonService.getUser(transactionDTO.idUserRequest)).thenReturn(user)
+        `when`(commonService.getTransaction(transactionDTO.idTransaction)).thenReturn(transaction)
+        `when`(transactionRepository.save(any(Transaction::class.java))).thenAnswer { it.arguments[0] }
+        service.paid(transactionDTO)
+
+        `when`(commonService.getUser(transactionDTO.idUserRequest)).thenReturn(user)
+        `when`(commonService.getTransaction(transactionDTO.idTransaction)).thenReturn(transaction)
+        `when`(transactionRepository.save(any(Transaction::class.java))).thenAnswer { it.arguments[0] }
+
+        `when`(user.increaseScore(anyInt())).thenReturn(user)
+        `when`(user.increaseTransactions()).thenReturn(user)
+
+        service.confirm(transactionDTO)
+
+        verify(transactionRepository, times(2)).save(transaction)
+        assertEquals(TransactionStatus.CONFIRMED, transaction.status)
+    }
+
+
 }

@@ -17,6 +17,7 @@ import org.junit.jupiter.api.assertThrows
 import org.mockito.ArgumentMatchers.any
 import org.mockito.Mockito
 import org.mockito.Mockito.verify
+import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
@@ -97,4 +98,43 @@ class OrderServiceImplTest {
         assertEquals(order, result)
         verify(orderRepository).save(order)
     }
+    @Test
+    fun `createOrder throws exception when price is above margin`() {
+        val orderDTO = OrderRequestDTO(1L, CryptoSymbol.BTCUSDT, 1.0, 10.5, IntentionType.BUY)
+        val user = Mockito.mock(User::class.java)
+        val cryptocurrency = CryptocurrencyBuilder().withName(CryptoSymbol.BTCUSDT).withPrice(10.0).build()
+
+        Mockito.`when`(commonService.getUser(orderDTO.userId)).thenReturn(user)
+        Mockito.`when`(commonService.getCrypto(orderDTO.cryptocurrency)).thenReturn(cryptocurrency)
+
+        assertThrows<Exception> {
+            orderService.createOrder(orderDTO)
+        }
+    }
+
+    @Test
+    fun `create order throws exception when price is below margin`() {
+        val orderDTO = OrderRequestDTO(1L, CryptoSymbol.BTCUSDT, 1.0, 9.5, IntentionType.BUY)
+        val user = Mockito.mock(User::class.java)
+        val cryptocurrency = CryptocurrencyBuilder().withName(CryptoSymbol.BTCUSDT).withPrice(10.0).build()
+
+        Mockito.`when`(commonService.getUser(orderDTO.userId)).thenReturn(user)
+        Mockito.`when`(commonService.getCrypto(orderDTO.cryptocurrency)).thenReturn(cryptocurrency)
+
+        assertThrows<Exception> {
+            orderService.createOrder(orderDTO)
+        }
+    }
+
+    @Test
+    fun `getActiveOrders throws exception when no active orders exist`() {
+        `when`(orderRepository.findByIsActiveTrue()).thenReturn(emptyList())
+
+        val exception = assertThrows<Exception> {
+            orderService.getActiveOrders()
+        }
+
+        assertEquals("There are no active orders", exception.message)
+    }
+
 }

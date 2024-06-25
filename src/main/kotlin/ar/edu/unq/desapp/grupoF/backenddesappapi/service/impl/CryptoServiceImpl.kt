@@ -8,6 +8,7 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.CryptocurrencyRepo
 import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.PriceHistoryRepository
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICryptoService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.client.BinanceClient
+import ar.edu.unq.desapp.grupoF.backenddesappapi.service.client.IBinanceClientService
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
@@ -23,21 +24,18 @@ class CryptoServiceImpl : ICryptoService {
     @Autowired
     private lateinit var priceHistoryRepository: PriceHistoryRepository
 
-    private val binanceClient = BinanceClient()
+    private var binanceClient: IBinanceClientService = BinanceClient()
+
     private val logger : Logger = LogManager.getLogger(CryptoServiceImpl::class.java)
 
     override fun getQuotes(): List<Cryptocurrency> {
         return cryptocurrencyRepository.findAll()
     }
 
-
-
-
-
-
 //    @Scheduled(fixedRate = 60000)
     @Scheduled(fixedRate = 600000)
     @CacheEvict(value = ["quotes"], allEntries = true)
+
     override fun updateQuotes() {
         val oldPrices = getSystemQuotes()
 
@@ -64,6 +62,5 @@ class CryptoServiceImpl : ICryptoService {
     private fun getSymbols(): MutableList<CryptoSymbol> {
         return cryptocurrencyRepository.findAll().map { it.name!! }.toMutableList()
     }
-
 
 }
