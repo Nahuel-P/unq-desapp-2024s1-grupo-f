@@ -1,80 +1,100 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl
-import ar.edu.unq.desapp.grupoF.backenddesappapi.BackendDesappApiApplication
+
+import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.OrderMapper
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Order
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.CryptocurrencyBuilder
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.OrderBuilder
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.OrderRepository
-import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICryptoService
-import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IUserService
-import ar.edu.unq.desapp.grupoF.backenddesappapi.service.client.DolarApiClient
+import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICommonService
+import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.OrderRequestDTO
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
+import org.mockito.ArgumentMatchers.any
+import org.mockito.Mockito
+import org.mockito.Mockito.verify
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean
+import java.util.*
 
-@SpringBootTest(classes = [BackendDesappApiApplication::class])
+@SpringBootTest
+
 class OrderServiceImplTest {
 
     @MockBean
     private lateinit var orderRepository: OrderRepository
 
     @MockBean
-    private lateinit var userService: IUserService
-
-    @MockBean
-    private lateinit var cryptoService: ICryptoService
-
-    @MockBean
-    private lateinit var cotizationService: DolarApiClient
+    private lateinit var commonService: ICommonService
 
     @Autowired
-    private lateinit var service: OrderServiceImpl
+    private lateinit var orderService: OrderServiceImpl
 
+    @Test
+    fun `createOrder creates a new order`() {
+        val orderServiceImpl = Mockito.spy(orderService)
 
-//    @Test
-//    fun `createOrder should return a new Order`() {
-//        val orderDTO = mock(OrderRequestDTO::class.java)
-//        val user = mock(User::class.java)
-//        val cryptocurrency = mock(Cryptocurrency::class.java)
-//        val order = Order()
-//
-//        `when`(orderDTO.type).thenReturn(IntentionType.BUY)
-//        `when`(userService.getUser(orderDTO.userId)).thenReturn(user)
-//        `when`(cryptoService.getCrypto(orderDTO.cryptocurrency)).thenReturn(cryptocurrency)
-//        `when`(cotizationService.getRateUsdToArs()).thenReturn(ExchangeRateDTO(CryptoSymbol.BTCUSDT, "cripto", "Cripto", 1132.0, 1152.0, "2024-10-10"))
-//        `when`(orderRepository.save(any(Order::class.java))).thenReturn(order)
-//
-//        val result = service.createOrder(orderDTO)
-//
-//        assertEquals(user, result.ownerUser)
-//        assertEquals(cryptocurrency, result.cryptocurrency)
-//        assertEquals(IntentionType.BUY, result.type)
-//        assertTrue(result.priceARS!! in 1132.0..1172.0)
-//    }
-//
-//    @Test
-//    fun `getActiveOrders should return active orders`() {
-//        val order = mock(Order::class.java)
-//        `when`(orderRepository.findByIsActiveTrue()).thenReturn(listOf(order))
-//
-//        val result = service.getActiveOrders()
-//
-//        assertTrue(result.contains(order))
-//    }
-//
-//    @Test
-//    fun `getOrder should return the correct order`() {
-//        val order = mock(Order::class.java)
-//        `when`(orderRepository.findById(any(Long::class.java))).thenReturn(Optional.of(order))
-//
-//        val result = service.getOrder(1L)
-//
-//        assertEquals(order, result)
-//    }
-//
-//    @Test
-//    fun `update should return the updated order`() {
-//        val order = mock(Order::class.java)
-//        `when`(orderRepository.save(any(Order::class.java))).thenReturn(order)
-//
-//        val result = service.update(order)
-//
-//        assertEquals(order, result)
-//    }
+        val cryptocurrency = CryptocurrencyBuilder().withName(CryptoSymbol.BTCUSDT).withPrice(50000.0).build()
+        val orderDTO = OrderRequestDTO(1L, CryptoSymbol.BTCUSDT, 1.0, 50000.0, IntentionType.BUY)
+        val user = Mockito.mock(User::class.java)
+        val order = OrderMapper.toModel(orderDTO, user, cryptocurrency, orderDTO.type, 50000.0)
+        Mockito.`when`(user.id).thenReturn(1L)
+        Mockito.`when`(commonService.getUser(orderDTO.userId)).thenReturn(user)
+        Mockito.`when`(commonService.getCrypto(orderDTO.cryptocurrency)).thenReturn(cryptocurrency)
+        Mockito.`when`(orderRepository.save(any(Order::class.java))).thenReturn(order)
+
+        val result = orderServiceImpl.createOrder(orderDTO)
+
+        assertNotNull(result)
+        assertEquals(orderDTO.userId, result.ownerUser?.id)
+        assertEquals(orderDTO.cryptocurrency, result.cryptocurrency?.name)
+        assertEquals(orderDTO.amount, result.amount)
+        assertEquals(orderDTO.price, result.price)
+        assertEquals(orderDTO.type, result.type)
+    }
+
+    @Test
+    fun `getActiveOrders returns all active orders`() {
+        val order1 = OrderBuilder().build()
+        val order2 = OrderBuilder().build()
+        val orders = listOf(order1, order2)
+        Mockito.`when`(orderRepository.findByIsActiveTrue()).thenReturn(orders)
+
+        val result = orderService.getActiveOrders()
+
+        assertEquals(orders, result)
+    }
+
+    @Test
+    fun `getOrder returns order by id`() {
+        val order = OrderBuilder().build()
+        Mockito.`when`(orderRepository.findById(1L)).thenReturn(Optional.of(order))
+
+        val result = orderService.getOrder(1L)
+
+        assertEquals(order, result)
+    }
+
+    @Test
+    fun `getOrder throws exception when order not found`() {
+        Mockito.`when`(orderRepository.findById(1L)).thenReturn(Optional.empty())
+
+        assertThrows<Exception> { orderService.getOrder(1L) }
+    }
+
+    @Test
+    fun `update updates order`() {
+        val order = OrderBuilder().build()
+        Mockito.`when`(orderRepository.save(order)).thenReturn(order)
+
+        val result = orderService.update(order)
+
+        assertEquals(order, result)
+        verify(orderRepository).save(order)
+    }
 }
