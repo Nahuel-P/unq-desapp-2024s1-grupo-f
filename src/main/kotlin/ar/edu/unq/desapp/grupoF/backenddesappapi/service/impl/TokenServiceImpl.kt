@@ -2,16 +2,16 @@ package ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 import io.jsonwebtoken.Claims
-import org.springframework.security.core.userdetails.UserDetails
-import org.springframework.stereotype.Service
-import java.util.*
 import io.jsonwebtoken.Jwts
 import io.jsonwebtoken.io.Decoders
 import io.jsonwebtoken.security.Keys
+import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.stereotype.Service
+import java.util.*
 import javax.crypto.SecretKey
 
 @Service
-class TokenService {
+class TokenServiceImpl {
 
     val secretKey = "c4aeb476ac78587f3d1a9f2dbe639ba2f1278e92b75e3c6a1e94b1a9f1dc9b18"
 
