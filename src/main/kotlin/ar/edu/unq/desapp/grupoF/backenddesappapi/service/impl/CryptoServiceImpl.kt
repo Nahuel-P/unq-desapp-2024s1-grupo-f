@@ -58,7 +58,7 @@ class CryptoServiceImpl : ICryptoService {
     }
 
     private fun getSymbols(): MutableList<CryptoSymbol> {
-        return cryptocurrencyRepository.findAll().map { it.name!! }.toMutableList()
+        return CryptoSymbol.entries.toMutableList()
     }
 
 }
