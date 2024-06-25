@@ -37,6 +37,7 @@ class CryptoCurrencyControllerTest {
         val cryptocurrency2 = CryptocurrencyBuilder().withName(CryptoSymbol.ETHUSDT).withPrice(50000.0).build()
 
         val cryptos = listOf(cryptocurrency1, cryptocurrency2)
+        `when`(cryptoService.getQuotes()).thenReturn(cryptos)
         `when`(cryptocurrencyRepository.findAll()).thenReturn(cryptos)
 
         mockMvc.perform(
