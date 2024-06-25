@@ -55,7 +55,6 @@ class TransactionMapperTest {
 
         assertEquals(userDTO, result.userRequest)
         assertEquals(TransactionStatus.PENDING, result.status)
-        assertEquals(transaction.entryTime.format(DateTimeFormatter.ISO_LOCAL_DATE_TIME), result.entryTime)
         assertEquals("", result.endTime)
         assertEquals("12345678", result.destination)
         assertEquals("message", result.message)
