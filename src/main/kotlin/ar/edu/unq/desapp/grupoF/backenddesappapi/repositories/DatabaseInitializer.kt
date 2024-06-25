@@ -101,68 +101,78 @@ fun generateDataForCryptocurrency() {
     }
 
     fun generateDataForOrders() {
+        val user1 = userRepository.findById(1L).orElse(null)
+        val user2 = userRepository.findById(2L).orElse(null)
+        val btcusdt = cryptocurrencyRepository.findByName(CryptoSymbol.BTCUSDT)
+        val bnbusdt = cryptocurrencyRepository.findByName(CryptoSymbol.BNBUSDT)
+        val cakeusdt = cryptocurrencyRepository.findByName(CryptoSymbol.CAKEUSDT)
 
-        orderRepository.save(
-            OrderBuilder()
-                .withOwnerUser(userRepository.findById(1L).get())
-                .withCryptocurrency(cryptocurrencyRepository.findByName(CryptoSymbol.BTCUSDT)!!)
-                .withAmount(0.02)
-                .withPrice(68315.99)
-                .withType(IntentionType.BUY)
-//                .withPriceARS(80407920.23).build()
-                .withPriceARS((0.02*68315.99)*1270.0).build()
-        )
+        if (user1 != null && btcusdt != null) {
+            orderRepository.save(
+                OrderBuilder()
+                    .withOwnerUser(user1)
+                    .withCryptocurrency(btcusdt)
+                    .withAmount(0.02)
+                    .withPrice(68315.99)
+                    .withType(IntentionType.BUY)
+                    .withPriceARS((0.02*68315.99)*1270.0).build()
+            )
+        }
 
-        orderRepository.save(
-            OrderBuilder()
-                .withOwnerUser(userRepository.findById(2L).get())
-                .withCryptocurrency(cryptocurrencyRepository.findByName(CryptoSymbol.BTCUSDT)!!)
-                .withAmount(1.0)
-                .withPrice(68314.0)
-                .withType(IntentionType.BUY)
-//                .withPriceARS(80405578.0).build()
-                .withPriceARS((1.0*68315.99)*1270.0).build()
-        )
+        if (user2 != null && btcusdt != null) {
+            orderRepository.save(
+                OrderBuilder()
+                    .withOwnerUser(user2)
+                    .withCryptocurrency(btcusdt)
+                    .withAmount(1.0)
+                    .withPrice(68314.0)
+                    .withType(IntentionType.BUY)
+                    .withPriceARS((1.0*68315.99)*1270.0).build()
+            )
+        }
 
-        orderRepository.save(
-            OrderBuilder()
-                .withOwnerUser(userRepository.findById(2L).get())
-                .withCryptocurrency(cryptocurrencyRepository.findByName(CryptoSymbol.BNBUSDT)!!)
-                .withAmount(1.0)
-                .withPrice(595.10)
-                .withType(IntentionType.SELL)
-//                .withPriceARS(700432.7).build()
-                .withPriceARS((1.0*595.10)*1270.0).build()
-        )
+        if (user2 != null && bnbusdt != null) {
+            orderRepository.save(
+                OrderBuilder()
+                    .withOwnerUser(user2)
+                    .withCryptocurrency(bnbusdt)
+                    .withAmount(1.0)
+                    .withPrice(595.10)
+                    .withType(IntentionType.SELL)
+                    .withPriceARS((1.0*595.10)*1270.0).build()
+            )
+        }
 
-        orderRepository.save(
-            OrderBuilder()
-                .withOwnerUser(userRepository.findById(2L).get())
-                .withCryptocurrency(cryptocurrencyRepository.findByName(CryptoSymbol.CAKEUSDT)!!)
-                .withAmount(2.0)
-                .withPrice(5.54)
-                .withType(IntentionType.SELL)
-//                .withPriceARS(6520.58).build()
-                .withPriceARS((2.0*5.54)*1270.0).build()
-
-        )
+        if (user2 != null && cakeusdt != null) {
+            orderRepository.save(
+                OrderBuilder()
+                    .withOwnerUser(user2)
+                    .withCryptocurrency(cakeusdt)
+                    .withAmount(2.0)
+                    .withPrice(5.54)
+                    .withType(IntentionType.SELL)
+                    .withPriceARS((2.0*5.54)*1270.0).build()
+            )
+        }
     }
 
     fun generateDataForTransactions() {
-        val user1 = userRepository.findById(1L).get()
-        val user2 = userRepository.findById(2L).get()
+        val user1 = userRepository.findById(1L).orElse(null)
+        val user2 = userRepository.findById(2L).orElse(null)
 
-        val order1 = orderRepository.findById(1L).get()
-        val order2 = orderRepository.findById(2L).get()
+        val order1 = orderRepository.findById(1L).orElse(null)
+        val order2 = orderRepository.findById(2L).orElse(null)
 
-        val transaction1 = TransactionBuilder().withOrder(order1).withCounterParty(user2).withEntryTime(LocalDateTime.now().minusHours(2)).build()
-        transaction1.order!!.disable()
-        val transaction2 = TransactionBuilder().withOrder(order2).withCounterParty(user1).build()
-        transaction2.order!!.disable()
+        if (user1 != null && user2 != null && order1 != null && order2 != null) {
+            val transaction1 = TransactionBuilder().withOrder(order1).withCounterParty(user2).withEntryTime(LocalDateTime.now().minusHours(2)).build()
+            transaction1.order!!.disable()
+            val transaction2 = TransactionBuilder().withOrder(order2).withCounterParty(user1).build()
+            transaction2.order!!.disable()
 
-        transactionRepository.save(transaction1)
-        orderRepository.save(order1)
-        transactionRepository.save(transaction2)
-        orderRepository.save(order2)
+            transactionRepository.save(transaction1)
+            orderRepository.save(order1)
+            transactionRepository.save(transaction2)
+            orderRepository.save(order2)
+        }
     }
 }
