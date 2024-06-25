@@ -64,13 +64,13 @@ dependencies {
 	implementation("org.springframework.boot:spring-boot-starter-actuator")
 	implementation("io.micrometer:micrometer-registry-prometheus")
 	implementation("org.springframework.boot:spring-boot-starter-cache")
-	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	runtimeOnly("com.h2database:h2")
-	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
-	testImplementation("org.springframework.boot:spring-boot-starter-test")
-	testImplementation("com.tngtech.archunit:archunit-junit5:$archUnitVersion")
 	runtimeOnly("io.jsonwebtoken:jjwt-jackson:${jsonWebTokenVersion}")
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:${jsonWebTokenVersion}")
+	testImplementation("org.springframework.boot:spring-boot-starter-test")
+	testImplementation("com.tngtech.archunit:archunit-junit5:$archUnitVersion")
+	developmentOnly("org.springframework.boot:spring-boot-devtools")
+	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 }
 
 tasks.withType<KotlinCompile> {
