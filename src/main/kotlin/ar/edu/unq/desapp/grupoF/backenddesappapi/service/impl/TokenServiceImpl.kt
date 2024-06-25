@@ -20,7 +20,7 @@ class TokenServiceImpl {
             .builder()
             .subject(user.email)
             .issuedAt(Date(System.currentTimeMillis()))
-            .expiration(Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000))
+            .expiration(Date(System.currentTimeMillis() + 15 * 60 * 1000))
             .signWith(getSigninKey())
             .compact()
         return token
