@@ -68,34 +68,36 @@ fun generateDataForCryptocurrency() {
 
 
     fun generateDataForPriceHistory() {
-        val dotusdt = cryptocurrencyRepository.findByName(CryptoSymbol.DOTUSDT)!!.name
-        val ethusdt = cryptocurrencyRepository.findByName(CryptoSymbol.ETHUSDT)!!.name
-        val btcusdt = cryptocurrencyRepository.findByName(CryptoSymbol.BTCUSDT)!!.name
-        val bnbusdt = cryptocurrencyRepository.findByName(CryptoSymbol.BNBUSDT)!!.name
-        val cakeusdt = cryptocurrencyRepository.findByName(CryptoSymbol.CAKEUSDT)!!.name
+        val dotusdt = cryptocurrencyRepository.findByName(CryptoSymbol.DOTUSDT)?.name
+        val ethusdt = cryptocurrencyRepository.findByName(CryptoSymbol.ETHUSDT)?.name
+        val btcusdt = cryptocurrencyRepository.findByName(CryptoSymbol.BTCUSDT)?.name
+        val bnbusdt = cryptocurrencyRepository.findByName(CryptoSymbol.BNBUSDT)?.name
+        val cakeusdt = cryptocurrencyRepository.findByName(CryptoSymbol.CAKEUSDT)?.name
 
-        priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(dotusdt).withPrice(6.89900000).withPriceTime(LocalDateTime.now().minusHours(1)).build())
-        priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(dotusdt).withPrice(7.0).withPriceTime(LocalDateTime.now().minusHours(2)).build())
-        priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(ethusdt).withPrice(3760.77).withPriceTime(LocalDateTime.now().minusHours(1)).build())
-        priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(ethusdt).withPrice(3760.47).withPriceTime(LocalDateTime.now().minusHours(2)).build())
-        priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(bnbusdt).withPrice(586.4).withPriceTime(LocalDateTime.now().minusHours(1)).build())
-        priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(bnbusdt).withPrice(536.4).withPriceTime(LocalDateTime.now().minusHours(2)).build())
-        priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(cakeusdt).withPrice(3.18).withPriceTime(LocalDateTime.now().minusHours(1)).build())
-        priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(cakeusdt).withPrice(2.88).withPriceTime(LocalDateTime.now().minusHours(2)).build())
+        if (dotusdt != null && ethusdt != null && btcusdt != null && bnbusdt != null && cakeusdt != null) {
+            priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(dotusdt).withPrice(6.89900000).withPriceTime(LocalDateTime.now().minusHours(1)).build())
+            priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(dotusdt).withPrice(7.0).withPriceTime(LocalDateTime.now().minusHours(2)).build())
+            priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(ethusdt).withPrice(3760.77).withPriceTime(LocalDateTime.now().minusHours(1)).build())
+            priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(ethusdt).withPrice(3760.47).withPriceTime(LocalDateTime.now().minusHours(2)).build())
+            priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(bnbusdt).withPrice(586.4).withPriceTime(LocalDateTime.now().minusHours(1)).build())
+            priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(bnbusdt).withPrice(536.4).withPriceTime(LocalDateTime.now().minusHours(2)).build())
+            priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(cakeusdt).withPrice(3.18).withPriceTime(LocalDateTime.now().minusHours(1)).build())
+            priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(cakeusdt).withPrice(2.88).withPriceTime(LocalDateTime.now().minusHours(2)).build())
 
-        var initialPrice = 64973.42
-        val secureRandom = SecureRandom()
-        for (i in 1..(30 * 6)) {
-            val priceTime = LocalDateTime.now().minusMinutes(10L * i)
-            val priceChange = -0.3 + secureRandom.nextDouble() * (0.5 - (-0.3))
-            val price = initialPrice + priceChange
+            var initialPrice = 64973.42
+            val secureRandom = SecureRandom()
+            for (i in 1..(30 * 6)) {
+                val priceTime = LocalDateTime.now().minusMinutes(10L * i)
+                val priceChange = -0.3 + secureRandom.nextDouble() * (0.5 - (-0.3))
+                val price = initialPrice + priceChange
 
-            priceHistoryRepository.save(PriceHistoryBuilder()
-                .withCryptocurrency(btcusdt)
-                .withPrice(price)
-                .withPriceTime(priceTime)
-                .build())
-            initialPrice = price
+                priceHistoryRepository.save(PriceHistoryBuilder()
+                    .withCryptocurrency(btcusdt)
+                    .withPrice(price)
+                    .withPriceTime(priceTime)
+                    .build())
+                initialPrice = price
+            }
         }
     }
 
