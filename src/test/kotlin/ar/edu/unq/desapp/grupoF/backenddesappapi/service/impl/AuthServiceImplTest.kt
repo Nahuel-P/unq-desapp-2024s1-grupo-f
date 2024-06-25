@@ -80,15 +80,21 @@ class AuthServiceImplTest {
         assertEquals("jwt", result)
     }
 
-//    @Test
-//    fun `login should throw exception when credentials are invalid`() {
-//        val loginDTO = LoginRequestDTO("test@test.com", "Password!111")
-//        val encodedPassword = "Password!1"
-//        val user = UserBuilder().withEmail("test@test.com").withPassword(encodedPassword).build()
-//
-//        Mockito.`when`(userRepository.findByEmail(loginDTO.email)).thenReturn(user)
-//        Mockito.`when`(passwordEncoder.matches(anyString(), anyString())).thenReturn(false)
-//
-//        assertThrows<Exception> { authService.login(loginDTO) }
-//    }
+    @Test
+    fun `login should throw exception when user does not exist`() {
+        val loginDTO = LoginRequestDTO("nonexistent@test.com", "password")
+
+        Mockito.`when`(userRepository.findByEmail(loginDTO.email)).thenReturn(null)
+
+        assertThrows<Exception> { authService.login(loginDTO) }
+    }
+
+    @Test
+    fun `registerUser should throw exception when password is weak`() {
+        val userDto = UserCreateDTO("michael", "scott", "prisonmike@test.com", "Scranton", "weakpassword", "cvu", "walletAddress")
+
+        Mockito.`when`(userRepository.existsByEmail(userDto.email!!)).thenReturn(false)
+
+        assertThrows<Exception> { authService.registerUser(userDto) }
+    }
 }
