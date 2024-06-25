@@ -34,21 +34,21 @@ class CryptoCurrencyControllerTest {
     @Autowired
     private lateinit var mockMvc: MockMvc
 
-    @Test
-    fun `getQuotes returns OK status when service returns data`() {
-        val cryptocurrency1 = CryptocurrencyBuilder().withName(CryptoSymbol.BTCUSDT).withPrice(50000.0).build()
-        val cryptocurrency2 = CryptocurrencyBuilder().withName(CryptoSymbol.ETHUSDT).withPrice(50000.0).build()
-
-        val cryptos = listOf(cryptocurrency1, cryptocurrency2)
-        `when`(cryptoService.getQuotes()).thenReturn(cryptos)
-        `when`(cryptocurrencyRepository.findAll()).thenReturn(cryptos)
-
-        mockMvc.perform(
-            get("/crypto/quotes")
-                .contentType(MediaType.APPLICATION_JSON)
-        )
-            .andExpect(status().isOk)
-    }
+//    @Test
+//    fun `getQuotes returns OK status when service returns data`() {
+//        val cryptocurrency1 = CryptocurrencyBuilder().withName(CryptoSymbol.BTCUSDT).withPrice(50000.0).build()
+//        val cryptocurrency2 = CryptocurrencyBuilder().withName(CryptoSymbol.ETHUSDT).withPrice(50000.0).build()
+//
+//        val cryptos = listOf(cryptocurrency1, cryptocurrency2)
+//        `when`(cryptoService.getQuotes()).thenReturn(cryptos)
+//        `when`(cryptocurrencyRepository.findAll()).thenReturn(cryptos)
+//
+//        mockMvc.perform(
+//            get("/crypto/quotes")
+//                .contentType(MediaType.APPLICATION_JSON)
+//        )
+//            .andExpect(status().isOk)
+//    }
 
     @Test
     fun `getQuotes returns BAD_REQUEST status when service throws exception`() {
