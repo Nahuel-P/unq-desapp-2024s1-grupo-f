@@ -29,22 +29,22 @@ class Cryptocurrency {
         return lastPrice
     }
 
-//    fun getLast24hsQuotes(): List<PriceHistory> {
-//        val priceHistories = filterPriceHistoriesInLast24Hours()
-//        return groupPriceHistoriesByHourAndSort(priceHistories)
-//    }
+    fun getLast24hsQuotes(priceHistories: List<PriceHistory>): List<PriceHistory> {
+        val priceHistories = filterPriceHistoriesInLast24Hours(priceHistories)
+        return groupPriceHistoriesByHourAndSort(priceHistories)
+    }
 
-//    private fun filterPriceHistoriesInLast24Hours(): List<PriceHistory> {
-//        val endDateTime = LocalDateTime.now()
-//        val startDateTime = endDateTime.minusDays(1)
-//        return this.priceHistory.filter {
-//            it.priceTime.isAfter(startDateTime) && it.priceTime.isBefore(endDateTime)
-//        }
-//    }
+    private fun filterPriceHistoriesInLast24Hours(priceHistories: List<PriceHistory>): List<PriceHistory> {
+        val endDateTime = LocalDateTime.now()
+        val startDateTime = endDateTime.minusDays(1)
+        return priceHistories.filter {
+            it.priceTime.isAfter(startDateTime) && it.priceTime.isBefore(endDateTime)
+        }
+    }
 
-//    private fun groupPriceHistoriesByHourAndSort(priceHistories: List<PriceHistory>): List<PriceHistory> {
-//        return priceHistories.groupBy {
-//            it.priceTime.truncatedTo(ChronoUnit.HOURS)
-//        }.values.map { it.first() }.sortedByDescending { it.priceTime }
-//    }
+    private fun groupPriceHistoriesByHourAndSort(priceHistories: List<PriceHistory>): List<PriceHistory> {
+        return priceHistories.groupBy {
+            it.priceTime.truncatedTo(ChronoUnit.HOURS)
+        }.values.map { it.first() }.sortedByDescending { it.priceTime }
+    }
 }

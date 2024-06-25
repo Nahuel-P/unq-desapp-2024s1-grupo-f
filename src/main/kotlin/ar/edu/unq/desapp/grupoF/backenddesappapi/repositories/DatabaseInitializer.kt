@@ -85,7 +85,6 @@ fun generateDataForCryptocurrency() {
 
         var initialPrice = 64973.42
         val secureRandom = SecureRandom()
-        // Recorremos cada 10 minutos de las últimas 30 horas
         for (i in 1..(30 * 6)) {
             val priceTime = LocalDateTime.now().minusMinutes(10L * i)
             val priceChange = -0.3 + secureRandom.nextDouble() * (0.5 - (-0.3))

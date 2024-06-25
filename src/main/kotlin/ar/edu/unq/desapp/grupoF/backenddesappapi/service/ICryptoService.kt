@@ -7,6 +7,5 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.CryptocurrencyPr
 
 interface ICryptoService {
     fun getQuotes(): List<Cryptocurrency>
-    fun getLast24hsQuotes(symbol: CryptoSymbol): List<PriceHistory>
     fun updateQuotes()
 }

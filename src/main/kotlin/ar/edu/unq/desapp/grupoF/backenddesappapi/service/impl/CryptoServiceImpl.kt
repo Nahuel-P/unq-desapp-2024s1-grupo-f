@@ -37,13 +37,7 @@ class CryptoServiceImpl : ICryptoService {
         return cryptocurrencyRepository.findAll()
     }
 
-    override fun getLast24hsQuotes(symbol: CryptoSymbol): List<PriceHistory> {
-//        val cryptocurrency = cryptocurrencyRepository.findByName(symbol)
-//            ?: throw IllegalArgumentException("Cryptocurrency with symbol $symbol not found")
-//        val prices = priceHistoryRepository.findByCryptocurrency(symbol)
-//        return cryptocurrency.getLast24hsQuotes()
-        TODO()
-    }
+
 
 /*
     @Scheduled(fixedRate = 600000)

@@ -8,11 +8,10 @@ class PriceHistoryMapper {
 
     companion object {
 
-        fun toDTO(prices: List<PriceHistory>): List<PriceHistoryResponseDTO> {
-            return prices.map { priceHistory ->
-                val history = prices.map { HistoryResponseDTO(it.price, it.priceTime.toString()) }
-                PriceHistoryResponseDTO(priceHistory.cryptocurrency, history)
-            }
+        fun toDTO(prices: List<PriceHistory>): PriceHistoryResponseDTO {
+            val symbol = prices.first().cryptocurrency
+            val history = prices.map { HistoryResponseDTO(it.price, it.priceTime.toString()) }
+            return PriceHistoryResponseDTO(symbol, history)
         }
     }
 }
