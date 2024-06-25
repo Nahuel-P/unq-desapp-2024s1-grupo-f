@@ -36,7 +36,7 @@ class CryptocurrencyTest {
     @Test
     fun `lastPrice returns current price`() {
         val cryptocurrency = aCryptocurrency().build()
-        cryptocurrency.price = 100.0
+        cryptocurrency.lastPrice = 100.0
         assertEquals(100.0, cryptocurrency.lastPrice())
     }
 

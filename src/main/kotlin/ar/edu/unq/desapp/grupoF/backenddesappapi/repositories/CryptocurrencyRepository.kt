@@ -13,6 +13,6 @@ interface CryptocurrencyRepository : JpaRepository<Cryptocurrency, Long> {
 
     fun findByName(name: CryptoSymbol): Cryptocurrency?
 
-    @Query("SELECT p FROM price_history p WHERE p.cryptocurrency.name = :name AND p.priceTime BETWEEN :startDateTime AND :endDateTime")
-    fun findPriceHistoryBySymbolAndTimeBetween(name: CryptoSymbol, startDateTime: LocalDateTime, endDateTime: LocalDateTime): List<PriceHistory>
+//    @Query("SELECT p FROM price_history p WHERE p.cryptocurrency.name = :name AND p.priceTime BETWEEN :startDateTime AND :endDateTime")
+//    fun findPriceHistoryBySymbolAndTimeBetween(name: CryptoSymbol, startDateTime: LocalDateTime, endDateTime: LocalDateTime): List<PriceHistory>
 }

@@ -67,11 +67,11 @@ class Order {
     }
 
     fun isAboveMarketPrice(crypto: Cryptocurrency, order: Order): Boolean {
-        return crypto.price > order.price!!
+        return crypto.lastPrice > order.price!!
     }
 
     fun isBelowMarketPrice(crypto: Cryptocurrency, order: Order): Boolean {
-        return crypto.price < order.price!!
+        return crypto.lastPrice < order.price!!
     }
 
     fun isAboveMarginPrice(marginPercentage: Double): Boolean {

@@ -8,8 +8,6 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.CryptocurrencyRepo
 import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.PriceHistoryRepository
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICryptoService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.client.BinanceClient
-import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.CryptocurrencyPriceDTO
-import kotlinx.coroutines.runBlocking
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
@@ -40,18 +38,28 @@ class CryptoServiceImpl : ICryptoService {
     }
 
     override fun getLast24hsQuotes(symbol: CryptoSymbol): List<PriceHistory> {
-        val cryptocurrency = cryptocurrencyRepository.findByName(symbol)
-            ?: throw IllegalArgumentException("Cryptocurrency with symbol $symbol not found")
-
-        return cryptocurrency.getLast24hsQuotes()
+//        val cryptocurrency = cryptocurrencyRepository.findByName(symbol)
+//            ?: throw IllegalArgumentException("Cryptocurrency with symbol $symbol not found")
+//        val prices = priceHistoryRepository.findByCryptocurrency(symbol)
+//        return cryptocurrency.getLast24hsQuotes()
+        TODO()
     }
 
+/*
     @Scheduled(fixedRate = 600000)
-//    @Scheduled(fixedRate = 60000)
+*/
+    @Scheduled(fixedRate = 60000)
     override fun updateQuotes() {
-        val quotes = getQuotes()
         val oldPrices = getSystemQuotes()
-        cryptocurrencyRepository.saveAll(quotes)
+
+        val cryptocurrencies = getQuotes()
+        val symbols = getSymbols()
+        val cryptoPricesDTO = binanceClient.getAllCryptoCurrencyPrices(symbols)
+        cryptoPricesDTO.forEach { priceDTO ->
+            val crypto = cryptocurrencies.find { it.name == priceDTO.symbol }
+            crypto?.lastPrice = priceDTO.price!!
+        }
+        cryptocurrencyRepository.saveAll(cryptocurrencies)
         priceHistoryRepository.saveAll(oldPrices)
     }
 
@@ -59,7 +67,7 @@ class CryptoServiceImpl : ICryptoService {
         val prices = mutableListOf<PriceHistory>()
         val cryptos = cryptocurrencyRepository.findAll()
         cryptos.forEach { crypto ->
-            prices.add(PriceHistoryBuilder().withPrice(crypto.price!!).withCryptocurrency(crypto).build())
+            prices.add(PriceHistoryBuilder().withPrice(crypto.lastPrice).withCryptocurrency(crypto.name).build())
         }
         return prices
     }

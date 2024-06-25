@@ -8,11 +8,11 @@ class CryptocurrencyMapper {
     companion object {
 
         fun toDTO(cryptocurrency: Cryptocurrency): CryptocurrencyPriceDTO {
-            return CryptocurrencyPriceDTO(cryptocurrency.name!!, cryptocurrency.price)
+            return CryptocurrencyPriceDTO(cryptocurrency.name!!, cryptocurrency.lastPrice)
         }
 
         fun toDTO(cryptocurrencies: List<Cryptocurrency>): List<CryptocurrencyPriceDTO> {
-            return cryptocurrencies.map { CryptocurrencyPriceDTO(it.name!!, it.price) }
+            return cryptocurrencies.map { CryptocurrencyPriceDTO(it.name!!, it.lastPrice) }
         }
     }
 }

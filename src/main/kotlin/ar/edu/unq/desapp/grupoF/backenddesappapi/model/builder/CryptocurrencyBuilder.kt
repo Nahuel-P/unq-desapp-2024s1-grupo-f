@@ -11,7 +11,7 @@ class CryptocurrencyBuilder {
     fun build(): Cryptocurrency {
         val cryptocurrency = Cryptocurrency()
         cryptocurrency.name = this.name
-        cryptocurrency.price = this.price
+        cryptocurrency.lastPrice = this.price
         return cryptocurrency
     }
 

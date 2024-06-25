@@ -2,10 +2,11 @@ package ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Cryptocurrency
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.PriceHistory
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import java.time.LocalDateTime
 
 class PriceHistoryBuilder {
-    private var crypto: Cryptocurrency? = null
+    private var crypto: CryptoSymbol? = null
     private var price: Double = 0.00
     private var priceTime: LocalDateTime = LocalDateTime.now()
 
@@ -17,7 +18,7 @@ class PriceHistoryBuilder {
         return priceHistory
     }
 
-    fun withCryptocurrency(symbol: Cryptocurrency?): PriceHistoryBuilder {
+    fun withCryptocurrency(symbol: CryptoSymbol?): PriceHistoryBuilder {
         this.crypto = symbol
         return this
     }

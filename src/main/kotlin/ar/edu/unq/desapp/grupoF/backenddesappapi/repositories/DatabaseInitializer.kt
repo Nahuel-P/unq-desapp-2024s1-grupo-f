@@ -68,11 +68,11 @@ fun generateDataForCryptocurrency() {
 
 
     fun generateDataForPriceHistory() {
-        val dotusdt = cryptocurrencyRepository.findByName(CryptoSymbol.DOTUSDT)
-        val ethusdt = cryptocurrencyRepository.findByName(CryptoSymbol.ETHUSDT)
-        val btcusdt = cryptocurrencyRepository.findByName(CryptoSymbol.BTCUSDT)
-        val bnbusdt = cryptocurrencyRepository.findByName(CryptoSymbol.BNBUSDT)
-        val cakeusdt = cryptocurrencyRepository.findByName(CryptoSymbol.CAKEUSDT)
+        val dotusdt = cryptocurrencyRepository.findByName(CryptoSymbol.DOTUSDT)!!.name
+        val ethusdt = cryptocurrencyRepository.findByName(CryptoSymbol.ETHUSDT)!!.name
+        val btcusdt = cryptocurrencyRepository.findByName(CryptoSymbol.BTCUSDT)!!.name
+        val bnbusdt = cryptocurrencyRepository.findByName(CryptoSymbol.BNBUSDT)!!.name
+        val cakeusdt = cryptocurrencyRepository.findByName(CryptoSymbol.CAKEUSDT)!!.name
 
         priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(dotusdt).withPrice(6.89900000).withPriceTime(LocalDateTime.now().minusHours(1)).build())
         priceHistoryRepository.save(PriceHistoryBuilder().withCryptocurrency(dotusdt).withPrice(7.0).withPriceTime(LocalDateTime.now().minusHours(2)).build())

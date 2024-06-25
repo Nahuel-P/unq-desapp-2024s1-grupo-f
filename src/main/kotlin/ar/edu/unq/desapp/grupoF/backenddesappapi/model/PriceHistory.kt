@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.model
 
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import com.fasterxml.jackson.annotation.JsonBackReference
 import jakarta.persistence.*
 import java.time.LocalDateTime
@@ -11,10 +12,8 @@ class PriceHistory {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null
 
-    @JsonBackReference
-    @ManyToOne
-    @JoinColumn(name = "cryptocurrency_id")
-    var cryptocurrency: Cryptocurrency? = null
+    @Enumerated(EnumType.STRING)
+    var cryptocurrency: CryptoSymbol? = null
 
     var price: Double = 0.00
 
