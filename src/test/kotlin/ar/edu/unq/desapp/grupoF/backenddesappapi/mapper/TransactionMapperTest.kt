@@ -56,7 +56,7 @@ class TransactionMapperTest {
         Mockito.`when`(transaction.status).thenReturn(status)
         Mockito.`when`(transaction.entryTime).thenReturn(entryTime)
 
-        val result = TransactionMapper.toResponseDTO(transaction)
+        val result = TransactionMapper.toBuyResponseDTO(transaction)
 
         assertEquals(status, result.status)
         assertEquals(entryTime, result.entryTime)

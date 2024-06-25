@@ -9,8 +9,5 @@ interface ITransactionService {
     fun paid(transactionDTO: TransactionRequestDTO): Transaction
     fun confirm(transactionDTO: TransactionRequestDTO): Transaction
     fun cancel(transactionDTO: TransactionRequestDTO): Transaction
-//    fun getTransaction(id: Long): Transaction
-//    fun getTransactionBy(userId: Long, startDate: LocalDateTime, endDate: LocalDateTime): Any
-
 
 }
