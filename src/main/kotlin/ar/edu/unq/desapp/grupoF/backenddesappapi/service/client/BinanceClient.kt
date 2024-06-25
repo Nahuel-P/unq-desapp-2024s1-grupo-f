@@ -8,8 +8,9 @@ import org.springframework.web.client.RestTemplate
 
 @Service
 @Profile("dev")
-class BinanceClient(private val restTemplate: RestTemplate) : IBinanceClientService{
+class BinanceClient : IBinanceClientService{
 
+    private var restTemplate: RestTemplate = RestTemplate()
     private var baseURL: String = "https://api.binance.com/api/v3"
 
     override fun getCryptoCurrencyPrice(symbol: CryptoSymbol): CryptocurrencyPriceDTO {

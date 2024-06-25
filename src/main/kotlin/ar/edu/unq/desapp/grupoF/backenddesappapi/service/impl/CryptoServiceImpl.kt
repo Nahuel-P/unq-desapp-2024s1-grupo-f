@@ -23,8 +23,7 @@ class CryptoServiceImpl : ICryptoService {
     @Autowired
     private lateinit var priceHistoryRepository: PriceHistoryRepository
 
-    @Autowired
-    private lateinit var binanceClient: BinanceClient
+    private var binanceClient = BinanceClient()
     
     private val logger : Logger = LogManager.getLogger(CryptoServiceImpl::class.java)
 
