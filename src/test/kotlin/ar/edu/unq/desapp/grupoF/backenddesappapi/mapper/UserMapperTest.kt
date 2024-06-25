@@ -4,6 +4,7 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserCreateDTO
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
+import org.mockito.Mockito
 import org.mockito.Mockito.mock
 import org.mockito.Mockito.`when`
 
@@ -46,5 +47,41 @@ class UserMapperTest {
         assertEquals("1725 Slough Avenue, Scranton", user.address)
         assertEquals("1234567890123456789012", user.cvu)
         assertEquals("12345678", user.walletAddress)
+    }
+
+    @Test
+    fun `toSellerDTO converts User to SellerDTO`() {
+        val user = mock(User::class.java)
+        `when`(user.id).thenReturn(1L)
+        `when`(user.firstName).thenReturn("Cosme")
+        `when`(user.lastName).thenReturn("Fulanito")
+        `when`(user.email).thenReturn("cfulanito.@test.com")
+        `when`(user.cvu).thenReturn("1234567890123456789012")
+
+        val dto = UserMapper.toSellerDTO(user)
+
+        assertEquals(1L, dto.id)
+        assertEquals("Cosme", dto.firstName)
+        assertEquals("Fulanito", dto.lastName)
+        assertEquals("cfulanito.@test.com", dto.email)
+        assertEquals("1234567890123456789012", dto.cvu)
+    }
+
+    @Test
+    fun `toBuyerDTO converts User to BuyerDTO`() {
+        val user = mock(User::class.java)
+        `when`(user.id).thenReturn(1L)
+        `when`(user.firstName).thenReturn("Cosme")
+        `when`(user.lastName).thenReturn("Fulanito")
+        `when`(user.email).thenReturn("cfulanito.@test.com")
+        `when`(user.walletAddress).thenReturn("12345678")
+
+        val dto = UserMapper.toBuyerDTO(user)
+
+        assertEquals(1L, dto.id)
+        assertEquals("Cosme", dto.firstName)
+        assertEquals("Fulanito", dto.lastName)
+        assertEquals("cfulanito.@test.com", dto.email)
+        assertEquals("12345678", dto.wallet)
     }
 }
