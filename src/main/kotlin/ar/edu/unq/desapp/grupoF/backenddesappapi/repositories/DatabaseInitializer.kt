@@ -55,11 +55,11 @@ class DatabaseInitializer(
 //        })
 //    }
 fun generateDataForCryptocurrency() {
-    val random = java.util.Random()
+    val secureRandom = SecureRandom()
     val mockCryptocurrencies = CryptoSymbol.values().map { symbol ->
         CryptocurrencyBuilder()
             .withName(symbol)
-            .withPrice(1000.0 + random.nextDouble() * 40000.0)
+            .withPrice(1000.0 + secureRandom.nextDouble() * 40000.0)
             .build()
     }
 
