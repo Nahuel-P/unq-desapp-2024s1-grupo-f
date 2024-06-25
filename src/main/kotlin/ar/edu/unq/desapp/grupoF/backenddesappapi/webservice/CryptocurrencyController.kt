@@ -2,7 +2,13 @@ package ar.edu.unq.desapp.grupoF.backenddesappapi.webservice
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.CryptocurrencyMapper
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICryptoService
+import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.CryptocurrencyPriceDTO
+import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.OrderResponseDTO
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.ArraySchema
+import io.swagger.v3.oas.annotations.media.Content
+import io.swagger.v3.oas.annotations.media.Schema
+import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.cache.annotation.Cacheable
@@ -20,7 +26,14 @@ class CryptocurrencyController {
     @Autowired
     private lateinit var cryptoService: ICryptoService
 
-    @Operation(summary = "Get all registered users")
+    @Operation(summary = "Get all cryptocurrency quotes", responses = [
+        ApiResponse(responseCode = "200", description = "List of all aall cryptocurrency quotes", content = [
+            Content(mediaType = "application/json",
+                array = ArraySchema(schema = Schema(implementation = CryptocurrencyPriceDTO::class))
+            )
+        ]),
+        ApiResponse(responseCode = "400", description = "Bad Request", content = [Content()])
+    ])
     @Cacheable("quotes")
     @GetMapping("/quotes")
     fun getQuotes(): ResponseEntity<Any> {

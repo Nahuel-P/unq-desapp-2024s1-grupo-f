@@ -1,10 +1,12 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.webservice
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.UserMapper
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.UserVolumeReport
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICommonService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IUserService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserResponseDTO
 import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.media.Schema
 import io.swagger.v3.oas.annotations.responses.ApiResponse
@@ -30,18 +32,14 @@ class UserController {
     @Autowired
     private lateinit var userService: IUserService
 
-    @Operation(
-        summary = "Get all registered users", responses = [
-            ApiResponse(
-                responseCode = "200",
-                description = "List of all users",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = Array<UserResponseDTO>::class)
-                )]
-            ),
-            ApiResponse(responseCode = "400", description = "Bad Request", content = [Content()])]
-    )
+    @Operation(summary = "Get all registered users", responses = [
+        ApiResponse(responseCode = "200", description = "List of all users", content = [
+            Content(mediaType = "application/json",
+                array = ArraySchema(schema = Schema(implementation = UserResponseDTO::class))
+            )
+        ]),
+        ApiResponse(responseCode = "400", description = "Bad Request", content = [Content()])
+    ])
     @GetMapping("/users")
     fun getUsers(): ResponseEntity<Any> {
         return try {
@@ -53,18 +51,11 @@ class UserController {
         }
     }
 
-    @Operation(
-        summary = "Get user by ID", responses = [
-            ApiResponse(
-                responseCode = "200",
-                description = "User details",
-                content = [Content(
-                    mediaType = "application/json",
-                    schema = Schema(implementation = UserResponseDTO::class)
-                )]
-            ),
-            ApiResponse(responseCode = "400", description = "Bad Request", content = [Content()])]
-    )
+    @Operation(summary = "Get user by ID", responses = [
+        ApiResponse(responseCode = "200", description = "User details", content = [Content(mediaType = "application/json",
+            schema = Schema(implementation = UserResponseDTO::class))]),
+        ApiResponse(responseCode = "400", description = "Bad Request", content = [Content()])])
+
     @GetMapping("{id}")
     fun getUserByID(@PathVariable id: Long): ResponseEntity<Any> {
         return try {
@@ -76,15 +67,10 @@ class UserController {
         }
     }
 
-    @Operation(
-        summary = "Get operated volume by user ID within a date range", responses = [
-            ApiResponse(
-                responseCode = "200",
-                description = "Operated volume details",
-                content = [Content(mediaType = "application/json")]
-            ),
-            ApiResponse(responseCode = "400", description = "Bad Request", content = [Content()])]
-    )
+    @Operation(summary = "Get operated volume by user ID within a date range", responses = [
+        ApiResponse(responseCode = "200", description = "Operated volume details", content = [Content(mediaType = "application/json",
+            schema = Schema(implementation = UserVolumeReport::class))]),
+        ApiResponse(responseCode = "400", description = "Bad Request", content = [Content()])])
     @GetMapping("/operatedVolume/{userId}/{startDate}/{endDate}")
     fun getOperatedVolume(
         @PathVariable userId: Long,
