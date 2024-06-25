@@ -1,5 +1,6 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.mapper
 
+import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Cryptocurrency
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Order
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.Transaction
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
@@ -7,7 +8,10 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.CryptocurrencyBui
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.TransactionStatus
+import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.BuyTransactionResponseDTO
+import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.BuyerResponseDTO
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.TransactionCreateDTO
+import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserCreateDTO
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.mockito.Mockito
@@ -26,5 +30,4 @@ class TransactionMapperTest {
         assertEquals(user, result.counterParty)
         assertEquals(order, result.order)
     }
-
 }

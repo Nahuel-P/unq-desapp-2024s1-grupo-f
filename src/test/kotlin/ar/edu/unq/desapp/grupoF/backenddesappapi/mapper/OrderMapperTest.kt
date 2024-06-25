@@ -51,6 +51,7 @@ class OrderMapperTest {
         `when`(order.type).thenReturn(intentionType)
         `when`(order.priceARS).thenReturn(ars)
         `when`(crypto.name).thenReturn(cryptoName)
+
         `when`(user.id).thenReturn(1L)
         `when`(user.firstName).thenReturn("Michael")
         `when`(user.lastName).thenReturn("Scott")

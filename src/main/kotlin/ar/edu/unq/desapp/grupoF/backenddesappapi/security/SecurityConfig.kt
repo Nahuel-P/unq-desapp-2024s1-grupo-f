@@ -29,8 +29,7 @@ class SecurityConfig {
             .headers { header -> header.frameOptions { it.disable() }}
             .authorizeHttpRequests {
 
-                it.requestMatchers("/login/**", "/register/**", "/swagger-ui/**", "/api-docs/**", "/binance/**","/dolarapi/**", "/h2-console/**", "/actuator/**").permitAll() }
-            .authorizeHttpRequests { it.anyRequest().authenticated() }
+                it.requestMatchers("/login/**", "/register/**", "/swagger-ui/**", "/api-docs/**", "/binance/**","/dolarapi/**", "/h2-console/**", "/actuator/**", "/v3/api-docs/**").permitAll() }            .authorizeHttpRequests { it.anyRequest().authenticated() }
 
             .userDetailsService(userDetailsService)
             .sessionManagement{
