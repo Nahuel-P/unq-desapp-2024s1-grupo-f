@@ -7,6 +7,7 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.CryptocurrencyRepository
 import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.PriceHistoryRepository
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICryptoService
+import ar.edu.unq.desapp.grupoF.backenddesappapi.service.client.BinanceClient
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.client.IBinanceClientService
 import org.apache.logging.log4j.LogManager
 import org.apache.logging.log4j.Logger
@@ -22,8 +23,7 @@ class CryptoServiceImpl : ICryptoService {
     @Autowired
     private lateinit var priceHistoryRepository: PriceHistoryRepository
 
-    @Autowired
-    private lateinit var binanceClient: IBinanceClientService
+    private var binanceClient: IBinanceClientService = BinanceClient()
 
     private val logger : Logger = LogManager.getLogger(CryptoServiceImpl::class.java)
 
@@ -59,6 +59,5 @@ class CryptoServiceImpl : ICryptoService {
     private fun getSymbols(): MutableList<CryptoSymbol> {
         return cryptocurrencyRepository.findAll().map { it.name!! }.toMutableList()
     }
-
 
 }
