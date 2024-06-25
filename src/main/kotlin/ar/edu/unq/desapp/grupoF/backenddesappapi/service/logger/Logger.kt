@@ -20,7 +20,7 @@ class Logger {
         val operationType = joinPoint.signature.toShortString()
         val parameters = joinPoint.args.joinToString(", ")
 
-        var result: Any? = null
+        var result: Any?
         val executionTime = measureTimeMillis {
             result = joinPoint.proceed()
         }
