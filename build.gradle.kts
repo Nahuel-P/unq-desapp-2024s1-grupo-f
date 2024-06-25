@@ -70,6 +70,7 @@ dependencies {
 	runtimeOnly("io.jsonwebtoken:jjwt-impl:${jsonWebTokenVersion}")
 	testImplementation("org.springframework.boot:spring-boot-starter-test")
 	testImplementation("com.tngtech.archunit:archunit-junit5:$archUnitVersion")
+	testImplementation("org.springframework.security:spring-security-test")
 	developmentOnly("org.springframework.boot:spring-boot-devtools")
 	providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
 }
