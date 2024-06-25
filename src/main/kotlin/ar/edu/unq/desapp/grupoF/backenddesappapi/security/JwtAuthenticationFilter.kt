@@ -1,5 +1,5 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.security
-import ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl.TokenService
+import ar.edu.unq.desapp.grupoF.backenddesappapi.service.impl.TokenServiceImpl
 import jakarta.servlet.FilterChain
 import jakarta.servlet.http.HttpServletRequest
 import jakarta.servlet.http.HttpServletResponse
@@ -17,7 +17,7 @@ import org.springframework.web.filter.OncePerRequestFilter
 class JwtAuthenticationFilter: OncePerRequestFilter() {
 
     @Autowired
-    lateinit var jwtService: TokenService
+    lateinit var jwtService: TokenServiceImpl
     @Autowired
     lateinit var userDetailsServiceImpl: UserDetailsService
 
