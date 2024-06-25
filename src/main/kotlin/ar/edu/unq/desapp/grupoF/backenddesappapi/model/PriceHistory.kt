@@ -1,7 +1,6 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.model
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
-import com.fasterxml.jackson.annotation.JsonBackReference
 import jakarta.persistence.*
 import java.time.LocalDateTime
 

@@ -17,7 +17,7 @@ class CryptocurrencyTest {
 
     @Test
     fun `should create a cryptocurrency when it has valid data`() {
-        assertDoesNotThrow { aCryptocurrency().build() }
+        assertDoesNotThrow { aCryptocurrency().withName(CryptoSymbol.DOTUSDT).build() }
     }
 
     @Test
@@ -36,8 +36,7 @@ class CryptocurrencyTest {
 
     @Test
     fun `lastPrice returns current price`() {
-        val cryptocurrency = aCryptocurrency().build()
-        cryptocurrency.lastPrice = 100.0
+        val cryptocurrency = aCryptocurrency().withPrice(100.0).build()
         assertEquals(100.0, cryptocurrency.lastPrice())
     }
 
