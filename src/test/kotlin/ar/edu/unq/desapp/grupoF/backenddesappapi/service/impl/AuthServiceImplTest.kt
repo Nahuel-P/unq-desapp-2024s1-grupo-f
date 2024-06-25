@@ -45,7 +45,15 @@ class AuthServiceImplTest {
 
     @Test
     fun `registerUser should create a new user when email is not already registered`() {
-        val userDto = UserCreateDTO("michael", "scott", "prisonmike@test.com", "1725 Slough Avenue, Scranton", "Password!1", "1234567890123456789012", "12345678")
+        val userDto = UserCreateDTO(
+            "michael",
+            "scott",
+            "prisonmike@test.com",
+            "1725 Slough Avenue, Scranton",
+            "Password!1",
+            "1234567890123456789012",
+            "12345678"
+        )
         val user = UserMapper.toModel(userDto)
         user.password = passwordEncoder.encode(user.password)
 
@@ -59,7 +67,15 @@ class AuthServiceImplTest {
 
     @Test
     fun `registerUser should throw exception when email is already registered`() {
-        val userDto = UserCreateDTO("michael", "scott", "prisonmike@test.com", "1725 Slough Avenue, Scranton", "Password!1", "1234567890123456789012", "12345678")
+        val userDto = UserCreateDTO(
+            "michael",
+            "scott",
+            "prisonmike@test.com",
+            "1725 Slough Avenue, Scranton",
+            "Password!1",
+            "1234567890123456789012",
+            "12345678"
+        )
 
         Mockito.`when`(userRepository.existsByEmail(userDto.email!!)).thenReturn(true)
 
@@ -91,7 +107,15 @@ class AuthServiceImplTest {
 
     @Test
     fun `registerUser should throw exception when password is weak`() {
-        val userDto = UserCreateDTO("michael", "scott", "prisonmike@test.com", "1725 Slough Avenue, Scranton", "Password!1", "1234567890123456789012", "12345678")
+        val userDto = UserCreateDTO(
+            "michael",
+            "scott",
+            "prisonmike@test.com",
+            "1725 Slough Avenue, Scranton",
+            "Password!1",
+            "1234567890123456789012",
+            "12345678"
+        )
 
         Mockito.`when`(userRepository.existsByEmail(userDto.email!!)).thenReturn(false)
 
@@ -100,11 +124,19 @@ class AuthServiceImplTest {
 
     @Test
     fun `registerUser throws exception when email is already registered`() {
-        val userDto = UserCreateDTO("michael", "scott", "prisonmike@test.com", "1725 Slough Avenue, Scranton", "Password!1", "1234567890123456789012", "12345678")
+        val userDto = UserCreateDTO(
+            "michael",
+            "scott",
+            "prisonmike@test.com",
+            "1725 Slough Avenue, Scranton",
+            "Password!1",
+            "1234567890123456789012",
+            "12345678"
+        )
 
         Mockito.`when`(userRepository.existsByEmail(userDto.email!!)).thenReturn(true)
 
         assertThrows<Exception> { authService.registerUser(userDto) }
     }
-    
+
 }

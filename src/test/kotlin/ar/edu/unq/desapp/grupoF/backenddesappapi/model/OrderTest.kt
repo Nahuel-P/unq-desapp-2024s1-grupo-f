@@ -1,3 +1,5 @@
+package ar.edu.unq.desapp.grupoF.backenddesappapi.model
+
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.OrderBuilder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import ar.edu.unq.desapp.grupoF.backenddesappapi.utils.aBTCUSDT

@@ -1,9 +1,6 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.webservice
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.CryptocurrencyMapper
-import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.PriceHistoryMapper
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.PriceHistory
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.CryptoSymbol
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICryptoService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.CryptocurrencyPriceDTO
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.OrderResponseDTO
@@ -18,7 +15,6 @@ import org.springframework.cache.annotation.Cacheable
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PathVariable
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 

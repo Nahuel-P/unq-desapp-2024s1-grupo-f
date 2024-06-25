@@ -22,23 +22,23 @@ import org.springframework.security.core.userdetails.UserDetailsService
 @SpringBootTest
 class JwtAuthenticationFilterTest {
 
-        @Mock
-        lateinit var request: HttpServletRequest
+    @Mock
+    lateinit var request: HttpServletRequest
 
-        @Mock
-        lateinit var response: HttpServletResponse
+    @Mock
+    lateinit var response: HttpServletResponse
 
-        @Mock
-        lateinit var filterChain: FilterChain
+    @Mock
+    lateinit var filterChain: FilterChain
 
-        @Mock
-        lateinit var jwtService: TokenServiceImpl
+    @Mock
+    lateinit var jwtService: TokenServiceImpl
 
-        @InjectMocks
-        lateinit var jwtAuthenticationFilter: TestableJwtAuthenticationFilter
+    @InjectMocks
+    lateinit var jwtAuthenticationFilter: TestableJwtAuthenticationFilter
 
-        @Mock
-        lateinit var userDetailsServiceImpl: UserDetailsService
+    @Mock
+    lateinit var userDetailsServiceImpl: UserDetailsService
 
 
     @BeforeEach

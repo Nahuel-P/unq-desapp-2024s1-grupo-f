@@ -1,7 +1,6 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.webservice
 
 import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.UserMapper
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.User
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.UserVolumeReport
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICommonService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IUserService
@@ -25,10 +24,11 @@ import java.time.LocalDate
 @Tag(name = "Users", description = "Endpoints for user")
 @Validated
 @Transactional
-class UserController{
+class UserController {
 
     @Autowired
     private lateinit var commonService: ICommonService
+
     @Autowired
     private lateinit var userService: IUserService
 
@@ -55,6 +55,7 @@ class UserController{
         ApiResponse(responseCode = "200", description = "User details", content = [Content(mediaType = "application/json",
             schema = Schema(implementation = UserResponseDTO::class))]),
         ApiResponse(responseCode = "400", description = "Bad Request", content = [Content()])])
+
     @GetMapping("{id}")
     fun getUserByID(@PathVariable id: Long): ResponseEntity<Any> {
         return try {
@@ -65,12 +66,17 @@ class UserController{
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to e.message));
         }
     }
+
     @Operation(summary = "Get operated volume by user ID within a date range", responses = [
         ApiResponse(responseCode = "200", description = "Operated volume details", content = [Content(mediaType = "application/json",
             schema = Schema(implementation = UserVolumeReport::class))]),
         ApiResponse(responseCode = "400", description = "Bad Request", content = [Content()])])
     @GetMapping("/operatedVolume/{userId}/{startDate}/{endDate}")
-    fun getOperatedVolume(@PathVariable userId: Long, @PathVariable startDate: String, @PathVariable endDate: String): ResponseEntity<Any> {
+    fun getOperatedVolume(
+        @PathVariable userId: Long,
+        @PathVariable startDate: String,
+        @PathVariable endDate: String
+    ): ResponseEntity<Any> {
         return try {
             val startDateTime = LocalDate.parse(startDate).atStartOfDay()
             val endDateTime = LocalDate.parse(endDate).atTime(23, 59, 59)

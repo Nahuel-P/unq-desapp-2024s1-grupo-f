@@ -15,12 +15,12 @@ class TokenServiceImpl {
 
     val secretKey = "c4aeb476ac78587f3d1a9f2dbe639ba2f1278e92b75e3c6a1e94b1a9f1dc9b18"
 
-    fun generateJWT(user: User): String{
+    fun generateJWT(user: User): String {
         var token: String = Jwts
             .builder()
             .subject(user.email)
             .issuedAt(Date(System.currentTimeMillis()))
-            .expiration(Date(System.currentTimeMillis() + 24*60*60*1000))
+            .expiration(Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000))
             .signWith(getSigninKey())
             .compact()
         return token
@@ -35,7 +35,7 @@ class TokenServiceImpl {
             .payload
     }
 
-    fun <T> extractClaim(token: String, resolver: (claim: Claims) -> T): T{
+    fun <T> extractClaim(token: String, resolver: (claim: Claims) -> T): T {
         val claims: Claims = extractAllClaims(token)
         return resolver(claims)
     }
@@ -49,12 +49,12 @@ class TokenServiceImpl {
         return Keys.hmacShaKeyFor(keyBytes)
     }
 
-    fun isValid(token: String, user: UserDetails): Boolean{
+    fun isValid(token: String, user: UserDetails): Boolean {
         val username: String = extractUsername(token)
-        return username.equals(user.username) && !isTokenExpired(token)
+        return username == user.username && !isTokenExpired(token)
     }
 
-    fun isTokenExpired(token: String): Boolean{
+    fun isTokenExpired(token: String): Boolean {
         return extractExpiration(token).before(Date())
     }
 

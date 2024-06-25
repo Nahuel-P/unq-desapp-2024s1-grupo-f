@@ -9,7 +9,6 @@ import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.Content
 import io.swagger.v3.oas.annotations.responses.ApiResponse
 import io.swagger.v3.oas.annotations.tags.Tag
-import io.swagger.v3.oas.models.media.Schema
 import jakarta.transaction.Transactional
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -28,11 +27,13 @@ class TransactionController() {
         ApiResponse(responseCode = "200", description = "Transaction created", content = [Content(mediaType = "application/json",
             schema = io.swagger.v3.oas.annotations.media.Schema(implementation = TransactionResponseDTO::class))]),
         ApiResponse(responseCode = "400", description = "Bad Request", content = [Content()])])
+
     @PostMapping("/create")
-    fun create(@RequestBody transactionDTO: TransactionCreateDTO) : ResponseEntity<Any> {
+    fun create(@RequestBody transactionDTO: TransactionCreateDTO): ResponseEntity<Any> {
         return try {
             val transaction = transactionService.create(transactionDTO)
-            val transactionResponse = TransactionMapper.toResponseDTO(transaction,"Transaction created, waiting for payment by buyer")
+            val transactionResponse =
+                TransactionMapper.toResponseDTO(transaction, "Transaction created, waiting for payment by buyer")
             ResponseEntity.ok().body(transactionResponse)
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to e.message))
@@ -43,10 +44,11 @@ class TransactionController() {
             schema = io.swagger.v3.oas.annotations.media.Schema(implementation = TransactionResponseDTO::class))]),
         ApiResponse(responseCode = "400", description = "Bad Request", content = [Content()])])
     @PutMapping("/paid")
-    fun paid(@RequestBody transactionDTO: TransactionRequestDTO) : ResponseEntity<Any>{
+    fun paid(@RequestBody transactionDTO: TransactionRequestDTO): ResponseEntity<Any> {
         return try {
             val transaction = transactionService.paid(transactionDTO)
-            val transactionResponse = TransactionMapper.toResponseDTO(transaction,"Transaction paid, waiting for confirmation by seller")
+            val transactionResponse =
+                TransactionMapper.toResponseDTO(transaction, "Transaction paid, waiting for confirmation by seller")
             ResponseEntity.ok().body(transactionResponse)
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to e.message))
@@ -57,10 +59,10 @@ class TransactionController() {
             schema = io.swagger.v3.oas.annotations.media.Schema(implementation = TransactionResponseDTO::class))]),
         ApiResponse(responseCode = "400", description = "Bad Request", content = [Content()])])
     @PutMapping("/confirm")
-    fun confirm(@RequestBody transactionDTO: TransactionRequestDTO) : ResponseEntity<Any>{
+    fun confirm(@RequestBody transactionDTO: TransactionRequestDTO): ResponseEntity<Any> {
         return try {
             val transaction = transactionService.confirm(transactionDTO)
-            val transactionResponse = TransactionMapper.toResponseDTO(transaction,"Transaction confirmed by seller!")
+            val transactionResponse = TransactionMapper.toResponseDTO(transaction, "Transaction confirmed by seller!")
             ResponseEntity.ok().body(transactionResponse)
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to e.message))
@@ -72,10 +74,13 @@ class TransactionController() {
         schema = io.swagger.v3.oas.annotations.media.Schema(implementation = TransactionResponseDTO::class))]),
     ApiResponse(responseCode = "400", description = "Bad Request", content = [Content()])])
     @PutMapping("/cancel")
-    fun cancel(@RequestBody transactionDTO: TransactionRequestDTO) : ResponseEntity<Any>{
+    fun cancel(@RequestBody transactionDTO: TransactionRequestDTO): ResponseEntity<Any> {
         return try {
             val transaction = transactionService.cancel(transactionDTO)
-            val transactionResponse = TransactionMapper.toResponseDTO(transaction,"Transaction cancelled by user: "+transactionDTO.idUserRequest)
+            val transactionResponse = TransactionMapper.toResponseDTO(
+                transaction,
+                "Transaction cancelled by user: " + transactionDTO.idUserRequest
+            )
             ResponseEntity.ok().body(transactionResponse)
         } catch (e: Exception) {
             ResponseEntity.status(HttpStatus.BAD_REQUEST).body(mapOf("error" to e.message))

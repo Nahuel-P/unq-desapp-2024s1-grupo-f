@@ -7,7 +7,7 @@ data class PriceHistoryResponseDTO(
     val history: List<HistoryResponseDTO>
 )
 
-data class HistoryResponseDTO (
+data class HistoryResponseDTO(
     val price: Double?,
     var priceTime: String?
 )

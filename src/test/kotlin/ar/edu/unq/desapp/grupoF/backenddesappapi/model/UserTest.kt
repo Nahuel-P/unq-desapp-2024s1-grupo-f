@@ -1,3 +1,5 @@
+package ar.edu.unq.desapp.grupoF.backenddesappapi.model
+
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.UserBuilder
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
@@ -153,6 +155,7 @@ class UserTest {
         val user = aUser().build()
         assertEquals("No trades yet.", user.reputation())
     }
+
     @Test
     fun `user reputation is 10 when 1 transaction and 10 score`() {
         val user = aUser().build()

@@ -30,8 +30,10 @@ class PriceHistoryControllerTest {
         val symbol = CryptoSymbol.BTCUSDT
         Mockito.`when`(priceHistoryService.getLast24hsQuotes(symbol)).thenReturn(listOf())
 
-        mockMvc.perform(get("/crypto/last24hsQuotes/$symbol")
-            .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(
+            get("/crypto/last24hsQuotes/$symbol")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
             .andExpect(status().isBadRequest)
     }
 
@@ -40,8 +42,10 @@ class PriceHistoryControllerTest {
         val symbol = CryptoSymbol.BTCUSDT
         Mockito.`when`(priceHistoryService.getLast24hsQuotes(symbol)).thenThrow(RuntimeException("Error"))
 
-        mockMvc.perform(get("/crypto/last24hsQuotes/$symbol")
-            .contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(
+            get("/crypto/last24hsQuotes/$symbol")
+                .contentType(MediaType.APPLICATION_JSON)
+        )
             .andExpect(status().isBadRequest)
     }
 }

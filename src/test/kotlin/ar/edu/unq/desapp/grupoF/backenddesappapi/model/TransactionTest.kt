@@ -4,7 +4,9 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.model.builder.TransactionBuilde
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.IntentionType
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.StateOrder
 import ar.edu.unq.desapp.grupoF.backenddesappapi.model.enums.TransactionStatus
-import ar.edu.unq.desapp.grupoF.backenddesappapi.utils.*
+import ar.edu.unq.desapp.grupoF.backenddesappapi.utils.aBuyOrder
+import ar.edu.unq.desapp.grupoF.backenddesappapi.utils.aUser
+import ar.edu.unq.desapp.grupoF.backenddesappapi.utils.anotherUser
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -16,6 +18,7 @@ class TransactionTest {
     private var buyer = aUser().build()
     private var seller = anotherUser().build()
     private var buyOrder = aBuyOrder().build()
+
     @Test
     fun `should create a purchase transaction when it has valid data`() {
         assertDoesNotThrow { TransactionBuilder().build() }

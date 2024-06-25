@@ -6,6 +6,8 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.UserRepository
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IAuthService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.LoginRequestDTO
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserCreateDTO
+import org.apache.logging.log4j.LogManager
+import org.apache.logging.log4j.Logger
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.AuthenticationManager
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
@@ -27,8 +29,11 @@ class AuthServiceImpl : IAuthService {
     @Autowired
     lateinit var authenticationManager: AuthenticationManager
 
+    private val logger: Logger = LogManager.getLogger(AuthServiceImpl::class.java)
     override fun registerUser(userDto: UserCreateDTO): User {
+        logger.info("Mapping user:" + userDto.toString())
         val user = UserMapper.toModel(userDto)
+        logger.info("Registering user with email ${user.email}")
         if (userRepository.existsByEmail(user.email!!)) {
             throw Exception("User with email ${user.email} already exists")
         }

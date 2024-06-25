@@ -1,6 +1,6 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto
 
-data class ExchangeRateDTO (
+data class ExchangeRateDTO(
     var moneda: String?,
     var casa: String?,
     var nombre: String?,

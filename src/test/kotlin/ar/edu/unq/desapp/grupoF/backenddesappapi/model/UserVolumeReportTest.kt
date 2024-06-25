@@ -1,12 +1,15 @@
-import ar.edu.unq.desapp.grupoF.backenddesappapi.model.UserVolumeReport
+package ar.edu.unq.desapp.grupoF.backenddesappapi.model
+
 import ar.edu.unq.desapp.grupoF.backenddesappapi.utils.aTransaction
-import org.junit.jupiter.api.Assertions.*
+import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.Test
 
 class UserVolumeReportTest {
 
     private var aTranstaction = aTransaction().build()
     private var anotherTransaction = aTransaction().build()
+
     @Test
     fun `should add to volume report correctly`() {
 
@@ -28,13 +31,13 @@ class UserVolumeReportTest {
         userVolumeReport.addToVolumeReport(aTranstaction)
         userVolumeReport.addToVolumeReport(anotherTransaction)
 
-        assertEquals(0.5 * 50000.0 *2, userVolumeReport.totalUSD)
+        assertEquals(0.5 * 50000.0 * 2, userVolumeReport.totalUSD)
         assertEquals(50000.0 * 10 * 31 * 2, userVolumeReport.totalARG)
 
         assertTrue(userVolumeReport.actives.containsKey("BTCUSDT"))
         assertEquals(0.5 * 2, userVolumeReport.actives["BTCUSDT"]!!.cryptoNominalQuantity)
         assertEquals(50000.0 * 2, userVolumeReport.actives["BTCUSDT"]!!.usdPrice)
-        assertEquals(50000.0 * 10 * 31 *2, userVolumeReport.actives["BTCUSDT"]!!.argPrice)
+        assertEquals(50000.0 * 10 * 31 * 2, userVolumeReport.actives["BTCUSDT"]!!.argPrice)
     }
 
 }

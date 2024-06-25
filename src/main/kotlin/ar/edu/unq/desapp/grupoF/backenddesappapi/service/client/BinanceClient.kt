@@ -8,7 +8,7 @@ import org.springframework.web.client.RestTemplate
 
 @Service
 @Profile("dev")
-class BinanceClient : IBinanceClientService{
+class BinanceClient : IBinanceClientService {
 
     private var restTemplate: RestTemplate = RestTemplate()
     private var baseURL: String = "https://api.binance.com/api/v3"

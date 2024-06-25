@@ -7,8 +7,8 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.repositories.PriceHistoryReposi
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.ICommonService
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito.`when`
 import org.mockito.Mockito.mock
+import org.mockito.Mockito.`when`
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.MockBean

@@ -1,7 +1,8 @@
 package ar.edu.unq.desapp.grupoF.backenddesappapi.model
 
 import java.time.LocalDateTime
-class UserVolumeReport{
+
+class UserVolumeReport {
     var totalUSD: Double = 0.0
     var totalARG: Double = 0.0
     var actives: MutableMap<String, Active> = mutableMapOf()

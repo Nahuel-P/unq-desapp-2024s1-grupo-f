@@ -89,7 +89,8 @@ class CommonServiceImplTest {
         val transactions = listOf(TransactionBuilder().build(), TransactionBuilder().build())
         val startDate = LocalDateTime.now().minusDays(1)
         val endDate = LocalDateTime.now()
-        Mockito.`when`(transactionRepository.findCompletedTransactionsByUserAndBetweenDates(1L, startDate, endDate)).thenReturn(transactions)
+        Mockito.`when`(transactionRepository.findCompletedTransactionsByUserAndBetweenDates(1L, startDate, endDate))
+            .thenReturn(transactions)
 
         val result = commonService.getTransactionBy(1L, startDate, endDate)
 
@@ -100,7 +101,8 @@ class CommonServiceImplTest {
     fun `getTransactionBy returns empty list when no transactions exist`() {
         val startDate = LocalDateTime.now().minusDays(1)
         val endDate = LocalDateTime.now()
-        Mockito.`when`(transactionRepository.findCompletedTransactionsByUserAndBetweenDates(1L, startDate, endDate)).thenReturn(emptyList())
+        Mockito.`when`(transactionRepository.findCompletedTransactionsByUserAndBetweenDates(1L, startDate, endDate))
+            .thenReturn(emptyList())
 
         val result = commonService.getTransactionBy(1L, startDate, endDate)
 

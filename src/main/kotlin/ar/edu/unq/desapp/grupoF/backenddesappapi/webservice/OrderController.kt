@@ -4,7 +4,6 @@ import ar.edu.unq.desapp.grupoF.backenddesappapi.mapper.OrderMapper
 import ar.edu.unq.desapp.grupoF.backenddesappapi.service.IOrderService
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.OrderRequestDTO
 import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.OrderResponseDTO
-import ar.edu.unq.desapp.grupoF.backenddesappapi.webservice.dto.UserResponseDTO
 import io.swagger.v3.oas.annotations.Operation
 import io.swagger.v3.oas.annotations.media.ArraySchema
 import io.swagger.v3.oas.annotations.media.Content
